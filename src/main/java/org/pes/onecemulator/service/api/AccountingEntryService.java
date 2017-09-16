@@ -71,6 +71,7 @@ public class AccountingEntryService {
             log.error("AccountingEntry create error: " + e.getMessage());
             throw new CreateEntityException(500, e.getMessage());
         }
+        log.error("AccountingEntry entity is null or has not expenseNumber value");
         throw new CreateEntityException(500, "AccountingEntry entity is null or has not expenseNumber value");
     }
 
