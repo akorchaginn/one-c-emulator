@@ -53,7 +53,7 @@ public class EntryController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/create")
-    public @ResponseBody ResponseEntity<AccountingEntryDto> create(@RequestBody AccountingEntryDto accountingEntryDto) throws Exception {
+    public @ResponseBody ResponseEntity<AccountingEntryDto> create(@RequestBody AccountingEntryDto accountingEntryDto) {
         try {
             return new ResponseEntity<>(
                     accountingEntryService.createAccountingEntry(accountingEntryDto),
