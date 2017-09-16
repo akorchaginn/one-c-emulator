@@ -68,33 +68,24 @@ public class EntryController {
             );
         }
     }
-    /*
+
     @RequestMapping(method = RequestMethod.POST, path = "/update")
-    public @ResponseBody AccountingEntryDto update(@RequestBody AccountingEntryDto accountingEntryDto) throws Exception {
-        if (accountingEntryDto != null && accountingEntryDto.getId() != null && accountingEntryDto.getExpenseNumber() != null) {
-            ExpenseRequest expenseRequest = expenseRequestRepositoryService.findByNumber(accountingEntryDto.getExpenseNumber());
-
-            if(expenseRequest != null && accountingEntryRepositoryService.exists(accountingEntryDto.getId())) {
-                accountingEntryDto.setExpenseRequest(expenseRequest);
-
-                AccountingEntryDto result = mapperFactoryService.convertToDto(accountingEntryRepositoryService.findById(accountingEntryDto.getId()));
-                result.setExpenseRequest(accountingEntryDto.getExpenseRequest());
-                result.setCode(accountingEntryDto.getCode());
-                result.setDate(accountingEntryDto.getDate());
-                result.setDocumentName(accountingEntryDto.getDocumentName());
-                result.setSum(accountingEntryDto.getSum());
-
-                return mapperFactoryService.convertToDto(
-                        accountingEntryRepositoryService.update(
-                                mapperFactoryService.convertToEntity(result)
-                        )
-                );
-            }
+    public @ResponseBody ResponseEntity<AccountingEntryDto> update(@RequestBody AccountingEntryDto accountingEntryDto) throws Exception {
+        try {
+            return new ResponseEntity<>(
+                    accountingEntryService.updateAccountingEntry(accountingEntryDto),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("warning:", e.getMessage());
+            return new ResponseEntity<>(
+                    responseHeaders,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
-
-        return new AccountingEntryDto();
     }
-
+    /*
     @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
     public Boolean delete(@PathVariable String id) {
         try {

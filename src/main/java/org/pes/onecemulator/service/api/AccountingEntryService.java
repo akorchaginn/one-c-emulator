@@ -7,6 +7,7 @@ import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.CreateEntityException;
 import org.pes.onecemulator.service.api.exception.NotFoundEntityException;
+import org.pes.onecemulator.service.api.exception.UpdateEntityException;
 import org.pes.onecemulator.service.repository.AccountingEntryRepositoryService;
 import org.pes.onecemulator.service.repository.ExpenseRequestRepositoryService;
 import org.slf4j.Logger;
@@ -60,11 +61,10 @@ public class AccountingEntryService {
                 if (expenseRequestDto != null) {
                     accountingEntryDto.setExpenseRequest(expenseRequestDto);
                     log.info("ExpenseRequest: " + expenseRequestDto.toString());
-                    AccountingEntry accountingEntry = accountingEntryRepositoryService.create(convertToEntity(accountingEntryDto));
-                    AccountingEntryDto accountingEntryDtoCreated = convertToDto(accountingEntry);
-                    log.info("AccountingEntry created: " + accountingEntryDtoCreated.toString());
+                    AccountingEntryDto result = convertToDto(accountingEntryRepositoryService.create(convertToEntity(accountingEntryDto)));
+                    log.info("AccountingEntry created: " + result.toString());
 
-                    return accountingEntryDtoCreated;
+                    return result;
                 }
             }
         } catch (Exception e) {
@@ -73,6 +73,32 @@ public class AccountingEntryService {
         }
         log.error("AccountingEntry entity is null or has not expenseNumber value");
         throw new CreateEntityException(500, "AccountingEntry entity is null or has not expenseNumber value");
+    }
+
+    public AccountingEntryDto updateAccountingEntry(AccountingEntryDto accountingEntryDto) throws UpdateEntityException {
+        try {
+            if (accountingEntryDto != null && accountingEntryDto.getId() != null && accountingEntryDto.getExpenseNumber() != null) {
+                ExpenseRequestDto expenseRequestDto = expenseRequestService.getExpenseRequestByNumber(accountingEntryDto.getExpenseNumber());
+
+                if(expenseRequestDto != null && accountingEntryRepositoryService.exists(accountingEntryDto.getId())) {
+                    accountingEntryDto.setExpenseRequest(expenseRequestDto);
+                    log.info("ExpenseRequest: " + expenseRequestDto.toString());
+                    AccountingEntryDto tmp = convertToDto(accountingEntryRepositoryService.findById(accountingEntryDto.getId()));
+                    tmp.setExpenseRequest(accountingEntryDto.getExpenseRequest());
+                    tmp.setCode(accountingEntryDto.getCode());
+                    tmp.setDate(accountingEntryDto.getDate());
+                    tmp.setDocumentName(accountingEntryDto.getDocumentName());
+                    tmp.setSum(accountingEntryDto.getSum());
+                    AccountingEntryDto result = convertToDto(accountingEntryRepositoryService.update(convertToEntity(tmp)));
+                    log.info("AccountingEntry updated: " + result.toString());
+
+                    return result;
+                }
+            }
+        } catch (Exception e) {
+            throw new UpdateEntityException(500, e.getMessage());
+        }
+        throw new UpdateEntityException(500, "AccountingEntry entity is null or expenseNumber is null");
     }
 
     private AccountingEntryDto convertToDto(AccountingEntry accountingEntry) {
