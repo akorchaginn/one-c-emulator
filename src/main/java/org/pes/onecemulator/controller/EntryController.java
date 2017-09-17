@@ -85,15 +85,21 @@ public class EntryController {
             );
         }
     }
-    /*
-    @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
-    public Boolean delete(@PathVariable String id) {
-        try {
-            accountingEntryRepositoryService.delete(UUID.fromString(id));
-        } catch (Exception e) {
-            return false;
-        }
 
-        return true;
-    }*/
+    @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
+    public ResponseEntity<AccountingEntryDto> delete(@PathVariable String id) {
+        try {
+            return new ResponseEntity<>(
+                    accountingEntryService.deleteAccountingEntry(UUID.fromString(id)),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("warning:", e.getMessage());
+            return new ResponseEntity<>(
+                    responseHeaders,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }

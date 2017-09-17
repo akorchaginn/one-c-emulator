@@ -1,6 +1,6 @@
 package org.pes.onecemulator.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Calendar;
@@ -11,13 +11,15 @@ public class AbstractObjectDto {
     @JsonProperty("id")
     private UUID id;
 
-    @JsonIgnore
+    @JsonProperty("createdTime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-dd-MM")
     private Calendar createdTime;
 
-    @JsonIgnore
+    @JsonProperty("updatedTime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-dd-MM")
     private Calendar updatedTime;
 
-    @JsonIgnore
+    @JsonProperty("deleted")
     private Boolean deleted;
 
     public UUID getId() {

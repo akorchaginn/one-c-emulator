@@ -3,19 +3,17 @@ package org.pes.onecemulator.service.api;
 import org.pes.onecemulator.dto.AccountingEntryDto;
 import org.pes.onecemulator.dto.ExpenseRequestDto;
 import org.pes.onecemulator.entity.AccountingEntry;
-import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.CreateEntityException;
+import org.pes.onecemulator.service.api.exception.DeleteEntityException;
 import org.pes.onecemulator.service.api.exception.NotFoundEntityException;
 import org.pes.onecemulator.service.api.exception.UpdateEntityException;
 import org.pes.onecemulator.service.repository.AccountingEntryRepositoryService;
-import org.pes.onecemulator.service.repository.ExpenseRequestRepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.PreRemove;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -80,7 +78,7 @@ public class AccountingEntryService {
             if (accountingEntryDto != null && accountingEntryDto.getId() != null && accountingEntryDto.getExpenseNumber() != null) {
                 ExpenseRequestDto expenseRequestDto = expenseRequestService.getExpenseRequestByNumber(accountingEntryDto.getExpenseNumber());
 
-                if(expenseRequestDto != null && accountingEntryRepositoryService.exists(accountingEntryDto.getId())) {
+                if(expenseRequestDto != null && accountingEntryRepositoryService.findById(accountingEntryDto.getId()) !=  null) {
                     accountingEntryDto.setExpenseRequest(expenseRequestDto);
                     log.info("ExpenseRequest: " + expenseRequestDto.toString());
                     AccountingEntryDto tmp = convertToDto(accountingEntryRepositoryService.findById(accountingEntryDto.getId()));
@@ -99,6 +97,21 @@ public class AccountingEntryService {
             throw new UpdateEntityException(500, e.getMessage());
         }
         throw new UpdateEntityException(500, "AccountingEntry entity is null or expenseNumber is null");
+    }
+
+    public AccountingEntryDto deleteAccountingEntry(UUID id) throws DeleteEntityException {
+        try {
+            AccountingEntry accountingEntry = accountingEntryRepositoryService.deleteLogic(id);
+            if (accountingEntry != null) {
+                AccountingEntryDto result = convertToDto(accountingEntry);
+                log.info("AccountingEntry with id: " + id.toString() + " deleted");
+                return result;
+            }
+        } catch (Exception e) {
+            log.info("Error AccountingEntry with id: " + id.toString() + " deleted " + e.getMessage());
+            throw new DeleteEntityException(500, "Error delete: " + e.getMessage());
+        }
+        throw new DeleteEntityException(500, "Error delete: merge return null O_o");
     }
 
     private AccountingEntryDto convertToDto(AccountingEntry accountingEntry) {

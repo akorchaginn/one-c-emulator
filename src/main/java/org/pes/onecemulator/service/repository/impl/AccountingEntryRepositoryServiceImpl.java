@@ -3,6 +3,8 @@ package org.pes.onecemulator.service.repository.impl;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.service.api.exception.CreateEntityException;
+import org.pes.onecemulator.service.api.exception.DeleteEntityException;
+import org.pes.onecemulator.service.api.exception.UpdateEntityException;
 import org.pes.onecemulator.service.repository.AccountingEntryRepositoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,29 +58,25 @@ public class AccountingEntryRepositoryServiceImpl implements AccountingEntryRepo
 
     @Override
     @Transactional
-    public AccountingEntry update(AccountingEntry accountingEntry) throws Exception {
-        if (accountingEntry.getId() != null && exists(accountingEntry.getId())) {
+    public AccountingEntry update(AccountingEntry accountingEntry) throws UpdateEntityException {
+        if (accountingEntry.getId() != null && accountingEntryRepository.exists(accountingEntry.getId())) {
             return entityManager.merge(accountingEntry);
         }
 
-        throw new Exception("Entity " + accountingEntry.toString() + " not exist at database");
+        throw new UpdateEntityException(500, "Entity " + accountingEntry.toString() + " not exist at database");
     }
 
     @Override
     @Transactional
-    public void delete(UUID id) throws Exception {
-        if (id != null && exists(id)) {
+    public AccountingEntry deleteLogic(UUID id) throws DeleteEntityException {
+        if (id != null) {
             AccountingEntry accountingEntry = accountingEntryRepository.findOne(id);
-            accountingEntry.setDeleted(true);
-            accountingEntryRepository.saveAndFlush(accountingEntry);
+            if (accountingEntry != null) {
+                accountingEntry.setDeleted(true);
+                return entityManager.merge(accountingEntry);
+            }
+            throw new DeleteEntityException(500, "AccountingEntry with id: "+ id.toString() + " not found at database");
         }
-
-        throw new Exception("Entity with id: " + id + " not exist at database");
-    }
-
-    @Override
-    @Transactional
-    public Boolean exists(UUID id) {
-        return accountingEntryRepository.exists(id) && !accountingEntryRepository.findOne(id).getDeleted();
+        throw new DeleteEntityException(500, "Delete id is null");
     }
 }

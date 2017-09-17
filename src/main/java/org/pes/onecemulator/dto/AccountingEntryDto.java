@@ -1,5 +1,6 @@
 package org.pes.onecemulator.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,6 +13,7 @@ public class AccountingEntryDto extends AbstractObjectDto {
     private String code;
 
     @JsonProperty("date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-dd-M")
     private Calendar date;
 
     @JsonProperty("docName")
