@@ -8,7 +8,7 @@ import java.util.Calendar;
 @Table(name = "accounting_entry")
 public class AccountingEntry extends AbstractObject {
 
-    @Column(name = "code")
+    @Column(name = "code", unique = true)
     private String code;
 
     @Column(name = "date")

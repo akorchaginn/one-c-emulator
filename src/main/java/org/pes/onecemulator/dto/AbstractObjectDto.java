@@ -12,11 +12,11 @@ public class AbstractObjectDto {
     private UUID id;
 
     @JsonProperty("createdTime")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-dd-MM")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-dd-MM hh:mm:ss")
     private Calendar createdTime;
 
     @JsonProperty("updatedTime")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-dd-MM")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-dd-MM hh:mm:ss")
     private Calendar updatedTime;
 
     @JsonProperty("deleted")

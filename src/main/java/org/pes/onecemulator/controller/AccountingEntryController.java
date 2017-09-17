@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/entry")
-public class EntryController {
+public class AccountingEntryController {
 
     @Autowired
     private AccountingEntryService accountingEntryService;

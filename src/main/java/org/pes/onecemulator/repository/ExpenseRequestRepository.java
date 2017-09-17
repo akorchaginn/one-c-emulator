@@ -9,4 +9,7 @@ import java.util.UUID;
 public interface ExpenseRequestRepository extends JpaRepository<ExpenseRequest, UUID> {
     @Query("select e from ExpenseRequest e where e.number = ?1")
     ExpenseRequest findByNumber(String number);
+
+    @Query("select count(e) > 0 from ExpenseRequest e where e.number = ?1")
+    Boolean exists(String number);
 }

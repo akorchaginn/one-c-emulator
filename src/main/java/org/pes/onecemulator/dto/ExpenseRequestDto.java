@@ -1,5 +1,6 @@
 package org.pes.onecemulator.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,9 +14,11 @@ public class ExpenseRequestDto extends AbstractObjectDto {
     private String currency;
 
     @JsonProperty("isConfirm")
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     private Boolean isConfirm;
 
     @JsonProperty("isPaid")
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     private Boolean isPaid;
 
     @JsonProperty("number")

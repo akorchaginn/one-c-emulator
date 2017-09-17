@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.UUID;
 
 public interface AccountingEntryRepository extends JpaRepository<AccountingEntry, UUID> {
-    @Query("select count(a) > 0 from AccountingEntry a where a.code = ?1 and a.deleted = false")
+    @Query("select count(a) > 0 from AccountingEntry a where a.code = ?1")
     Boolean exists(String code);
 }

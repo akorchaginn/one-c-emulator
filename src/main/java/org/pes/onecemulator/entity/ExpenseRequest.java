@@ -18,13 +18,13 @@ public class ExpenseRequest extends AbstractObject {
     @Column(name = "is_paid")
     private Boolean isPaid;
 
-    @Column(name = "number")
+    @Column(name = "number", unique = true)
     private String number;
 
     @Column(name = "sum")
     private BigDecimal sum;
 
-    @OneToMany(mappedBy = "expenseRequest", cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = false)
+    @OneToMany(mappedBy = "expenseRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AccountingEntry> accountingEntries = new HashSet<>();
 
     public String getCurrency() {
