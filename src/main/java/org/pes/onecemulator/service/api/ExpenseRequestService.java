@@ -110,7 +110,7 @@ public class ExpenseRequestService {
                 ExpenseRequestDto expenseRequestDtoResult = convertToDto(expenseRequestRepositoryService.update(convertToEntity(expenseRequestDtoTmp)));
                 log.info("ExpenseRequest deleted result: "
                         + "id = " + expenseRequestDtoResult.getId()
-                        + "\n" + "AccountingEmtries list id = " + expenseRequestDtoResult.getAccountingEntries()
+                        + "\n" + "AccountingEntries list id = " + expenseRequestDtoResult.getAccountingEntries()
                         .stream()
                         .map(AbstractObjectDto::getId)
                         .collect(Collectors.toList())
