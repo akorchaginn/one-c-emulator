@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.api;
 
+import org.pes.onecemulator.dto.AbstractObjectDto;
 import org.pes.onecemulator.dto.AccountingEntryDto;
 import org.pes.onecemulator.dto.ExpenseRequestDto;
 import org.pes.onecemulator.entity.ExpenseRequest;
@@ -29,6 +30,9 @@ public class ExpenseRequestService {
 
     @Autowired
     private ExpenseRequestRepositoryService expenseRequestRepositoryService;
+
+    @Autowired
+    private AccountingEntryService accountingEntryService;
 
     public ExpenseRequestDto getExpenseRequestById(UUID id) throws NotFoundEntityException {
         ExpenseRequest expenseRequest = expenseRequestRepositoryService.findById(id);
@@ -92,10 +96,27 @@ public class ExpenseRequestService {
     public ExpenseRequestDto deleteExpenseRequest(ExpenseRequestDto expenseRequestDto) throws DeleteEntityException {
         try {
             if (expenseRequestDto != null) {
-                expenseRequestDto.setDeleted(true);
-                expenseRequestDto.getAccountingEntries()
-                        .forEach(accountingEntryDto -> accountingEntryDto.setDeleted(true));
-                return convertToDto(expenseRequestRepositoryService.update(convertToEntity(expenseRequestDto)));
+                ExpenseRequestDto expenseRequestDtoTmp = convertToDto(expenseRequestRepositoryService.findById(expenseRequestDto.getId()));
+                expenseRequestDtoTmp.setDeleted(true);
+                log.info("ExpenseRequest " + expenseRequestDto.toString() + " set deleted");
+                Set<AccountingEntryDto> accountingEntryDtos = expenseRequestDtoTmp.getAccountingEntries();
+                log.info("Size of AccountingEntries: "+ accountingEntryDtos.size());
+                if (accountingEntryDtos.size() > 0) {
+                    for (AccountingEntryDto a : accountingEntryDtos) {
+                        a.setDeleted(true);
+                    }
+                    expenseRequestDtoTmp.setAccountingEntries(accountingEntryDtos);
+                }
+                ExpenseRequestDto expenseRequestDtoResult = convertToDto(expenseRequestRepositoryService.update(convertToEntity(expenseRequestDtoTmp)));
+                log.info("ExpenseRequest deleted result: "
+                        + "id = " + expenseRequestDtoResult.getId()
+                        + "\n" + "AccountingEmtries list id = " + expenseRequestDtoResult.getAccountingEntries()
+                        .stream()
+                        .map(AbstractObjectDto::getId)
+                        .collect(Collectors.toList())
+                );
+
+                return expenseRequestDtoResult;
             }
         } catch (Exception e) {
             throw new DeleteEntityException(500, e.getMessage());
