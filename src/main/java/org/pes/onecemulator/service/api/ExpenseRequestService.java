@@ -35,6 +35,7 @@ public class ExpenseRequestService {
     private AccountingEntryService accountingEntryService;
 
     public ExpenseRequestDto getExpenseRequestById(UUID id) throws NotFoundEntityException {
+        log.info("ExpenseRequest getById method start...");
         ExpenseRequest expenseRequest = expenseRequestRepositoryService.findById(id);
         if (expenseRequest != null) {
             log.info("ExpenseRequest entity with id: " + id + " found");
@@ -45,6 +46,7 @@ public class ExpenseRequestService {
     }
 
     public List<ExpenseRequestDto> listExpenseRequest() throws NotFoundEntityException {
+        log.info("ExpenseRequest list method start...");
         List<ExpenseRequest> expenseRequests = expenseRequestRepositoryService.findAll();
         if (expenseRequests.size() > 0) {
             log.info("ExpenseRequest entity list count: " + expenseRequests.size());
@@ -55,6 +57,7 @@ public class ExpenseRequestService {
     }
 
     public ExpenseRequestDto createExpenseRequest(ExpenseRequestDto expenseRequestDto) throws CreateEntityException {
+        log.info("ExpenseRequest create method start...");
         try {
             if (expenseRequestDto != null && expenseRequestDto.getNumber() != null) {
                 log.info("ExpenseRequest: " + expenseRequestDto.toString());
@@ -72,6 +75,7 @@ public class ExpenseRequestService {
     }
 
     public ExpenseRequestDto updateExpenseRequest(ExpenseRequestDto expenseRequestDto) throws UpdateEntityException {
+        log.info("ExpenseRequest update method start...");
         try {
             if (expenseRequestDto != null && expenseRequestDto.getId() != null && expenseRequestDto.getNumber() != null) {
                 ExpenseRequestDto tmp = convertToDto(expenseRequestRepositoryService.findById(expenseRequestDto.getId()));
@@ -94,6 +98,7 @@ public class ExpenseRequestService {
     }
 
     public ExpenseRequestDto deleteExpenseRequest(ExpenseRequestDto expenseRequestDto) throws DeleteEntityException {
+        log.info("ExpenseRequest delete method start...");
         try {
             if (expenseRequestDto != null) {
                 ExpenseRequestDto expenseRequestDtoTmp = convertToDto(expenseRequestRepositoryService.findById(expenseRequestDto.getId()));
@@ -125,6 +130,7 @@ public class ExpenseRequestService {
     }
 
     public ExpenseRequestDto getExpenseRequestByNumber(String number) throws NotFoundEntityException {
+        log.info("ExpenseRequest getByNumber method start...");
         ExpenseRequest expenseRequest = expenseRequestRepositoryService.findByNumber(number);
         if (expenseRequest != null) {
             log.info("ExpenseRequest entity with number: " + number + " found");

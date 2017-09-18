@@ -33,6 +33,7 @@ public class AccountingEntryService {
     private AccountingEntryRepositoryService accountingEntryRepositoryService;
 
     public AccountingEntryDto getAccountingEntryById(UUID id) throws NotFoundEntityException {
+        log.info("AccountingEntry getById method start...");
         AccountingEntry accountingEntry = accountingEntryRepositoryService.findById(id);
         if (accountingEntry != null) {
             log.info("AccountingEntry entity with id: " + id.toString() + " found");
@@ -43,6 +44,7 @@ public class AccountingEntryService {
     }
 
     public List<AccountingEntryDto> listAccountingEntry() throws NotFoundEntityException {
+        log.info("AccountingEntry list method start...");
         List<AccountingEntry> accountingEntries = accountingEntryRepositoryService.findAll();
         if (accountingEntries.size() > 0) {
             log.info("AccountingEntry entity list count: " + accountingEntries.size());
@@ -53,6 +55,7 @@ public class AccountingEntryService {
     }
 
     public AccountingEntryDto createAccountingEntry(AccountingEntryDto accountingEntryDto) throws CreateEntityException {
+        log.info("AccountingEntry create method start...");
         try {
             if (accountingEntryDto != null && accountingEntryDto.getExpenseNumber() != null) {
                 ExpenseRequestDto expenseRequestDto = expenseRequestService.getExpenseRequestByNumber(accountingEntryDto.getExpenseNumber());
@@ -74,6 +77,7 @@ public class AccountingEntryService {
     }
 
     public AccountingEntryDto updateAccountingEntry(AccountingEntryDto accountingEntryDto) throws UpdateEntityException {
+        log.info("AccountingEntry update method start...");
         try {
             if (accountingEntryDto != null && accountingEntryDto.getId() != null && accountingEntryDto.getExpenseNumber() != null) {
                 ExpenseRequestDto expenseRequestDto = expenseRequestService.getExpenseRequestByNumber(accountingEntryDto.getExpenseNumber());
@@ -100,6 +104,7 @@ public class AccountingEntryService {
     }
 
     public AccountingEntryDto deleteAccountingEntry(UUID id) throws DeleteEntityException {
+        log.info("AccountingEntry delete method start...");
         try {
             AccountingEntry accountingEntry = accountingEntryRepositoryService.delete(id);
             if (accountingEntry != null) {
