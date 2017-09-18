@@ -53,10 +53,10 @@ public class ExpenseRequestController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/create")
-    public @ResponseBody ResponseEntity<ExpenseRequestDto> create(@RequestBody ExpenseRequestDto accountingEntryDto) {
+    public @ResponseBody ResponseEntity<ExpenseRequestDto> create(@RequestBody ExpenseRequestDto expenseRequestDto) {
         try {
             return new ResponseEntity<>(
-                    expenseRequestService.createExpenseRequest(accountingEntryDto),
+                    expenseRequestService.createExpenseRequest(expenseRequestDto),
                     HttpStatus.OK
             );
         } catch (Exception e) {
@@ -70,10 +70,27 @@ public class ExpenseRequestController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/update")
-    public @ResponseBody ResponseEntity<ExpenseRequestDto> update(@RequestBody ExpenseRequestDto accountingEntryDto) {
+    public @ResponseBody ResponseEntity<ExpenseRequestDto> update(@RequestBody ExpenseRequestDto expenseRequestDto) {
         try {
             return new ResponseEntity<>(
-                    expenseRequestService.updateExpenseRequest(accountingEntryDto),
+                    expenseRequestService.updateExpenseRequest(expenseRequestDto),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("warning:", e.getMessage());
+            return new ResponseEntity<>(
+                    responseHeaders,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/delete")
+    public @ResponseBody ResponseEntity<ExpenseRequestDto> delete(@RequestBody ExpenseRequestDto expenseRequestDto) {
+        try {
+            return new ResponseEntity<>(
+                    expenseRequestService.deleteExpenseRequest(expenseRequestDto),
                     HttpStatus.OK
             );
         } catch (Exception e) {

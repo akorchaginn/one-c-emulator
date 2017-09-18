@@ -68,7 +68,7 @@ public class AccountingEntryRepositoryServiceImpl implements AccountingEntryRepo
 
     @Override
     @Transactional
-    public AccountingEntry deleteLogic(UUID id) throws DeleteEntityException {
+    public AccountingEntry delete(UUID id) throws DeleteEntityException {
         if (id != null) {
             AccountingEntry accountingEntry = accountingEntryRepository.findOne(id);
             if (accountingEntry != null) {

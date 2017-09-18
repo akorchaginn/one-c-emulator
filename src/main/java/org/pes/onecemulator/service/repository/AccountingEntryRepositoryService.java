@@ -11,5 +11,5 @@ public interface AccountingEntryRepositoryService {
     List<AccountingEntry> findAll();
     AccountingEntry create(AccountingEntry accountingEntry) throws Exception;
     AccountingEntry update(AccountingEntry accountingEntry) throws Exception;
-    AccountingEntry deleteLogic(UUID id) throws DeleteEntityException;
+    AccountingEntry delete(UUID id) throws DeleteEntityException;
 }

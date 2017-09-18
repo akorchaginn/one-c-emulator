@@ -1,9 +1,11 @@
 package org.pes.onecemulator.service.api;
 
+import org.pes.onecemulator.dto.AccountingEntryDto;
 import org.pes.onecemulator.dto.ExpenseRequestDto;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.CreateEntityException;
+import org.pes.onecemulator.service.api.exception.DeleteEntityException;
 import org.pes.onecemulator.service.api.exception.NotFoundEntityException;
 import org.pes.onecemulator.service.api.exception.UpdateEntityException;
 import org.pes.onecemulator.service.repository.ExpenseRequestRepositoryService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -84,6 +87,20 @@ public class ExpenseRequestService {
             throw new UpdateEntityException(500, e.getMessage());
         }
         throw new UpdateEntityException(500, "ExpenseRequest entity is null");
+    }
+
+    public ExpenseRequestDto deleteExpenseRequest(ExpenseRequestDto expenseRequestDto) throws DeleteEntityException {
+        try {
+            if (expenseRequestDto != null) {
+                expenseRequestDto.setDeleted(true);
+                expenseRequestDto.getAccountingEntries()
+                        .forEach(accountingEntryDto -> accountingEntryDto.setDeleted(true));
+                return convertToDto(expenseRequestRepositoryService.update(convertToEntity(expenseRequestDto)));
+            }
+        } catch (Exception e) {
+            throw new DeleteEntityException(500, e.getMessage());
+        }
+        throw new DeleteEntityException(500, "Delete method argument is null");
     }
 
     public ExpenseRequestDto getExpenseRequestByNumber(String number) throws NotFoundEntityException {

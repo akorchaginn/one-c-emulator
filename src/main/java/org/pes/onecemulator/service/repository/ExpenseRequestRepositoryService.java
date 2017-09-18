@@ -11,5 +11,5 @@ public interface ExpenseRequestRepositoryService {
     List<ExpenseRequest> findAll();
     ExpenseRequest create(ExpenseRequest expenseRequest) throws Exception;
     ExpenseRequest update(ExpenseRequest expenseRequest) throws Exception;
-    void delete(UUID id) throws Exception;
+    ExpenseRequest delete(UUID id) throws Exception;
 }

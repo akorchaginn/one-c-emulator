@@ -101,7 +101,7 @@ public class AccountingEntryService {
 
     public AccountingEntryDto deleteAccountingEntry(UUID id) throws DeleteEntityException {
         try {
-            AccountingEntry accountingEntry = accountingEntryRepositoryService.deleteLogic(id);
+            AccountingEntry accountingEntry = accountingEntryRepositoryService.delete(id);
             if (accountingEntry != null) {
                 AccountingEntryDto result = convertToDto(accountingEntry);
                 log.info("AccountingEntry with id: " + id.toString() + " deleted");

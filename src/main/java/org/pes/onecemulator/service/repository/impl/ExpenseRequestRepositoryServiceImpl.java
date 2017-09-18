@@ -3,6 +3,7 @@ package org.pes.onecemulator.service.repository.impl;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.service.api.exception.CreateEntityException;
+import org.pes.onecemulator.service.api.exception.DeleteEntityException;
 import org.pes.onecemulator.service.api.exception.UpdateEntityException;
 import org.pes.onecemulator.service.repository.ExpenseRequestRepositoryService;
 import org.springframework.stereotype.Service;
@@ -76,11 +77,16 @@ public class ExpenseRequestRepositoryServiceImpl implements ExpenseRequestReposi
 
     @Override
     @Transactional
-    public void delete(UUID id) throws Exception {
-        if (expenseRequestRepository.exists(id)) {
-            expenseRequestRepository.delete(id);
-        } else {
-            throw new Exception("Entity with id: " + id + " not exist at database");
+    public ExpenseRequest delete(UUID id) throws DeleteEntityException {
+        if (id != null) {
+            ExpenseRequest expenseRequest = expenseRequestRepository.findOne(id);
+            if (expenseRequest != null) {
+                expenseRequest.setDeleted(true);
+
+                return entityManager.merge(expenseRequest);
+            }
+            throw new DeleteEntityException(500, "Entity with id: " + id + " not exist at database");
         }
+        throw new DeleteEntityException(500, "Id is null");
     }
 }

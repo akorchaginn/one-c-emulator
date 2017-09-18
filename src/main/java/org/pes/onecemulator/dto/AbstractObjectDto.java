@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Calendar;
 import java.util.UUID;
 
-public class AbstractObjectDto {
+public class AbstractObjectDto extends ApiError {
 
     @JsonProperty("id")
     private UUID id;
