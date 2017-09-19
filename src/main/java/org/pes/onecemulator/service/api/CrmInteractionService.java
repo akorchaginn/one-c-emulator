@@ -93,7 +93,7 @@ public class CrmInteractionService {
                 .add(expenseRequestDto.getConfirm().toString())
                 .toString();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String parameterDate = simpleDateFormat.format(accountingEntryDto.getDate());
+        String parameterDate = simpleDateFormat.format(accountingEntryDto.getDate().getTime());
         String resultUrl = new StringJoiner("/")
                 .add(endpointUrl)
                 .add(parameterData)
