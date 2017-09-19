@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.api;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.asynchttpclient.*;
 import org.pes.onecemulator.dto.AccountingEntryDto;
@@ -12,16 +13,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 @Service
 public class CrmInteractionService {
@@ -80,9 +87,12 @@ public class CrmInteractionService {
         return documentCrmList;
     }
 
-    public void sendAccountingEntryToCrm(AccountingEntryDto accountingEntryDto) throws IOException {
+    public void sendAccountingEntryToCrm(AccountingEntryDto accountingEntryDto) {
         ExpenseRequestDto expenseRequestDto = accountingEntryDto.getExpenseRequest();
-        String endpointUrl = environment.getProperty("crm.interaction.url") + environment.getProperty("crm.interaction.uri");
+
+        String endpointUrl = environment.getProperty("crm.interaction.url").replaceAll("\"", StringUtils.EMPTY)
+                + environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY);
+
         String parameterData = new StringJoiner(",")
                 .add(expenseRequestDto.getNumber())
                 .add(expenseRequestDto.getSum().toString())
@@ -92,22 +102,46 @@ public class CrmInteractionService {
                 .add(accountingEntryDto.getDocumentName())
                 .add(expenseRequestDto.getConfirm().toString())
                 .toString();
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String parameterDate = simpleDateFormat.format(accountingEntryDto.getDate().getTime());
+
         String resultUrl = new StringJoiner("/")
                 .add(endpointUrl)
                 .add(parameterData)
                 .add(parameterDate)
                 .toString();
 
-        try (AsyncHttpClient asyncHttpClient = asyncHttpClient()) {
+        try {
+            log.info("Start request to CRM: " + resultUrl);
+
+            AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
             asyncHttpClient
                     .prepareGet(resultUrl)
-                    .execute()
-                    .toCompletableFuture()
-                    .thenApply(Response::getResponseBody)
-                    .thenAccept(System.out::println)
-                    .join();
+                    .execute(new CompletionHandler(accountingEntryDto.getId()));
+
+        } catch (Exception e) {
+            log.warn("Error request to CRM: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
+        }
+    }
+
+    private static class CompletionHandler extends AsyncCompletionHandler<Void> {
+        private final UUID aEnId;
+        public CompletionHandler(UUID aEnId) { this.aEnId = aEnId; }
+
+        @Override
+        public Void onCompleted(Response response) {
+            try {
+                log.warn(String.format("End request to CRM for new AccountingEntry %s: %s", aEnId.toString(),  response.getResponseBody()));
+            } catch (Exception e) {
+                log.warn("Error onCompleted(): "+ e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+            }
+            return null;
+        }
+
+        @Override
+        public void onThrowable(Throwable t) {
+            log.warn("End CRM request with error: " + t.getMessage() +"\n" + Arrays.toString(t.getStackTrace()));
         }
     }
 

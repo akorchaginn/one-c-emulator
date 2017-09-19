@@ -60,9 +60,9 @@ public class AccountingEntryController {
     public @ResponseBody ResponseEntity<AccountingEntryDto> create(@RequestBody AccountingEntryDto accountingEntryDto) {
         try {
             AccountingEntryDto accountingEntryDtoResult = accountingEntryService.createAccountingEntry(accountingEntryDto);
-            crmInteractionService.sendAccountingEntryToCrm(accountingEntryDto);
+            crmInteractionService.sendAccountingEntryToCrm(accountingEntryDtoResult);
             return new ResponseEntity<>(
-                    accountingEntryDto,
+                    accountingEntryDtoResult,
                     HttpStatus.OK
             );
         } catch (Exception e) {

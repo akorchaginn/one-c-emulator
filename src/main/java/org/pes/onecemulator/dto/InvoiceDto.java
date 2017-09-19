@@ -13,23 +13,23 @@ public class InvoiceDto extends AbstractObjectDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar date;
 
-    @JsonProperty("number")
+    @JsonProperty("nom")
     private String number;
 
-    @JsonProperty("number_oq")
+    @JsonProperty("NomOQ")
     private String numberOq;
 
-    @JsonProperty("payer_code")
-    private String payerCode;
+    @JsonProperty("name")
+    private String name;
 
     @JsonIgnore
     private PayerDto payer;
 
-    @JsonProperty("payment_date")
+    @JsonProperty("dataOplat")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar paymentDate;
 
-    @JsonProperty("payment_sum")
+    @JsonProperty("sumOplat")
     private BigDecimal paymentSum;
 
     @JsonProperty("status")
@@ -62,12 +62,12 @@ public class InvoiceDto extends AbstractObjectDto {
         this.numberOq = numberOq;
     }
 
-    public String getPayerCode() {
-        return payerCode;
+    public String getName() {
+        return name;
     }
 
-    public void setPayerCode(String payerCode) {
-        this.payerCode = payerCode;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public PayerDto getPayer() {

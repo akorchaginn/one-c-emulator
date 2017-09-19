@@ -14,7 +14,7 @@ public class PayerDto extends AbstractObjectDto {
     @JsonProperty("code")
     private String code;
 
-    @JsonProperty("full_name")
+    @JsonProperty("fullName")
     private String fullName;
 
     @JsonProperty("inn")

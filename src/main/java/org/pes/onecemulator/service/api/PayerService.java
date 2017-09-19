@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -75,8 +76,8 @@ public class PayerService {
                 return result;
             }
         } catch (Exception e) {
-            log.error("Payer create error: " + e.getMessage());
-            throw new CreateEntityException(500, e.getMessage());
+            log.error("Payer create error: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
+            throw new CreateEntityException(500, e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         log.error("Payer entity is null or has not expenseNumber value");
         throw new CreateEntityException(500, "Payer entity is null or has not expenseNumber value");
@@ -102,7 +103,7 @@ public class PayerService {
                 }
             }
         } catch (Exception e) {
-            throw new UpdateEntityException(500, e.getMessage());
+            throw new UpdateEntityException(500, e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         throw new UpdateEntityException(500, "Payer entity is null");
     }
@@ -134,7 +135,7 @@ public class PayerService {
                 return payerDtoResult;
             }
         } catch (Exception e) {
-            throw new DeleteEntityException(500, e.getMessage());
+            throw new DeleteEntityException(500, e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         throw new DeleteEntityException(500, "Delete method argument is null");
     }

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -58,8 +59,8 @@ public class InvoiceService {
     public InvoiceDto createInvoice(InvoiceDto invoiceDto) throws CreateEntityException {
         log.info("Invoice create method start...");
         try {
-            if (invoiceDto != null && invoiceDto.getPayerCode() != null) {
-                PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getPayerCode());
+            if (invoiceDto != null && invoiceDto.getName() != null) {
+                PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getName());
                 if (payerDto != null) {
                     invoiceDto.setPayer(payerDto);
                     log.info("Payer: " + payerDto.toString());
@@ -70,8 +71,8 @@ public class InvoiceService {
                 }
             }
         } catch (Exception e) {
-            log.error("Invoice create error: " + e.getMessage());
-            throw new CreateEntityException(500, e.getMessage());
+            log.error("Invoice create error: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
+            throw new CreateEntityException(500, e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         log.error("Invoice entity is null or has not expenseNumber value");
         throw new CreateEntityException(500, "Invoice entity is null or has not expenseNumber value");
@@ -80,14 +81,14 @@ public class InvoiceService {
     public InvoiceDto updateInvoice(InvoiceDto invoiceDto) throws UpdateEntityException {
         log.info("Invoice update method start...");
         try {
-            if (invoiceDto != null && invoiceDto.getId() != null && invoiceDto.getPayerCode() != null) {
-                PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getPayerCode());
+            if (invoiceDto != null && invoiceDto.getId() != null && invoiceDto.getName() != null) {
+                PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getName());
                 if(payerDto != null && invoiceRepositoryService.findById(invoiceDto.getId()) !=  null) {
                     invoiceDto.setPayer(payerDto);
                     log.info("Payer: " + payerDto.toString());
                     InvoiceDto tmp = convertToDto(invoiceRepositoryService.findById(invoiceDto.getId()));
                     tmp.setPayer(invoiceDto.getPayer());
-                    tmp.setPayerCode(invoiceDto.getPayerCode());
+                    tmp.setName(invoiceDto.getName());
                     tmp.setDate(invoiceDto.getDate());
                     tmp.setSum(invoiceDto.getSum());
                     tmp.setNumberOq(invoiceDto.getNumberOq());
@@ -102,7 +103,7 @@ public class InvoiceService {
                 }
             }
         } catch (Exception e) {
-            throw new UpdateEntityException(500, e.getMessage());
+            throw new UpdateEntityException(500, e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         throw new UpdateEntityException(500, "Invoice entity is null or expenseNumber is null");
     }
@@ -118,7 +119,7 @@ public class InvoiceService {
             }
         } catch (Exception e) {
             log.info("Error Invoice with id: " + id.toString() + " deleted " + e.getMessage());
-            throw new DeleteEntityException(500, "Error delete: " + e.getMessage());
+            throw new DeleteEntityException(500, "Error delete: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         throw new DeleteEntityException(500, "Error delete: merge return null O_o");
     }

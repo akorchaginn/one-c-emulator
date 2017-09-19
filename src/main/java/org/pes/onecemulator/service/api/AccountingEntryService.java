@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -70,7 +71,7 @@ public class AccountingEntryService {
             }
         } catch (Exception e) {
             log.error("AccountingEntry create error: " + e.getMessage());
-            throw new CreateEntityException(500, e.getMessage());
+            throw new CreateEntityException(500, e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         log.error("AccountingEntry entity is null or has not expenseNumber value");
         throw new CreateEntityException(500, "AccountingEntry entity is null or has not expenseNumber value");
@@ -98,7 +99,7 @@ public class AccountingEntryService {
                 }
             }
         } catch (Exception e) {
-            throw new UpdateEntityException(500, e.getMessage());
+            throw new UpdateEntityException(500, e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         throw new UpdateEntityException(500, "AccountingEntry entity is null or expenseNumber is null");
     }
@@ -113,8 +114,8 @@ public class AccountingEntryService {
                 return result;
             }
         } catch (Exception e) {
-            log.info("Error AccountingEntry with id: " + id.toString() + " deleted " + e.getMessage());
-            throw new DeleteEntityException(500, "Error delete: " + e.getMessage());
+            log.info("Error AccountingEntry with id: " + id.toString() + " deleted " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
+            throw new DeleteEntityException(500, "Error delete: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         throw new DeleteEntityException(500, "Error delete: merge return null O_o");
     }
