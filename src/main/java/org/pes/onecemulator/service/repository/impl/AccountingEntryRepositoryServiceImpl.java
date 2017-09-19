@@ -29,7 +29,9 @@ public class AccountingEntryRepositoryServiceImpl implements AccountingEntryRepo
     @Transactional
     public AccountingEntry findById(UUID id) {
         AccountingEntry accountingEntry = accountingEntryRepository.findOne(id);
-        return accountingEntry.getDeleted() ? null : accountingEntry;
+        if (accountingEntry != null && !accountingEntry.getDeleted())
+            return accountingEntry;
+        return null;
     }
 
     @Override

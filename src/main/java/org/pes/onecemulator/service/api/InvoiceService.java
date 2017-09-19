@@ -58,7 +58,7 @@ public class InvoiceService {
     public InvoiceDto createInvoice(InvoiceDto invoiceDto) throws CreateEntityException {
         log.info("Invoice create method start...");
         try {
-            if (invoiceDto != null && invoiceDto.getPayer() != null) {
+            if (invoiceDto != null && invoiceDto.getPayerCode() != null) {
                 PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getPayerCode());
                 if (payerDto != null) {
                     invoiceDto.setPayer(payerDto);

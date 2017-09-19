@@ -2,6 +2,7 @@ package org.pes.onecemulator.controller;
 
 import org.pes.onecemulator.dto.AccountingEntryDto;
 import org.pes.onecemulator.service.api.AccountingEntryService;
+import org.pes.onecemulator.service.api.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public class AccountingEntryController {
 
     @Autowired
     private AccountingEntryService accountingEntryService;
+
+    @Autowired
+    private CrmInteractionService crmInteractionService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/getbyid/{id}")
     public @ResponseBody ResponseEntity<AccountingEntryDto> getById(@PathVariable String id) {
@@ -55,8 +59,10 @@ public class AccountingEntryController {
     @RequestMapping(method = RequestMethod.POST, path = "/create")
     public @ResponseBody ResponseEntity<AccountingEntryDto> create(@RequestBody AccountingEntryDto accountingEntryDto) {
         try {
+            AccountingEntryDto accountingEntryDtoResult = accountingEntryService.createAccountingEntry(accountingEntryDto);
+            crmInteractionService.sendAccountingEntryToCrm(accountingEntryDto);
             return new ResponseEntity<>(
-                    accountingEntryService.createAccountingEntry(accountingEntryDto),
+                    accountingEntryDto,
                     HttpStatus.OK
             );
         } catch (Exception e) {

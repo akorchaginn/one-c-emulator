@@ -44,20 +44,14 @@ public class CrmInteractionController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDoc")
-    public @ResponseBody ResponseEntity<List<DocumentCrm>> getByParameters(@RequestBody List<DocumentCrm> documentCrms) {
-        List<DocumentCrm> documentCrmList = new ArrayList<>();
-        documentCrms.forEach(documentCrm ->
-                documentCrmList.addAll(
-                        crmInteractionService.getDocumentsCrmByParameters(
-                                documentCrm.getPayerName(),
-                                documentCrm.getSum(),
-                                documentCrm.getDate()
-                        )
-                )
-        );
+    public @ResponseBody ResponseEntity<List<DocumentCrm>> getByParameters(@RequestBody DocumentCrm documentCrm) {
         try {
             return new ResponseEntity<>(
-                    documentCrmList,
+                    crmInteractionService.getDocumentsCrmByParameters(
+                            documentCrm.getPayerName(),
+                            documentCrm.getSum(),
+                            documentCrm.getDate()
+                    ),
                     HttpStatus.OK
             );
         } catch (Exception e) {

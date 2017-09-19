@@ -1,23 +1,35 @@
 package org.pes.onecemulator.service.api;
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.asynchttpclient.*;
+import org.pes.onecemulator.dto.AccountingEntryDto;
 import org.pes.onecemulator.dto.DocumentCrm;
+import org.pes.onecemulator.dto.ExpenseRequestDto;
 import org.pes.onecemulator.dto.InvoiceDto;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.NotFoundEntityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 @Service
 public class CrmInteractionService {
 
     private static final Logger log = LoggerFactory.getLogger(CrmInteractionService.class);
+
+    @Autowired
+    private Environment environment;
 
     @Autowired
     private MapperFactoryService mapperFactoryService;
@@ -66,6 +78,37 @@ public class CrmInteractionService {
             e.printStackTrace();
         }
         return documentCrmList;
+    }
+
+    public void sendAccountingEntryToCrm(AccountingEntryDto accountingEntryDto) throws IOException {
+        ExpenseRequestDto expenseRequestDto = accountingEntryDto.getExpenseRequest();
+        String endpointUrl = environment.getProperty("crm.interaction.url") + environment.getProperty("crm.interaction.uri");
+        String parameterData = new StringJoiner(",")
+                .add(expenseRequestDto.getNumber())
+                .add(expenseRequestDto.getSum().toString())
+                .add(expenseRequestDto.getPaid().toString())
+                .add(expenseRequestDto.getCurrency())
+                .add(accountingEntryDto.getCode())
+                .add(accountingEntryDto.getDocumentName())
+                .add(expenseRequestDto.getConfirm().toString())
+                .toString();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String parameterDate = simpleDateFormat.format(accountingEntryDto.getDate());
+        String resultUrl = new StringJoiner("/")
+                .add(endpointUrl)
+                .add(parameterData)
+                .add(parameterDate)
+                .toString();
+
+        try (AsyncHttpClient asyncHttpClient = asyncHttpClient()) {
+            asyncHttpClient
+                    .prepareGet(resultUrl)
+                    .execute()
+                    .toCompletableFuture()
+                    .thenApply(Response::getResponseBody)
+                    .thenAccept(System.out::println)
+                    .join();
+        }
     }
 
     private DocumentCrm convertToDoc(InvoiceDto invoice) {

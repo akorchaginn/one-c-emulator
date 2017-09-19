@@ -54,10 +54,10 @@ public class InvoiceController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/create")
-    public @ResponseBody ResponseEntity<InvoiceDto> create(@RequestBody InvoiceDto accountingEntryDto) {
+    public @ResponseBody ResponseEntity<InvoiceDto> create(@RequestBody InvoiceDto invoiceDto) {
         try {
             return new ResponseEntity<>(
-                    invoiceService.createInvoice(accountingEntryDto),
+                    invoiceService.createInvoice(invoiceDto),
                     HttpStatus.OK
             );
         } catch (Exception e) {
@@ -71,10 +71,10 @@ public class InvoiceController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/update")
-    public @ResponseBody ResponseEntity<InvoiceDto> update(@RequestBody InvoiceDto accountingEntryDto) throws Exception {
+    public @ResponseBody ResponseEntity<InvoiceDto> update(@RequestBody InvoiceDto invoiceDto) throws Exception {
         try {
             return new ResponseEntity<>(
-                    invoiceService.updateInvoice(accountingEntryDto),
+                    invoiceService.updateInvoice(invoiceDto),
                     HttpStatus.OK
             );
         } catch (Exception e) {

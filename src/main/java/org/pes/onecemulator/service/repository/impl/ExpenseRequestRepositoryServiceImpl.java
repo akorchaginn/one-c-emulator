@@ -29,14 +29,18 @@ public class ExpenseRequestRepositoryServiceImpl implements ExpenseRequestReposi
     @Transactional
     public ExpenseRequest findById(UUID id) {
         ExpenseRequest expenseRequest = expenseRequestRepository.findOne(id);
-        return !expenseRequest.getDeleted() ? expenseRequest : null;
+        if (expenseRequest != null && !expenseRequest.getDeleted())
+            return expenseRequest;
+        return null;
     }
 
     @Override
     @Transactional
     public ExpenseRequest findByNumber(String number) {
         ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(number);
-        return !expenseRequest.getDeleted() ? expenseRequest : null;
+        if (expenseRequest != null && !expenseRequest.getDeleted())
+            return expenseRequest;
+        return null;
     }
 
     @Override

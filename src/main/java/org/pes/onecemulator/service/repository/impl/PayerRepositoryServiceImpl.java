@@ -29,14 +29,18 @@ public class PayerRepositoryServiceImpl implements PayerRepositoryService {
     @Transactional
     public Payer findById(UUID id) {
         Payer payer = payerRepository.findOne(id);
-        return !payer.getDeleted() ? payer : null;
+        if (payer != null && !payer.getDeleted())
+            return payer;
+        return null;
     }
 
     @Override
     @Transactional
     public Payer findByCode(String code) {
         Payer payer = payerRepository.findByCode(code);
-        return !payer.getDeleted() ? payer : null;
+        if (payer != null && !payer.getDeleted())
+            return payer;
+        return null;
     }
 
     @Override

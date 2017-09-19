@@ -29,7 +29,9 @@ public class InvoiceRepositoryServiceImpl implements InvoiceRepositoryService {
     @Transactional
     public Invoice findById(UUID id) {
         Invoice invoice = invoiceRepository.findOne(id);
-        return !invoice.getDeleted() ? invoice : null;
+        if (invoice != null && !invoice.getDeleted())
+            return invoice;
+        return null;
     }
 
     @Override
