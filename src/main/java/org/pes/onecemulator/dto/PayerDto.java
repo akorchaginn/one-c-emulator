@@ -1,33 +1,33 @@
-package org.pes.onecemulator.entity;
+package org.pes.onecemulator.dto;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "payer")
-public class Payer extends AbstractObject {
+public class PayerDto extends AbstractObjectDto {
 
-    @Column(name = "address")
+    @JsonProperty("address")
     private String address;
 
-    @Column(name = "code")
+    @JsonProperty("code")
     private String code;
 
-    @Column(name = "full_name")
+    @JsonProperty("full_name")
     private String fullName;
 
-    @Column(name = "inn")
+    @JsonProperty("inn")
     private String inn;
 
-    @Column(name = "kpp")
+    @JsonProperty("kpp")
     private String kpp;
 
-    @Column(name = "name")
+    @JsonProperty("name")
     private String name;
 
-    @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Invoice> invoices = new HashSet<>();
+    @JsonIgnore
+    private Set<InvoiceDto> invoices = new HashSet<>();
 
     public String getAddress() {
         return address;
@@ -77,11 +77,11 @@ public class Payer extends AbstractObject {
         this.name = name;
     }
 
-    public Set<Invoice> getInvoices() {
+    public Set<InvoiceDto> getInvoices() {
         return invoices;
     }
 
-    public void setInvoices(Set<Invoice> invoices) {
+    public void setInvoices(Set<InvoiceDto> invoices) {
         this.invoices = invoices;
     }
 }

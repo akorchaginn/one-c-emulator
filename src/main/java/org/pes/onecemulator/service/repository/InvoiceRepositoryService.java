@@ -10,5 +10,5 @@ public interface InvoiceRepositoryService {
     List<Invoice> findAll();
     Invoice create(Invoice invoice) throws Exception;
     Invoice update(Invoice invoice) throws Exception;
-    void delete(UUID id) throws Exception;
+    Invoice delete(UUID id) throws Exception;
 }

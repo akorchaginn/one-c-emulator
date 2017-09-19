@@ -1,41 +1,41 @@
-package org.pes.onecemulator.entity;
+package org.pes.onecemulator.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-@Entity
-@Table(name = "invoice")
-public class Invoice extends AbstractObject {
+public class InvoiceDto extends AbstractObjectDto {
 
-    @Column(name = "date")
+    @JsonProperty("date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar date;
 
-    @Column(name = "number")
+    @JsonProperty("number")
     private String number;
 
-    @Column(name = "number_oq")
+    @JsonProperty("number_oq")
     private String numberOq;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "payer_id")
-    private Payer payer;
+    @JsonProperty("payer_code")
+    private String payerCode;
 
-    @Column(name = "payment_date")
+    @JsonIgnore
+    private PayerDto payer;
+
+    @JsonProperty("payment_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar paymentDate;
 
-    @Column(name = "payment_sum")
+    @JsonProperty("payment_sum")
     private BigDecimal paymentSum;
 
-    @Column(name = "status")
+    @JsonProperty("status")
     private String status;
 
-    @Column(name = "sum")
+    @JsonProperty("sum")
     private BigDecimal sum;
 
     public Calendar getDate() {
@@ -62,11 +62,19 @@ public class Invoice extends AbstractObject {
         this.numberOq = numberOq;
     }
 
-    public Payer getPayer() {
+    public String getPayerCode() {
+        return payerCode;
+    }
+
+    public void setPayerCode(String payerCode) {
+        this.payerCode = payerCode;
+    }
+
+    public PayerDto getPayer() {
         return payer;
     }
 
-    public void setPayer(Payer payer) {
+    public void setPayer(PayerDto payer) {
         this.payer = payer;
     }
 

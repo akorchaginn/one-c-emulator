@@ -13,7 +13,7 @@ public class AccountingEntryDto extends AbstractObjectDto {
     private String code;
 
     @JsonProperty("date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-dd-MM")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar date;
 
     @JsonProperty("docName")

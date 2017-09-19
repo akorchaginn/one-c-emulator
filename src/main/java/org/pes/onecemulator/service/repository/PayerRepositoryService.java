@@ -7,8 +7,9 @@ import java.util.UUID;
 
 public interface PayerRepositoryService {
     Payer findById(UUID id);
+    Payer findByCode(String code);
     List<Payer> findAll();
     Payer create(Payer payer) throws Exception;
     Payer update(Payer payer) throws Exception;
-    void delete(UUID id) throws Exception;
+    Payer delete(UUID id) throws Exception;
 }

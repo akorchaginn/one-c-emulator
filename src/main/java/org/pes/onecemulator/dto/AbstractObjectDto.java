@@ -1,12 +1,13 @@
 package org.pes.onecemulator.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Calendar;
 import java.util.UUID;
 
-public class AbstractObjectDto extends ApiError {
+public class AbstractObjectDto {
 
     @JsonProperty("id")
     private UUID id;
@@ -21,6 +22,10 @@ public class AbstractObjectDto extends ApiError {
 
     @JsonProperty("deleted")
     private Boolean deleted;
+
+    @JsonProperty("error")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ApiError error;
 
     public UUID getId() {
         return id;
@@ -52,5 +57,13 @@ public class AbstractObjectDto extends ApiError {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public ApiError getError() {
+        return error;
+    }
+
+    public void setError(ApiError error) {
+        this.error = error;
     }
 }
