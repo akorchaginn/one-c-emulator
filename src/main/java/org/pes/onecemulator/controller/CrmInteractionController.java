@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,14 +42,20 @@ public class CrmInteractionController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDoc")
-    public @ResponseBody ResponseEntity<List<DocumentCrm>> getByParameters(@RequestBody DocumentCrm documentCrm) {
+    public @ResponseBody ResponseEntity<List<DocumentCrm>> getByParameters(@RequestBody List<DocumentCrm> documentCrms) {
+        List<DocumentCrm> documentCrmList = new ArrayList<>();
+        documentCrms.forEach(documentCrm ->
+                documentCrmList.addAll(
+                        crmInteractionService.getDocumentsCrmByParameters(
+                                documentCrm.getPayerName(),
+                                documentCrm.getSum(),
+                                documentCrm.getDate()
+                        )
+                )
+        );
         try {
             return new ResponseEntity<>(
-                    crmInteractionService.getDocumentsCrmByParameters(
-                            documentCrm.getPayerName(),
-                            documentCrm.getSum(),
-                            documentCrm.getDate()
-                    ),
+                    documentCrmList,
                     HttpStatus.OK
             );
         } catch (Exception e) {
