@@ -1,5 +1,7 @@
 package org.pes.onecemulator.service.api;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.pes.onecemulator.dto.InvoiceDto;
 import org.pes.onecemulator.dto.PayerDto;
 import org.pes.onecemulator.entity.Invoice;
@@ -38,7 +40,6 @@ public class InvoiceService {
         InvoiceDto invoiceDto = convertToDto(invoiceRepositoryService.findById(id));
         if (invoiceDto != null) {
             log.info("Invoice entity with id: " + id.toString() + " found");
-
             return invoiceDto;
         }
         log.warn("Invoice entity with id: " + id.toString() + " not found");
@@ -59,8 +60,8 @@ public class InvoiceService {
     public InvoiceDto createInvoice(InvoiceDto invoiceDto) throws CreateEntityException {
         log.info("Invoice create method start...");
         try {
-            if (invoiceDto != null && invoiceDto.getName() != null) {
-                PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getName());
+            if (invoiceDto != null && invoiceDto.getLocalPayerCode() != null) {
+                PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getLocalPayerCode());
                 if (payerDto != null) {
                     invoiceDto.setPayer(payerDto);
                     log.info("Payer: " + payerDto.toString());
@@ -81,14 +82,14 @@ public class InvoiceService {
     public InvoiceDto updateInvoice(InvoiceDto invoiceDto) throws UpdateEntityException {
         log.info("Invoice update method start...");
         try {
-            if (invoiceDto != null && invoiceDto.getId() != null && invoiceDto.getName() != null) {
-                PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getName());
+            if (invoiceDto != null && invoiceDto.getId() != null && invoiceDto.getLocalPayerCode() != null) {
+                PayerDto payerDto = payerService.getPayerByCode(invoiceDto.getLocalPayerCode());
                 if(payerDto != null && invoiceRepositoryService.findById(invoiceDto.getId()) !=  null) {
                     invoiceDto.setPayer(payerDto);
                     log.info("Payer: " + payerDto.toString());
                     InvoiceDto tmp = convertToDto(invoiceRepositoryService.findById(invoiceDto.getId()));
                     tmp.setPayer(invoiceDto.getPayer());
-                    tmp.setName(invoiceDto.getName());
+                    tmp.setLocalPayerCode(invoiceDto.getPayer().getCode());
                     tmp.setDate(invoiceDto.getDate());
                     tmp.setSum(invoiceDto.getSum());
                     tmp.setNumberOq(invoiceDto.getNumberOq());
@@ -125,7 +126,13 @@ public class InvoiceService {
     }
 
     private InvoiceDto convertToDto(Invoice invoice) {
-        return mapperFactoryService.getMapper().map(invoice, InvoiceDto.class);
+        PropertyMap<Invoice, InvoiceDto> invoiceMap = new PropertyMap<Invoice, InvoiceDto>() {
+            @Override
+            protected void configure() {
+                map().setLocalPayerCode(source.getPayer().getCode());
+            }
+        };
+        return mapperFactoryService.getMapper().addMappings(invoiceMap).map(invoice);
     }
 
     private List<InvoiceDto> convertToDto(List<Invoice> invoices) {

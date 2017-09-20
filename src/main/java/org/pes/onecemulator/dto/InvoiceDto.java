@@ -19,8 +19,8 @@ public class InvoiceDto extends AbstractObjectDto {
     @JsonProperty("NomOQ")
     private String numberOq;
 
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("payerCode")
+    private String localPayerCode;
 
     @JsonIgnore
     private PayerDto payer;
@@ -62,12 +62,12 @@ public class InvoiceDto extends AbstractObjectDto {
         this.numberOq = numberOq;
     }
 
-    public String getName() {
-        return name;
+    public String getLocalPayerCode() {
+        return localPayerCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLocalPayerCode(String payerCode) {
+        this.localPayerCode = payerCode;
     }
 
     public PayerDto getPayer() {
