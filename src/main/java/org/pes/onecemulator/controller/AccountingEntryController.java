@@ -4,7 +4,6 @@ import org.pes.onecemulator.dto.AccountingEntryDto;
 import org.pes.onecemulator.service.api.AccountingEntryService;
 import org.pes.onecemulator.service.api.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +29,7 @@ public class AccountingEntryController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.NOT_FOUND
             );
         }
@@ -47,10 +43,7 @@ public class AccountingEntryController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.NOT_FOUND
             );
         }
@@ -66,10 +59,7 @@ public class AccountingEntryController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
@@ -83,10 +73,7 @@ public class AccountingEntryController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
@@ -100,10 +87,7 @@ public class AccountingEntryController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }

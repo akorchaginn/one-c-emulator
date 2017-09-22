@@ -3,7 +3,6 @@ package org.pes.onecemulator.controller;
 import org.pes.onecemulator.dto.PayerDto;
 import org.pes.onecemulator.service.api.PayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +26,7 @@ public class PayerController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.NOT_FOUND
             );
         }
@@ -44,10 +40,7 @@ public class PayerController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.NOT_FOUND
             );
         }
@@ -61,10 +54,7 @@ public class PayerController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
@@ -78,10 +68,7 @@ public class PayerController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
@@ -95,10 +82,7 @@ public class PayerController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("warning:", e.getMessage());
             return new ResponseEntity<>(
-                    responseHeaders,
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
