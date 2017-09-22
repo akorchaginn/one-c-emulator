@@ -95,7 +95,7 @@ public class CrmInteractionService {
 
         String parameterData = new StringJoiner(",")
                 .add(expenseRequestDto.getNumber())
-                .add(expenseRequestDto.getSum().toString())
+                .add(accountingEntryDto.getSum().toString())
                 .add(expenseRequestDto.getPaid().toString())
                 .add(expenseRequestDto.getCurrency())
                 .add(accountingEntryDto.getCode())
