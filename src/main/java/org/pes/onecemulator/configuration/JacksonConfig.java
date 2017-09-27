@@ -8,6 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+import java.util.TimeZone;
+
 @Configuration
 @ComponentScan(basePackages = "org.pes.onecemulator")
 public class JacksonConfig {
@@ -21,6 +23,7 @@ public class JacksonConfig {
                 super.configure(objectMapper);
                 objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
                 objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+                objectMapper.setTimeZone(TimeZone.getDefault());
             }
         };
     }
