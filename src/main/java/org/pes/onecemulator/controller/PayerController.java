@@ -5,7 +5,12 @@ import org.pes.onecemulator.service.api.PayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +23,7 @@ public class PayerController {
     private PayerService payerService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/getbyid/{id}")
-    public @ResponseBody
-    ResponseEntity<PayerDto> getById(@PathVariable String id) {
+    public @ResponseBody ResponseEntity<PayerDto> getById(@PathVariable String id) {
         try {
             return new ResponseEntity<>(
                     payerService.getPayerById(UUID.fromString(id)),
@@ -88,11 +92,11 @@ public class PayerController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/delete")
-    public @ResponseBody ResponseEntity<PayerDto> delete(@RequestBody PayerDto payerDto) {
+    @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
+    public @ResponseBody ResponseEntity<PayerDto> delete(@PathVariable(value = "id") UUID id) {
         try {
             return new ResponseEntity<>(
-                    payerService.deletePayer(payerDto),
+                    payerService.deletePayer(id),
                     HttpStatus.OK
             );
         } catch (Exception e) {

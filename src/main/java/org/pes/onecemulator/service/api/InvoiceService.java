@@ -1,6 +1,5 @@
 package org.pes.onecemulator.service.api;
 
-import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.pes.onecemulator.dto.InvoiceDto;
 import org.pes.onecemulator.dto.PayerDto;
@@ -43,7 +42,7 @@ public class InvoiceService {
             return invoiceDto;
         }
         log.warn("Invoice entity with id: " + id.toString() + " not found");
-        throw new NotFoundEntityException(404, "Entity with id: " + id + " not found at database");
+        throw new NotFoundEntityException(404, "Invoice entity with id: " + id + " not found at database");
     }
 
     public List<InvoiceDto> listInvoice() throws NotFoundEntityException {

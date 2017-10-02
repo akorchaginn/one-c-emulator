@@ -84,4 +84,9 @@ public class PayerDto extends AbstractObjectDto {
     public void setInvoices(Set<InvoiceDto> invoices) {
         this.invoices = invoices;
     }
+
+    @Override
+    public String toString() {
+        return getId() + ", " + getCode() + ", " + getName();
+    }
 }

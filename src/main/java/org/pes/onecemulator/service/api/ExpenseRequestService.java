@@ -43,7 +43,7 @@ public class ExpenseRequestService {
             return convertToDto(expenseRequest);
         }
         log.info("ExpenseRequest entity with id: " + id + " not found");
-        throw new NotFoundEntityException(404, "Entity with id: " + id + " not found at database");
+        throw new NotFoundEntityException(404, "ExpenseRequest entity with id: " + id + " not found at database");
     }
 
     public List<ExpenseRequestDto> listExpenseRequest() throws NotFoundEntityException {

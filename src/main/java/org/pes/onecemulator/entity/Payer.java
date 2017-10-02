@@ -1,6 +1,12 @@
 package org.pes.onecemulator.entity;
 
-import javax.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -83,5 +89,10 @@ public class Payer extends AbstractObject {
 
     public void setInvoices(Set<Invoice> invoices) {
         this.invoices = invoices;
+    }
+
+    @Override
+    public String toString() {
+        return getId() + ", " + getCode() + ", " + getName();
     }
 }

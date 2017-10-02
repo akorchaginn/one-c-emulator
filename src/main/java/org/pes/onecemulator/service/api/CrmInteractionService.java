@@ -2,28 +2,33 @@ package org.pes.onecemulator.service.api;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.asynchttpclient.*;
-import org.pes.onecemulator.dto.*;
+import org.asynchttpclient.AsyncCompletionHandler;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClient;
+import org.asynchttpclient.Response;
+import org.pes.onecemulator.dto.AccountingEntryDto;
+import org.pes.onecemulator.dto.DocumentCrm;
+import org.pes.onecemulator.dto.ExpenseRequestDto;
+import org.pes.onecemulator.dto.InvoiceDto;
+import org.pes.onecemulator.dto.PayerCrm;
+import org.pes.onecemulator.dto.PayerDto;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.NotFoundEntityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -62,37 +67,29 @@ public class CrmInteractionService {
         log.info("DocumentCrm getDocumentCrmByParameters method start...");
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         date.set(Calendar.HOUR_OF_DAY, 0);
-        try {
-            Set<InvoiceDto> invoiceDtos = payerService.getPayerByCode(name).getInvoices();
-            if (invoiceDtos != null) {
-                log.info("DocumentCrm find by parameters: name = " + name + ", sum = " + sum + ", date= " + date.getTime());
-                for (InvoiceDto i : invoiceDtos) {
-                    if (sum.equals(i.getSum())
-                            && DateUtils.isSameDay(date, i.getDate())) {
-                        documentCrmList.add(convertToDoc(i));
-                        log.info("Invoice with id: " + i.getId() + " equal parameters");
-                    }
+        Set<InvoiceDto> invoiceDtos = payerService.getPayerByCode(name).getInvoices();
+        if (invoiceDtos != null) {
+            log.info("DocumentCrm find by parameters: name = " + name + ", sum = " + sum + ", date= " + date.getTime());
+            for (InvoiceDto i : invoiceDtos) {
+                if (sum.equals(i.getSum())
+                        && DateUtils.isSameDay(date, i.getDate())) {
+                    documentCrmList.add(convertToDoc(i));
+                    log.info("Invoice with id: " + i.getId() + " equal parameters");
                 }
-                log.info("DocumentCrm count: " + documentCrmList.size());
-
-                return documentCrmList;
             }
+            log.info("DocumentCrm count: " + documentCrmList.size());
+
             return documentCrmList;
-        } catch (NotFoundEntityException e) {
-            e.printStackTrace();
         }
         return documentCrmList;
     }
 
     public List<PayerCrm> getAllPayersCrm() {
-        List<PayerCrm> payerCrms = new ArrayList<>();
-        try {
-            payerCrms.addAll(convertToPayerCrm(payerService.listPayer()));
+        List<PayerCrm> payerCrms = convertToPayerCrm(payerService.listPayer());
+        if (payerCrms != null)
             return payerCrms;
-        } catch (NotFoundEntityException e) {
-            log.warn(e.getMessage());
-            return payerCrms;
-        }
+
+        return new ArrayList<>();
     }
 
     public void sendAccountingEntryToCrm(AccountingEntryDto accountingEntryDto) {
