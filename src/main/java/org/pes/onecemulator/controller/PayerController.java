@@ -47,10 +47,24 @@ public class PayerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/create")
-    public @ResponseBody ResponseEntity<PayerDto> create(@RequestBody PayerDto expenseRequestDto) {
+    public @ResponseBody ResponseEntity<PayerDto> create(@RequestBody PayerDto payerDto) {
         try {
             return new ResponseEntity<>(
-                    payerService.createPayer(expenseRequestDto),
+                    payerService.createPayer(payerDto),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/create-all")
+    public @ResponseBody ResponseEntity<List<PayerDto>> create(@RequestBody List<PayerDto> payerDtos) {
+        try {
+            return new ResponseEntity<>(
+                    payerService.createPayer(payerDtos),
                     HttpStatus.OK
             );
         } catch (Exception e) {
@@ -61,10 +75,10 @@ public class PayerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/update")
-    public @ResponseBody ResponseEntity<PayerDto> update(@RequestBody PayerDto expenseRequestDto) {
+    public @ResponseBody ResponseEntity<PayerDto> update(@RequestBody PayerDto payerDto) {
         try {
             return new ResponseEntity<>(
-                    payerService.updatePayer(expenseRequestDto),
+                    payerService.updatePayer(payerDto),
                     HttpStatus.OK
             );
         } catch (Exception e) {
@@ -75,10 +89,10 @@ public class PayerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/delete")
-    public @ResponseBody ResponseEntity<PayerDto> delete(@RequestBody PayerDto expenseRequestDto) {
+    public @ResponseBody ResponseEntity<PayerDto> delete(@RequestBody PayerDto payerDto) {
         try {
             return new ResponseEntity<>(
-                    payerService.deletePayer(expenseRequestDto),
+                    payerService.deletePayer(payerDto),
                     HttpStatus.OK
             );
         } catch (Exception e) {

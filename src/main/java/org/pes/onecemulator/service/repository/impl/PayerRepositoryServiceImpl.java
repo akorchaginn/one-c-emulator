@@ -57,12 +57,11 @@ public class PayerRepositoryServiceImpl implements PayerRepositoryService {
     public Payer create(Payer payer) throws CreateEntityException {
         try {
             boolean idIsNull = payer.getId() == null;
-            if (idIsNull) {
+            if (idIsNull && payerRepository.findByCode(payer.getCode()) == null) {
                 payer.setId(UUID.randomUUID());
-
                 return payerRepository.saveAndFlush(payer);
             } else {
-                throw new CreateEntityException(500, "ExpenseRequest entity with number: " + payer.getCode() + " exist at database");
+                throw new CreateEntityException(500, "Payer entity with id: " + payer.getId() + " or code: " + payer.getCode() + " exist at database");
             }
         } catch (Exception e) {
             throw new CreateEntityException(500, e.getMessage());

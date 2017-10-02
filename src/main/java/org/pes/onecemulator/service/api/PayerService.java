@@ -40,7 +40,7 @@ public class PayerService {
             return convertToDto(payer);
         }
         log.info("Payer entity with id: " + id + " not found");
-        throw new NotFoundEntityException(404, "Entity with id: " + id + " not found at database");
+        throw new NotFoundEntityException(404, "Payer entity with id: " + id + " not found at database");
     }
 
     public PayerDto getPayerByCode(String code) throws NotFoundEntityException {
@@ -80,7 +80,26 @@ public class PayerService {
             throw new CreateEntityException(500, e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
         }
         log.error("Payer entity is null or has not expenseNumber value");
-        throw new CreateEntityException(500, "Payer entity is null or has not expenseNumber value");
+        throw new CreateEntityException(500, "Payer entity is null or has not code value");
+    }
+
+    public List<PayerDto> createPayer(List<PayerDto> payerDtos) throws CreateEntityException {
+        log.info("Payer create method start...");
+        payerDtos.parallelStream().forEach(payerDto -> {
+            if (payerDto != null && payerDto.getCode() != null) {
+                log.info("Payer: " + payerDto.toString());
+                PayerDto result = null;
+                try {
+                    result = convertToDto(payerRepositoryService.create(convertToEntity(payerDto)));
+                } catch (Exception e) {
+                    log.error("Payer create error: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
+                }
+                log.info("Payer created: " + result);
+            } else {
+                log.error("Payer entity is null or has not code value");
+            }
+        });
+        return convertToDto(payerRepositoryService.findAll());
     }
 
     public PayerDto updatePayer(PayerDto payerDto) throws UpdateEntityException {

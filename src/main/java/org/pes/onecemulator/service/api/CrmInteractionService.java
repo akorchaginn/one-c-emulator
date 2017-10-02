@@ -3,10 +3,7 @@ package org.pes.onecemulator.service.api;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.asynchttpclient.*;
-import org.pes.onecemulator.dto.AccountingEntryDto;
-import org.pes.onecemulator.dto.DocumentCrm;
-import org.pes.onecemulator.dto.ExpenseRequestDto;
-import org.pes.onecemulator.dto.InvoiceDto;
+import org.pes.onecemulator.dto.*;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.NotFoundEntityException;
 import org.slf4j.Logger;
@@ -87,6 +84,17 @@ public class CrmInteractionService {
         return documentCrmList;
     }
 
+    public List<PayerCrm> getAllPayersCrm() {
+        List<PayerCrm> payerCrms = new ArrayList<>();
+        try {
+            payerCrms.addAll(convertToPayerCrm(payerService.listPayer()));
+            return payerCrms;
+        } catch (NotFoundEntityException e) {
+            log.warn(e.getMessage());
+            return payerCrms;
+        }
+    }
+
     public void sendAccountingEntryToCrm(AccountingEntryDto accountingEntryDto) {
         ExpenseRequestDto expenseRequestDto = accountingEntryDto.getExpenseRequest();
 
@@ -155,5 +163,13 @@ public class CrmInteractionService {
 
     private InvoiceDto convertToInvoice(DocumentCrm documentCrm) {
         return mapperFactoryService.getMapper().map(documentCrm, InvoiceDto.class);
+    }
+
+    private PayerCrm convertToPayerCrm(PayerDto payerDto) {
+        return mapperFactoryService.getMapper().map(payerDto, PayerCrm.class);
+    }
+
+    private List<PayerCrm> convertToPayerCrm(List<PayerDto> payerDtos) {
+        return payerDtos.stream().map(this::convertToPayerCrm).collect(Collectors.toList());
     }
 }
