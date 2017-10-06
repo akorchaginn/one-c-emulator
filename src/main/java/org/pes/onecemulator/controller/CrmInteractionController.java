@@ -54,12 +54,12 @@ public class CrmInteractionController {
                         )
                 )
         );
-        try {
+        if (documentCrmList.size() > 0) {
             return new ResponseEntity<>(
                     documentCrmList,
                     HttpStatus.OK
             );
-        } catch (Exception e) {
+        } else {
             return new ResponseEntity<>(
                     HttpStatus.NOT_FOUND
             );

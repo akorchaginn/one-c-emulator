@@ -67,9 +67,10 @@ public class CrmInteractionService {
         log.info("DocumentCrm getDocumentCrmByParameters method start...");
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         date.set(Calendar.HOUR_OF_DAY, 0);
-        Set<InvoiceDto> invoiceDtos = payerService.getPayerByCode(name).getInvoices();
-        if (invoiceDtos != null) {
-            log.info("DocumentCrm find by parameters: name = " + name + ", sum = " + sum + ", date= " + date.getTime());
+        PayerDto payer = payerService.getPayerByCode(name);
+        Set<InvoiceDto> invoiceDtos = payer.getInvoices();
+        if (invoiceDtos != null && invoiceDtos.size() > 0) {
+            log.info("DocumentCrm find by parameters: name = " + name + ", sum = " + sum + ", date = " + date.getTime());
             for (InvoiceDto i : invoiceDtos) {
                 if (sum.equals(i.getSum())
                         && DateUtils.isSameDay(date, i.getDate())) {
@@ -78,9 +79,9 @@ public class CrmInteractionService {
                 }
             }
             log.info("DocumentCrm count: " + documentCrmList.size());
-
             return documentCrmList;
         }
+        log.warn("Invoice count: 0");
         return documentCrmList;
     }
 
