@@ -57,7 +57,7 @@ public class CrmInteractionController {
         try {
             return new ResponseEntity<>(
                     documentCrmList,
-                    HttpStatus.OK
+                    HttpStatus.NOT_FOUND //for check
             );
         } catch (Exception e) {
             return new ResponseEntity<>(
