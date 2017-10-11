@@ -76,7 +76,7 @@ public class CrmInteractionService {
                 Calendar invoiceDate = i.getDate();
                 Boolean isSumEqual = sum.equals(invoiceSum);
                 Boolean isDateEqual = DateUtils.isSameDay(date, invoiceDate);
-                if (sum.equals(i.getSum())
+                if (sum.compareTo(i.getSum()) == 0
                         && DateUtils.isSameDay(date, i.getDate())) {
                     documentCrmList.add(convertToDoc(i));
                     log.info("Invoice with id: " + i.getId() + " equal parameters");
