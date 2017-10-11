@@ -61,7 +61,7 @@ public class CrmInteractionController {
             );
         } else {
             return new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
+                    HttpStatus.OK
             );
         }
     }
