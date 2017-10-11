@@ -72,7 +72,7 @@ public class CrmInteractionService {
         if (invoiceDtos != null && invoiceDtos.size() > 0) {
             log.info("DocumentCrm find by parameters: name = " + name + ", sum = " + sum + ", date = " + date.getTime());
             for (InvoiceDto i : invoiceDtos) {
-                if (sum.equals(i.getSum())
+                if (sum.compareTo(i.getSum()) == 0
                         && DateUtils.isSameDay(date, i.getDate())) {
                     documentCrmList.add(convertToDoc(i));
                     log.info("Invoice with id: " + i.getId() + " equal parameters");
