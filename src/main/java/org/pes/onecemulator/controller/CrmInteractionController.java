@@ -3,9 +3,12 @@ package org.pes.onecemulator.controller;
 import org.pes.onecemulator.dto.DocumentCrm;
 import org.pes.onecemulator.dto.PayerCrm;
 import org.pes.onecemulator.service.api.CrmInteractionService;
+import org.pes.onecemulator.utils.CrmSecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +24,12 @@ public class CrmInteractionController {
 
     @Autowired
     private CrmInteractionService crmInteractionService;
+
+    private final HttpHeaders crmSecurityHeader = new HttpHeaders();
+
+    private CrmInteractionController() {
+        crmSecurityHeader.add("crm-api-token", CrmSecurityUtils.CRM_TOKEN);
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/DocID")
     public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocById(@RequestBody List<DocumentCrm> documentCrms) {

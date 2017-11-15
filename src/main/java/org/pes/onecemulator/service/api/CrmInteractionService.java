@@ -14,6 +14,7 @@ import org.pes.onecemulator.dto.PayerCrm;
 import org.pes.onecemulator.dto.PayerDto;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.NotFoundEntityException;
+import org.pes.onecemulator.utils.CrmSecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,6 +125,8 @@ public class CrmInteractionService {
             AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
             asyncHttpClient
                     .prepareGet(resultUrl)
+                    .addHeader("crm-api-token", CrmSecurityUtils.CRM_TOKEN)
+                    .addHeader("crm-1c-database-source", CrmSecurityUtils.ONEC_DATABASE_SOURCE)
                     .execute(new CompletionHandler(accountingEntryDto.getId()));
 
         } catch (Exception e) {
