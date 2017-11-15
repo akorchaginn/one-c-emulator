@@ -42,6 +42,7 @@ public class CrmInteractionController {
         try {
             return new ResponseEntity<>(
                     documentCrmList,
+                    crmSecurityHeader,
                     HttpStatus.OK
             );
         } catch (Exception e) {
@@ -66,6 +67,7 @@ public class CrmInteractionController {
         if (documentCrmList.size() > 0) {
             return new ResponseEntity<>(
                     documentCrmList,
+                    crmSecurityHeader,
                     HttpStatus.OK
             );
         } else {
@@ -80,6 +82,7 @@ public class CrmInteractionController {
         try {
             return new ResponseEntity<>(
                     crmInteractionService.getAllPayersCrm(),
+                    crmSecurityHeader,
                     HttpStatus.OK
             );
         } catch (Exception e) {
