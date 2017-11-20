@@ -45,15 +45,15 @@ public class InvoiceService {
         throw new NotFoundEntityException(404, "Invoice entity with id: " + id + " not found at database");
     }
 
-    public InvoiceDto getInvoiceByExternalId(UUID id) throws NotFoundEntityException {
+    public InvoiceDto getInvoiceByExternalId(String externalId) throws NotFoundEntityException {
         log.info("Invoice getByExternalId method start...");
-        InvoiceDto invoiceDto = convertToDto(invoiceRepositoryService.findByExternalId(id));
+        InvoiceDto invoiceDto = convertToDto(invoiceRepositoryService.findByExternalId(externalId));
         if (invoiceDto != null) {
-            log.info("Invoice entity with externalId: " + id.toString() + " found");
+            log.info("Invoice entity with externalId: " + externalId.toString() + " found");
             return invoiceDto;
         }
-        log.warn("Invoice entity with externalId: " + id.toString() + " not found");
-        throw new NotFoundEntityException(404, "Invoice entity with externalId: " + id + " not found at database");
+        log.warn("Invoice entity with externalId: " + externalId.toString() + " not found");
+        throw new NotFoundEntityException(404, "Invoice entity with externalId: " + externalId + " not found at database");
     }
 
     public List<InvoiceDto> listInvoice() throws NotFoundEntityException {

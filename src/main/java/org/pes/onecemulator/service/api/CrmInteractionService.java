@@ -58,7 +58,7 @@ public class CrmInteractionService {
         return documentCrmList;
     }
 
-    public DocumentCrm getDocumentCrmByExternalId(UUID externalId) {
+    public DocumentCrm getDocumentCrmByExternalId(String externalId) {
         log.info("DocumentCrm getDocumentCrmByExternalId method start...");
         try {
             return convertToDoc(invoiceService.getInvoiceByExternalId(externalId));

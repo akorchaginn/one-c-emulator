@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
     @Query("select i from Invoice i where i.externalId = ?1")
-    Invoice findByExternalId(UUID uuid);
+    Invoice findByExternalId(String uuid);
 }
