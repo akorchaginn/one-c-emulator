@@ -107,6 +107,7 @@ public class InvoiceService {
                     tmp.setPaymentDate(invoiceDto.getPaymentDate());
                     tmp.setPaymentSum(invoiceDto.getPaymentSum());
                     tmp.setStatus(invoiceDto.getStatus());
+                    tmp.setExternalId(invoiceDto.getExternalId());
                     InvoiceDto result = convertToDto(invoiceRepositoryService.update(convertToEntity(tmp)));
                     log.info("Invoice updated: " + result.toString());
 

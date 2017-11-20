@@ -40,7 +40,7 @@ public class Invoice extends AbstractObject {
     private BigDecimal sum;
 
     @Column(name = "external_id")
-    private UUID externalId;
+    private String externalId;
 
     public Calendar getDate() {
         return date;
@@ -106,11 +106,11 @@ public class Invoice extends AbstractObject {
         this.sum = sum;
     }
 
-    public UUID getExternalId() {
+    public String getExternalId() {
         return externalId;
     }
 
-    public void setExternalId(UUID externalId) {
+    public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
 }
