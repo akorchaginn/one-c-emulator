@@ -4,6 +4,8 @@ import org.pes.onecemulator.dto.DocumentCrm;
 import org.pes.onecemulator.dto.PayerCrm;
 import org.pes.onecemulator.service.api.CrmInteractionService;
 import org.pes.onecemulator.utils.CrmSecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,15 +17,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @RestController
 public class CrmInteractionController {
 
+    private static final Logger log = LoggerFactory.getLogger(CrmInteractionController.class);
+
     @Autowired
     private CrmInteractionService crmInteractionService;
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     private final HttpHeaders crmSecurityHeader = new HttpHeaders();
 
@@ -33,34 +41,22 @@ public class CrmInteractionController {
 
     @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/DocID")
     public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocById(@RequestBody List<DocumentCrm> documentCrms) {
-        List<DocumentCrm> documentCrmList = new ArrayList<>();
-        documentCrms.forEach(documentCrm ->
-            documentCrmList.addAll(
-                    crmInteractionService.getDocumentsCrmById(UUID.fromString(documentCrm.getId()))
-            )
-        );
-        try {
-            return new ResponseEntity<>(
-                    documentCrmList,
-                    crmSecurityHeader,
-                    HttpStatus.OK
-            );
-        } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
-            );
-        }
-    }
 
-    @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDoc")
-    public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocByExternalId(@RequestBody List<DocumentCrm> documentCrms) {
+        if (httpServletRequest != null) {
+            try {
+                log.info(httpServletRequest.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->
-                documentCrmList.add(
-                        crmInteractionService.getDocumentCrmByExternalId(documentCrm.getExternalId())
+                documentCrmList.addAll(
+                        crmInteractionService.getDocumentsCrmById(UUID.fromString(documentCrm.getId()))
                 )
         );
-        if (documentCrmList.size() > 0) {
+        if (documentCrmList.size() > 0 && documentCrmList.stream().allMatch(Objects::nonNull)) {
             return new ResponseEntity<>(
                     documentCrmList,
                     crmSecurityHeader,
@@ -68,6 +64,39 @@ public class CrmInteractionController {
             );
         } else {
             return new ResponseEntity<>(
+                    documentCrmList,
+                    HttpStatus.OK
+            );
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDoc")
+    public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocByExternalId(@RequestBody List<DocumentCrm> documentCrms) {
+
+        if (httpServletRequest != null) {
+            try {
+                log.info(httpServletRequest.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<DocumentCrm> documentCrmList = new ArrayList<>();
+        documentCrms.forEach(documentCrm ->
+                documentCrmList.add(
+                        crmInteractionService.getDocumentCrmByExternalId(documentCrm.getExternalId())
+                )
+        );
+        if (documentCrmList.size() > 0 && documentCrmList.stream().allMatch(Objects::nonNull)) {
+            return new ResponseEntity<>(
+                    documentCrmList,
+                    crmSecurityHeader,
+                    HttpStatus.OK
+            );
+        } else {
+            documentCrmList.clear();
+            return new ResponseEntity<>(
+                    documentCrmList,
                     HttpStatus.OK
             );
         }
