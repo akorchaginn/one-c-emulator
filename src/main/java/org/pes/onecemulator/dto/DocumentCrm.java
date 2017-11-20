@@ -37,6 +37,9 @@ public class DocumentCrm {
     @JsonProperty("sumOplat")
     private BigDecimal paymentSum;
 
+    @JsonProperty("uuid")
+    private String externalId;
+
     public String getId() {
         return id;
     }
@@ -107,5 +110,13 @@ public class DocumentCrm {
 
     public void setPaymentSum(BigDecimal paymentSum) {
         this.paymentSum = paymentSum;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 }

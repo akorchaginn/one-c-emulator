@@ -23,13 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -62,6 +56,18 @@ public class CrmInteractionService {
         }
 
         return documentCrmList;
+    }
+
+    public DocumentCrm getDocumentCrmByExternalId(UUID externalId) {
+        log.info("DocumentCrm getDocumentCrmByExternalId method start...");
+        try {
+            return convertToDoc(invoiceService.getInvoiceByExternalId(externalId));
+        } catch (NotFoundEntityException e) {
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<DocumentCrm> getDocumentsCrmByParameters(String name, BigDecimal sum, Calendar date) {

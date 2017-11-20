@@ -53,6 +53,27 @@ public class CrmInteractionController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDoc")
+    public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocByExternalId(@RequestBody List<DocumentCrm> documentCrms) {
+        List<DocumentCrm> documentCrmList = new ArrayList<>();
+        documentCrms.forEach(documentCrm ->
+                documentCrmList.add(
+                        crmInteractionService.getDocumentCrmByExternalId(UUID.fromString(documentCrm.getExternalId()))
+                )
+        );
+        if (documentCrmList.size() > 0) {
+            return new ResponseEntity<>(
+                    documentCrmList,
+                    crmSecurityHeader,
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    HttpStatus.OK
+            );
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDocOld")
     public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocByParameters(@RequestBody List<DocumentCrm> documentCrms) {
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->

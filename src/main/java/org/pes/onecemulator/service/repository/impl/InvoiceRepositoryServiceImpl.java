@@ -36,6 +36,15 @@ public class InvoiceRepositoryServiceImpl implements InvoiceRepositoryService {
 
     @Override
     @Transactional
+    public Invoice findByExternalId(UUID externalId) {
+        Invoice invoice = invoiceRepository.findByExternalId(externalId);
+        if (invoice != null && !invoice.getDeleted())
+            return invoice;
+        return null;
+    }
+
+    @Override
+    @Transactional
     public List<Invoice> findAll() {
         return invoiceRepository.findAll()
                 .stream()

@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.UUID;
 
 @Entity
 @Table(name = "invoice")
@@ -37,6 +38,9 @@ public class Invoice extends AbstractObject {
 
     @Column(name = "sum")
     private BigDecimal sum;
+
+    @Column(name = "external_id")
+    private UUID externalId;
 
     public Calendar getDate() {
         return date;
@@ -100,5 +104,13 @@ public class Invoice extends AbstractObject {
 
     public void setSum(BigDecimal sum) {
         this.sum = sum;
+    }
+
+    public UUID getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(UUID externalId) {
+        this.externalId = externalId;
     }
 }
