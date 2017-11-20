@@ -57,7 +57,7 @@ public class CrmInteractionController {
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->
                 documentCrmList.add(
-                        crmInteractionService.getDocumentCrmByExternalId(UUID.fromString(documentCrm.getExternalId()))
+                        crmInteractionService.getDocumentCrmByExternalId(documentCrm.getExternalId())
                 )
         );
         if (documentCrmList.size() > 0) {
