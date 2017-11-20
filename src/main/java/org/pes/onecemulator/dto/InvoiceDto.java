@@ -38,6 +38,9 @@ public class InvoiceDto extends AbstractObjectDto {
     @JsonProperty("sum")
     private BigDecimal sum;
 
+    @JsonProperty("externalId")
+    private String externalId;
+
     public Calendar getDate() {
         return date;
     }
@@ -108,5 +111,13 @@ public class InvoiceDto extends AbstractObjectDto {
 
     public void setSum(BigDecimal sum) {
         this.sum = sum;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 }
