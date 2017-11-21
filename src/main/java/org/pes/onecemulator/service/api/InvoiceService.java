@@ -1,6 +1,9 @@
 package org.pes.onecemulator.service.api;
 
+import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.convention.MatchingStrategies;
+import org.modelmapper.spi.MatchingStrategy;
 import org.pes.onecemulator.dto.InvoiceDto;
 import org.pes.onecemulator.dto.PayerDto;
 import org.pes.onecemulator.entity.Invoice;
@@ -143,11 +146,14 @@ public class InvoiceService {
             @Override
             protected void configure() {
                 map().setLocalPayerCode(source.getPayer().getCode());
-                map().setId(source.getId());
-                map().setExternalId(source.getExternalId());
             }
         };
-        return mapperFactoryService.getMapper().addMappings(invoiceMap).map(invoice);
+
+        ModelMapper mapper = mapperFactoryService.getMapper();
+        mapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT);
+
+        return mapper.addMappings(invoiceMap).map(invoice);
     }
 
     private List<InvoiceDto> convertToDto(List<Invoice> invoices) {
