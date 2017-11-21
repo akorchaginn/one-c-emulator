@@ -49,10 +49,10 @@ public class InvoiceService {
         log.info("Invoice getByExternalId method start...");
         InvoiceDto invoiceDto = convertToDto(invoiceRepositoryService.findByExternalId(externalId));
         if (invoiceDto != null) {
-            log.info("Invoice entity with externalId: " + externalId.toString() + " found");
+            log.info("Invoice entity with externalId: " + externalId + " found");
             return invoiceDto;
         }
-        log.warn("Invoice entity with externalId: " + externalId.toString() + " not found");
+        log.warn("Invoice entity with externalId: " + externalId + " not found");
         throw new NotFoundEntityException(404, "Invoice entity with externalId: " + externalId + " not found at database");
     }
 
@@ -141,6 +141,7 @@ public class InvoiceService {
             @Override
             protected void configure() {
                 map().setLocalPayerCode(source.getPayer().getCode());
+                map().setExternalId(source.getExternalId());
             }
         };
         return mapperFactoryService.getMapper().addMappings(invoiceMap).map(invoice);
