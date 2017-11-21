@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -44,7 +45,12 @@ public class CrmInteractionController {
 
         if (httpServletRequest != null) {
             try {
-                log.info(httpServletRequest.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+                StringBuilder content = new StringBuilder();
+                BufferedReader reader = httpServletRequest.getReader();
+                while(reader.readLine() != null) {
+                    content.append(reader.readLine());
+                }
+                log.info(content.toString());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -52,7 +58,7 @@ public class CrmInteractionController {
 
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->
-                documentCrmList.addAll(
+                documentCrmList.add(
                         crmInteractionService.getDocumentsCrmById(UUID.fromString(documentCrm.getId()))
                 )
         );
@@ -63,6 +69,7 @@ public class CrmInteractionController {
                     HttpStatus.OK
             );
         } else {
+            documentCrmList.clear();
             return new ResponseEntity<>(
                     documentCrmList,
                     HttpStatus.OK
@@ -75,7 +82,12 @@ public class CrmInteractionController {
 
         if (httpServletRequest != null) {
             try {
-                log.info(httpServletRequest.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+                StringBuilder content = new StringBuilder();
+                BufferedReader reader = httpServletRequest.getReader();
+                while(reader.readLine() != null) {
+                    content.append(reader.readLine());
+                }
+                log.info(content.toString());
             } catch (Exception e) {
                 e.printStackTrace();
             }

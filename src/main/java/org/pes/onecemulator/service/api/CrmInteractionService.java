@@ -44,18 +44,16 @@ public class CrmInteractionService {
     @Autowired
     private InvoiceService invoiceService;
 
-    public List<DocumentCrm> getDocumentsCrmById(UUID id) {
+    public DocumentCrm getDocumentsCrmById(UUID id) {
         log.info("DocumentCrm getDocumentCrmById method start...");
-        List<DocumentCrm> documentCrmList = new ArrayList<>();
         try {
-            documentCrmList.add(convertToDoc(invoiceService.getInvoiceById(id)));
-            log.info("DocumentCrm count: " + documentCrmList.size());
-            return documentCrmList;
+            return convertToDoc(invoiceService.getInvoiceById(id));
         } catch (NotFoundEntityException e) {
+            return null;
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-
-        return documentCrmList;
     }
 
     public DocumentCrm getDocumentCrmByExternalId(String externalId) {
