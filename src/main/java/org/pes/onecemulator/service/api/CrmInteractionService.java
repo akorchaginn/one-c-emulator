@@ -163,6 +163,7 @@ public class CrmInteractionService {
         PropertyMap<InvoiceDto, DocumentCrm> documentCrmPropertyMap = new PropertyMap<InvoiceDto, DocumentCrm>() {
             @Override
             protected void configure() {
+                map().setId(source.getId());
                 map().setExternalId(source.getExternalId());
             }
         };

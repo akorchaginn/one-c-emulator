@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.UUID;
 
 public class DocumentCrm {
 
     @JsonProperty(value = "id")
-    private String id;
+    private UUID id;
 
     @JsonProperty("nom")
     private String number;
@@ -40,11 +41,11 @@ public class DocumentCrm {
     @JsonProperty(value = "uuid")
     private String externalId;
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

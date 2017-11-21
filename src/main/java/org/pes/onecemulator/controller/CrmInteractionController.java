@@ -42,7 +42,7 @@ public class CrmInteractionController {
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->
                 documentCrmList.add(
-                        crmInteractionService.getDocumentsCrmById(UUID.fromString(documentCrm.getId()))
+                        crmInteractionService.getDocumentsCrmById(documentCrm.getId())
                 )
         );
         if (documentCrmList.size() > 0 && documentCrmList.stream().allMatch(Objects::nonNull)) {
