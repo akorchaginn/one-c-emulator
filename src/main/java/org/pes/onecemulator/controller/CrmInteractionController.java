@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @RestController
 public class CrmInteractionController {
@@ -114,6 +111,7 @@ public class CrmInteractionController {
         }
     }
 
+    @Deprecated
     @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDocOld")
     public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocByParameters(@RequestBody List<DocumentCrm> documentCrms) {
         List<DocumentCrm> documentCrmList = new ArrayList<>();
@@ -126,14 +124,16 @@ public class CrmInteractionController {
                         )
                 )
         );
-        if (documentCrmList.size() > 0) {
+        if (documentCrmList.size() > 0 && documentCrmList.stream().allMatch(Objects::nonNull)) {
             return new ResponseEntity<>(
                     documentCrmList,
                     crmSecurityHeader,
                     HttpStatus.OK
             );
         } else {
+            documentCrmList.clear();
             return new ResponseEntity<>(
+                    documentCrmList,
                     HttpStatus.OK
             );
         }
