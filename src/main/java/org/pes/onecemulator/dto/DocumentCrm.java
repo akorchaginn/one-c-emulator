@@ -37,7 +37,7 @@ public class DocumentCrm {
     @JsonProperty("sumOplat")
     private BigDecimal paymentSum;
 
-    @JsonProperty("uuid")
+    @JsonProperty(value = "uuid")
     private String externalId;
 
     public String getId() {

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.util.*;
 
 @RestController
@@ -39,19 +38,6 @@ public class CrmInteractionController {
 
     @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/DocID")
     public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocById(@RequestBody List<DocumentCrm> documentCrms) {
-
-        if (httpServletRequest != null) {
-            try {
-                StringBuilder content = new StringBuilder();
-                BufferedReader reader = httpServletRequest.getReader();
-                while(reader.readLine() != null) {
-                    content.append(reader.readLine());
-                }
-                log.info(content.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->
@@ -76,19 +62,6 @@ public class CrmInteractionController {
 
     @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDoc")
     public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocByExternalId(@RequestBody List<DocumentCrm> documentCrms) {
-
-        if (httpServletRequest != null) {
-            try {
-                StringBuilder content = new StringBuilder();
-                BufferedReader reader = httpServletRequest.getReader();
-                while(reader.readLine() != null) {
-                    content.append(reader.readLine());
-                }
-                log.info(content.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->
