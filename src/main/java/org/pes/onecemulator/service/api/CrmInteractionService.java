@@ -6,6 +6,7 @@ import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.Response;
+import org.modelmapper.PropertyMap;
 import org.pes.onecemulator.dto.AccountingEntryDto;
 import org.pes.onecemulator.dto.DocumentCrm;
 import org.pes.onecemulator.dto.ExpenseRequestDto;
@@ -159,7 +160,14 @@ public class CrmInteractionService {
     }
 
     private DocumentCrm convertToDoc(InvoiceDto invoice) {
-        return mapperFactoryService.getMapper().map(invoice, DocumentCrm.class);
+        PropertyMap<InvoiceDto, DocumentCrm> documentCrmPropertyMap = new PropertyMap<InvoiceDto, DocumentCrm>() {
+            @Override
+            protected void configure() {
+                map().setExternalId(source.getExternalId());
+            }
+        };
+
+        return mapperFactoryService.getMapper().addMappings(documentCrmPropertyMap).map(invoice);
     }
 
     private List<DocumentCrm> convertToDoc(List<InvoiceDto> invoices) {

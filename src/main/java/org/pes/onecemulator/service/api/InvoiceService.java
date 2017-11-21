@@ -52,20 +52,8 @@ public class InvoiceService {
         log.info("Invoice getByExternalId method start...");
         Invoice invoice = invoiceRepositoryService.findByExternalId(externalId);
         if (invoice != null) {
-            log.info("Invoice entity with id: " + invoice.getId() + " by externalId: " + externalId + " found");
-            InvoiceDto invoiceDto = new InvoiceDto();
-            invoiceDto.setId(invoice.getId());
-            invoiceDto.setExternalId(invoice.getExternalId());
-            invoiceDto.setLocalPayerCode(invoice.getPayer().getCode());
-            invoiceDto.setDate(invoice.getDate());
-            invoiceDto.setNumber(invoice.getNumber());
-            invoiceDto.setSum(invoice.getSum());
-            invoiceDto.setNumberOq(invoice.getNumberOq());
-            invoiceDto.setPaymentDate(invoice.getPaymentDate());
-            invoiceDto.setPaymentSum(invoice.getPaymentSum());
-            invoiceDto.setStatus(invoice.getStatus());
-
-            return invoiceDto;
+            log.info("Invoice id: " + invoice.getId().toString() + ", externalId: " + invoice.getExternalId());
+            return convertToDto(invoice);
         }
 
         log.warn("Invoice entity with externalId: " + externalId + " not found");
