@@ -2,10 +2,12 @@ package org.pes.onecemulator.service.api;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
 import org.pes.onecemulator.dto.InvoiceDto;
 import org.pes.onecemulator.dto.PayerDto;
+import org.pes.onecemulator.entity.AbstractObject;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.CreateEntityException;
@@ -150,8 +152,13 @@ public class InvoiceService {
         };
 
         ModelMapper mapper = mapperFactoryService.getMapper();
+
         mapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);
+
+        mapper.createTypeMap(AbstractObject.class, InvoiceDto.class)
+                .addMappings(configurableMapExpression -> configurableMapExpression.map(
+                        AbstractObject::getId, InvoiceDto::setId));
 
         return mapper.addMappings(invoiceMap).map(invoice);
     }
