@@ -2,12 +2,10 @@ package org.pes.onecemulator.service.api;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
-import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
 import org.pes.onecemulator.dto.InvoiceDto;
 import org.pes.onecemulator.dto.PayerDto;
-import org.pes.onecemulator.entity.AbstractObject;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.mapping.MapperFactoryService;
 import org.pes.onecemulator.service.api.exception.CreateEntityException;
@@ -53,12 +51,23 @@ public class InvoiceService {
     public InvoiceDto getInvoiceByExternalId(String externalId) throws NotFoundEntityException {
         log.info("Invoice getByExternalId method start...");
         Invoice invoice = invoiceRepositoryService.findByExternalId(externalId);
-        log.info("Invoice id: " + invoice.getId().toString() + ", externalId: " + invoice.getExternalId());
-        InvoiceDto invoiceDto = convertToDto(invoice);
-        if (invoiceDto != null) {
-            log.info("Invoice entity with externalId: " + externalId + " found");
+        if (invoice != null) {
+            log.info("Invoice entity with id: " + invoice.getId() + " by externalId: " + externalId + " found");
+            InvoiceDto invoiceDto = new InvoiceDto();
+            invoiceDto.setId(invoice.getId());
+            invoiceDto.setExternalId(invoice.getExternalId());
+            invoiceDto.setLocalPayerCode(invoice.getPayer().getCode());
+            invoiceDto.setDate(invoice.getDate());
+            invoiceDto.setNumber(invoice.getNumber());
+            invoiceDto.setSum(invoice.getSum());
+            invoiceDto.setNumberOq(invoice.getNumberOq());
+            invoiceDto.setPaymentDate(invoice.getPaymentDate());
+            invoiceDto.setPaymentSum(invoice.getPaymentSum());
+            invoiceDto.setStatus(invoice.getStatus());
+
             return invoiceDto;
         }
+
         log.warn("Invoice entity with externalId: " + externalId + " not found");
         throw new NotFoundEntityException(404, "Invoice entity with externalId: " + externalId + " not found at database");
     }
@@ -151,16 +160,7 @@ public class InvoiceService {
             }
         };
 
-        ModelMapper mapper = mapperFactoryService.getMapper();
-
-        mapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT);
-
-        mapper.createTypeMap(AbstractObject.class, InvoiceDto.class)
-                .addMappings(configurableMapExpression -> configurableMapExpression.map(
-                        AbstractObject::getId, InvoiceDto::setId));
-
-        return mapper.addMappings(invoiceMap).map(invoice);
+        return mapperFactoryService.getMapper().addMappings(invoiceMap).map(invoice);
     }
 
     private List<InvoiceDto> convertToDto(List<Invoice> invoices) {
