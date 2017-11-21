@@ -160,15 +160,7 @@ public class CrmInteractionService {
     }
 
     private DocumentCrm convertToDoc(InvoiceDto invoice) {
-        PropertyMap<InvoiceDto, DocumentCrm> documentCrmPropertyMap = new PropertyMap<InvoiceDto, DocumentCrm>() {
-            @Override
-            protected void configure() {
-                map().setId(source.getId());
-                map().setExternalId(source.getExternalId());
-            }
-        };
-
-        return mapperFactoryService.getMapper().addMappings(documentCrmPropertyMap).map(invoice);
+        return mapperFactoryService.getMapper().map(invoice, DocumentCrm.class);
     }
 
     private List<DocumentCrm> convertToDoc(List<InvoiceDto> invoices) {
