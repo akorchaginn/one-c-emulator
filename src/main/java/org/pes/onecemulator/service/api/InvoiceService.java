@@ -1,9 +1,6 @@
 package org.pes.onecemulator.service.api;
 
-import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
-import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.pes.onecemulator.dto.InvoiceDto;
 import org.pes.onecemulator.dto.PayerDto;
 import org.pes.onecemulator.entity.Invoice;
@@ -48,11 +45,36 @@ public class InvoiceService {
         throw new NotFoundEntityException(404, "Invoice entity with id: " + id + " not found at database");
     }
 
+    public InvoiceDto getInvoiceByIdAndSource(UUID id, String source) throws NotFoundEntityException {
+        log.info("Invoice getById method start...");
+        InvoiceDto invoiceDto = convertToDto(invoiceRepositoryService.findByIdAndSource(id, source));
+        if (invoiceDto != null) {
+            log.info("Invoice entity with id: " + id.toString() + " found");
+            return invoiceDto;
+        }
+        log.warn("Invoice entity with id: " + id.toString() + " not found");
+        throw new NotFoundEntityException(404, "Invoice entity with id: " + id + " not found at database");
+    }
+
     public InvoiceDto getInvoiceByExternalId(String externalId) throws NotFoundEntityException {
         log.info("Invoice getByExternalId method start...");
         Invoice invoice = invoiceRepositoryService.findByExternalId(externalId);
         if (invoice != null) {
             log.info("Invoice id: " + invoice.getId().toString() + ", externalId: " + invoice.getExternalId());
+            return convertToDto(invoice);
+        }
+
+        log.warn("Invoice entity with externalId: " + externalId + " not found");
+        throw new NotFoundEntityException(404, "Invoice entity with externalId: " + externalId + " not found at database");
+    }
+
+    public InvoiceDto getInvoiceByExternalIdAndSource(String externalId, String source) throws NotFoundEntityException {
+        log.info("Invoice getByExternalIdAndSource method start...");
+        Invoice invoice = invoiceRepositoryService.findByExternalIdAndSource(externalId, source);
+        if (invoice != null) {
+            log.info("Invoice id: " + invoice.getId().toString()
+                    + ", externalId: " + invoice.getExternalId()
+                    + ", source: " + invoice.getSource());
             return convertToDto(invoice);
         }
 

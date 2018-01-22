@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,13 +37,15 @@ public class CrmInteractionController {
         crmSecurityHeader.add("crm-api-token", CrmSecurityUtils.CRM_TOKEN);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/DocID")
-    public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocById(@RequestBody List<DocumentCrm> documentCrms) {
+    @RequestMapping(method = RequestMethod.POST, value = "{source}/hs/DocID")
+    public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocById(
+            @PathVariable(value = "source") String source,
+            @RequestBody List<DocumentCrm> documentCrms) {
 
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->
                 documentCrmList.add(
-                        crmInteractionService.getDocumentsCrmById(documentCrm.getId())
+                        crmInteractionService.getDocumentsCrmById(documentCrm.getId(), source)
                 )
         );
         if (documentCrmList.size() > 0 && documentCrmList.stream().allMatch(Objects::nonNull)) {
@@ -60,13 +63,15 @@ public class CrmInteractionController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/NewDoc")
-    public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocByExternalId(@RequestBody List<DocumentCrm> documentCrms) {
+    @RequestMapping(method = RequestMethod.POST, value = "{source}/hs/NewDoc")
+    public @ResponseBody ResponseEntity<List<DocumentCrm>> getDocByExternalId(
+            @PathVariable(value = "source") String source,
+            @RequestBody List<DocumentCrm> documentCrms) {
 
         List<DocumentCrm> documentCrmList = new ArrayList<>();
         documentCrms.forEach(documentCrm ->
                 documentCrmList.add(
-                        crmInteractionService.getDocumentCrmByExternalId(documentCrm.getExternalId())
+                        crmInteractionService.getDocumentCrmByExternalId(documentCrm.getExternalId(), source)
                 )
         );
         if (documentCrmList.size() > 0 && documentCrmList.stream().allMatch(Objects::nonNull)) {
@@ -112,9 +117,10 @@ public class CrmInteractionController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "B1Cbuh2015/hs/Con")
-    public @ResponseBody ResponseEntity<List<PayerCrm>> getAllPayers() {
+    @RequestMapping(method = RequestMethod.POST, value = "{source}/hs/Con")
+    public @ResponseBody ResponseEntity<List<PayerCrm>> getAllPayers(@PathVariable(value = "source") String source) {
         try {
+            log.info("Requested payers by path: " + source + "/hs/Con");
             return new ResponseEntity<>(
                     crmInteractionService.getAllPayersCrm(),
                     crmSecurityHeader,

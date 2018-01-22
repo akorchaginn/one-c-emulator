@@ -6,7 +6,6 @@ import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.Response;
-import org.modelmapper.PropertyMap;
 import org.pes.onecemulator.dto.AccountingEntryDto;
 import org.pes.onecemulator.dto.DocumentCrm;
 import org.pes.onecemulator.dto.ExpenseRequestDto;
@@ -24,7 +23,13 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -45,10 +50,10 @@ public class CrmInteractionService {
     @Autowired
     private InvoiceService invoiceService;
 
-    public DocumentCrm getDocumentsCrmById(UUID id) {
+    public DocumentCrm getDocumentsCrmById(UUID id, String source) {
         log.info("DocumentCrm getDocumentCrmById method start...");
         try {
-            return convertToDoc(invoiceService.getInvoiceById(id));
+            return convertToDoc(invoiceService.getInvoiceByIdAndSource(id, source));
         } catch (NotFoundEntityException e) {
             return null;
         } catch (Exception e) {
@@ -57,10 +62,10 @@ public class CrmInteractionService {
         }
     }
 
-    public DocumentCrm getDocumentCrmByExternalId(String externalId) {
+    public DocumentCrm getDocumentCrmByExternalId(String externalId, String source) {
         log.info("DocumentCrm getDocumentCrmByExternalId method start...");
         try {
-            return convertToDoc(invoiceService.getInvoiceByExternalId(externalId));
+            return convertToDoc(invoiceService.getInvoiceByExternalIdAndSource(externalId, source));
         } catch (NotFoundEntityException e) {
             return null;
         } catch (Exception e) {
@@ -141,7 +146,7 @@ public class CrmInteractionService {
 
     private static class CompletionHandler extends AsyncCompletionHandler<Void> {
         private final UUID aEnId;
-        public CompletionHandler(UUID aEnId) { this.aEnId = aEnId; }
+        CompletionHandler(UUID aEnId) { this.aEnId = aEnId; }
 
         @Override
         public Void onCompleted(Response response) {

@@ -10,6 +10,9 @@ import java.util.Set;
 
 public class ExpenseRequestDto extends AbstractObjectDto {
 
+    @JsonProperty("source")
+    private String source;
+
     @JsonProperty("currency")
     private String currency;
 
@@ -29,6 +32,14 @@ public class ExpenseRequestDto extends AbstractObjectDto {
 
     @JsonIgnore
     private Set<AccountingEntryDto> accountingEntries = new HashSet<>();
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     public String getCurrency() {
         return currency;

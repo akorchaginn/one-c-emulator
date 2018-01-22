@@ -1,6 +1,11 @@
 package org.pes.onecemulator.entity;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +13,9 @@ import java.util.Set;
 @Entity
 @Table(name = "expense_request")
 public class ExpenseRequest extends AbstractObject {
+
+    @Column(name = "source")
+    private String source;
 
     @Column(name = "currency")
     private String currency;
@@ -26,6 +34,14 @@ public class ExpenseRequest extends AbstractObject {
 
     @OneToMany(mappedBy = "expenseRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AccountingEntry> accountingEntries = new HashSet<>();
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     public String getCurrency() {
         return currency;

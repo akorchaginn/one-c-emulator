@@ -9,6 +9,9 @@ import java.util.Calendar;
 
 public class InvoiceDto extends AbstractObjectDto {
 
+    @JsonProperty("source")
+    private String source;
+
     @JsonProperty("date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar date;
@@ -40,6 +43,14 @@ public class InvoiceDto extends AbstractObjectDto {
 
     @JsonProperty("externalId")
     private String externalId;
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     public Calendar getDate() {
         return date;

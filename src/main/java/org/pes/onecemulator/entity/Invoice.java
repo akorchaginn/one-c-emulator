@@ -8,11 +8,13 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.UUID;
 
 @Entity
 @Table(name = "invoice")
 public class Invoice extends AbstractObject {
+
+    @Column(name = "source")
+    private String source;
 
     @Column(name = "date")
     private Calendar date;
@@ -41,6 +43,14 @@ public class Invoice extends AbstractObject {
 
     @Column(name = "external_id")
     private String externalId;
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     public Calendar getDate() {
         return date;
