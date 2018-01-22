@@ -136,7 +136,7 @@ public class CrmInteractionService {
             asyncHttpClient
                     .prepareGet(resultUrl)
                     .addHeader("crm-api-token", CrmSecurityUtils.CRM_TOKEN)
-                    .addHeader("crm-1c-database-source", CrmSecurityUtils.ONEC_DATABASE_SOURCE)
+                    .addHeader("crm-1c-database-source", expenseRequestDto.getSource())
                     .execute(new CompletionHandler(accountingEntryDto.getId()));
 
         } catch (Exception e) {
