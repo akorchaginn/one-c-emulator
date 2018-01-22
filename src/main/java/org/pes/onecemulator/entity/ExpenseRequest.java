@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "expense_request")
 public class ExpenseRequest extends AbstractObject {
 
-    @Column(name = "source")
+    @Column(name = "source", nullable = false)
     private String source;
 
     @Column(name = "currency")

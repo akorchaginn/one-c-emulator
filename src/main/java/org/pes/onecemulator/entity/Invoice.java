@@ -13,7 +13,7 @@ import java.util.Calendar;
 @Table(name = "invoice")
 public class Invoice extends AbstractObject {
 
-    @Column(name = "source")
+    @Column(name = "source", nullable = false)
     private String source;
 
     @Column(name = "date")
