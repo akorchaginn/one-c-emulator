@@ -151,7 +151,7 @@ public class CrmInteractionService {
         @Override
         public Void onCompleted(Response response) {
             try {
-                log.warn(String.format("End request to CRM for new AccountingEntry %s: %s", aEnId.toString(),  response.getResponseBody()));
+                log.info(String.format("End request to CRM for new AccountingEntry %s: %s", aEnId.toString(),  response.getResponseBody()));
             } catch (Exception e) {
                 log.warn("Error onCompleted(): "+ e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             }
@@ -160,7 +160,7 @@ public class CrmInteractionService {
 
         @Override
         public void onThrowable(Throwable t) {
-            log.warn("End CRM request with error: " + t.getMessage() +"\n" + Arrays.toString(t.getStackTrace()));
+            log.error("Error request to CRM: " + t.getMessage() +"\n" + Arrays.toString(t.getStackTrace()));
         }
     }
 
