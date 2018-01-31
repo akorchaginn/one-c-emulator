@@ -1,29 +1,56 @@
-package org.pes.onecemulator.dto;
+package org.pes.onecemulator.model;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.UUID;
 
-public class InvoiceDto extends AbstractObjectDto {
+public class InvoiceModel {
 
+    @JsonProperty("id")
+    private UUID id;
+
+    @JsonProperty("source")
     private String source;
 
+    @JsonProperty("date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar date;
 
+    @JsonProperty("nom")
     private String number;
 
+    @JsonProperty("NomOQ")
     private String numberOq;
 
-    private PayerDto payer;
+    @JsonProperty("payerCode")
+    private String payerCode;
 
+    @JsonProperty("dataOplat")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar paymentDate;
 
+    @JsonProperty("sumOplat")
     private BigDecimal paymentSum;
 
+    @JsonProperty("status")
     private String status;
 
+    @JsonProperty("sum")
     private BigDecimal sum;
 
+    @JsonProperty("externalId")
     private String externalId;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getSource() {
         return source;
@@ -57,12 +84,12 @@ public class InvoiceDto extends AbstractObjectDto {
         this.numberOq = numberOq;
     }
 
-    public PayerDto getPayer() {
-        return payer;
+    public String getPayerCode() {
+        return payerCode;
     }
 
-    public void setPayer(PayerDto payer) {
-        this.payer = payer;
+    public void setPayerCode(String payerCode) {
+        this.payerCode = payerCode;
     }
 
     public Calendar getPaymentDate() {

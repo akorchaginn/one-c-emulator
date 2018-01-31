@@ -1,95 +1,86 @@
 package org.pes.onecemulator.controller;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.pes.onecemulator.converter.AccountingEntryConverter;
 import org.pes.onecemulator.dto.AccountingEntryDto;
-import org.pes.onecemulator.service.api.AccountingEntryService;
-import org.pes.onecemulator.service.api.CrmInteractionService;
+import org.pes.onecemulator.model.AEntryModel;
+import org.pes.onecemulator.model.SimpleJsonResult;
+import org.pes.onecemulator.service.AccountingEntryService;
+import org.pes.onecemulator.service.CrmInteractionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("api/entry")
 public class AccountingEntryController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountingEntryController.class);
+
+    private static final Object OK = "OK";
+
     @Autowired
     private AccountingEntryService accountingEntryService;
 
     @Autowired
+    private AccountingEntryConverter converter;
+
+    @Autowired
     private CrmInteractionService crmInteractionService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/getbyid/{id}")
-    public @ResponseBody ResponseEntity<AccountingEntryDto> getById(@PathVariable String id) {
+    @GetMapping(value = "/get-by-id/{id}")
+    public @ResponseBody SimpleJsonResult getById(@PathVariable UUID id) {
         try {
-            return new ResponseEntity<>(
-                    accountingEntryService.getAccountingEntryById(UUID.fromString(id)),
-                    HttpStatus.OK
-            );
+            AccountingEntryDto dto = accountingEntryService.getById(id);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/list")
-    public @ResponseBody ResponseEntity<List<AccountingEntryDto>> list() {
+    @GetMapping(value = "/list")
+    public @ResponseBody SimpleJsonResult list() {
         try {
-            return new ResponseEntity<>(
-                    accountingEntryService.listAccountingEntry(),
-                    HttpStatus.OK
-            );
+            return new SimpleJsonResult(converter.convertToModel(accountingEntryService.list()));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/create")
-    public @ResponseBody ResponseEntity<AccountingEntryDto> create(@RequestBody AccountingEntryDto accountingEntryDto) {
+    @PostMapping(value = "/create")
+    public @ResponseBody SimpleJsonResult create(@RequestBody AEntryModel model) {
         try {
-            AccountingEntryDto accountingEntryDtoResult = accountingEntryService.createAccountingEntry(accountingEntryDto);
-            crmInteractionService.sendAccountingEntryToCrm(accountingEntryDtoResult);
-            return new ResponseEntity<>(
-                    accountingEntryDtoResult,
-                    HttpStatus.OK
-            );
+            AccountingEntryDto dto = converter.convertToDto(model);
+            dto = accountingEntryService.create(dto);
+            crmInteractionService.sendAccountingEntryToCrm(dto);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/update")
-    public @ResponseBody ResponseEntity<AccountingEntryDto> update(@RequestBody AccountingEntryDto accountingEntryDto) throws Exception {
+    @PostMapping(value = "/update")
+    public @ResponseBody SimpleJsonResult update(@RequestBody AEntryModel model) {
         try {
-            return new ResponseEntity<>(
-                    accountingEntryService.updateAccountingEntry(accountingEntryDto),
-                    HttpStatus.OK
-            );
+            AccountingEntryDto dto = converter.convertToDto(model);
+            dto = accountingEntryService.update(dto);
+            crmInteractionService.sendAccountingEntryToCrm(dto);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
-    public ResponseEntity<AccountingEntryDto> delete(@PathVariable String id) {
+    @GetMapping(value = "/delete/{id}")
+    public SimpleJsonResult delete(@PathVariable UUID id) {
         try {
-            return new ResponseEntity<>(
-                    accountingEntryService.deleteAccountingEntry(UUID.fromString(id)),
-                    HttpStatus.OK
-            );
+            accountingEntryService.delete(id);
+            return new SimpleJsonResult(OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 }

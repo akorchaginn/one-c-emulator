@@ -1,4 +1,4 @@
-package org.pes.onecemulator.dto;
+package org.pes.onecemulator.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

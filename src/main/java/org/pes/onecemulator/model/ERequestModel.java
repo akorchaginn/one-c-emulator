@@ -1,24 +1,43 @@
-package org.pes.onecemulator.dto;
+package org.pes.onecemulator.model;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.UUID;
 
-public class ExpenseRequestDto extends AbstractObjectDto {
+public class ERequestModel {
 
+    @JsonProperty("id")
+    private UUID id;
+
+    @JsonProperty("source")
     private String source;
 
+    @JsonProperty("currency")
     private String currency;
 
+    @JsonProperty("isConfirm")
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     private Boolean isConfirm;
 
+    @JsonProperty("isPaid")
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     private Boolean isPaid;
 
+    @JsonProperty("number")
     private String number;
 
+    @JsonProperty("sum")
     private BigDecimal sum;
 
-    private Set<AccountingEntryDto> accountingEntries = new HashSet<>();
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getSource() {
         return source;
@@ -66,13 +85,5 @@ public class ExpenseRequestDto extends AbstractObjectDto {
 
     public void setSum(BigDecimal sum) {
         this.sum = sum;
-    }
-
-    public Set<AccountingEntryDto> getAccountingEntries() {
-        return accountingEntries;
-    }
-
-    public void setAccountingEntries(Set<AccountingEntryDto> accountingEntries) {
-        this.accountingEntries = accountingEntries;
     }
 }

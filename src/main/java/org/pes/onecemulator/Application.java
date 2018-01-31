@@ -1,6 +1,5 @@
 package org.pes.onecemulator;
 
-import org.pes.onecemulator.configuration.JpaConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

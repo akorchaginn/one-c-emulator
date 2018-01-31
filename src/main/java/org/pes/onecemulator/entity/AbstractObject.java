@@ -1,84 +1,52 @@
 package org.pes.onecemulator.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.UUID;
 
 @MappedSuperclass
-public class AbstractObject implements Serializable {
+public abstract class AbstractObject implements Serializable {
 
     @Id
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", unique = true, nullable = false, updatable = false)
+    @Type(type = "pg-uuid")
+    @GeneratedValue(generator = "custom-uuid")
+    @GenericGenerator(
+            name = "custom-uuid",
+            strategy = "org.hibernate.id.UUIDGenerator",
+            parameters = {
+                    @Parameter(
+                            name = "uuid_gen_strategy_class",
+                            value = "org.hibernate.id.uuid.CustomVersionOneStrategy"
+                    )
+            }
+    )
     private UUID id;
-/*
-    @Version
-    @Column(name = "version", nullable = false)
-    private Long version;
-*/
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted = Boolean.FALSE;
 
-    @Column(name = "created_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_time")
+    @CreationTimestamp
     private Calendar createdTime;
 
-    @Column(name = "updated_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_time")
+    @UpdateTimestamp
     private Calendar updatedTime;
 
-    @PrePersist
-    @PreUpdate
-    protected void updateBaseFields() {
-        Calendar current = GregorianCalendar.getInstance();
-
-        if (createdTime == null) {
-            createdTime = current;
-        }
-
-        updatedTime = current;
-
-        if (deleted == null) {
-            deleted = false;
-        }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-
-        result.append(getClass().getSimpleName());
-        result.append(":");
-
-        result.append("id=");
-        result.append(getId());
-
-        //result.append(", ");
-        //result.append("version=");
-        //result.append(version);
-
-        result.append(", ");
-        result.append("deleted=");
-        result.append(deleted);
-        if (createdTime != null) {
-            result.append(", ");
-            result.append("createdTime=");
-            result.append(createdTime.getTime());
-        }
-
-        if (updatedTime != null) {
-            result.append(", ");
-            result.append("updatedTime=");
-            result.append(updatedTime.getTime());
-        }
-
-        return result.toString();
-    }
-
+    @Version
+    private Long version;
 
     public UUID getId() {
         return id;
@@ -86,14 +54,6 @@ public class AbstractObject implements Serializable {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
     }
 
     public Calendar getCreatedTime() {
@@ -110,5 +70,13 @@ public class AbstractObject implements Serializable {
 
     public void setUpdatedTime(Calendar updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

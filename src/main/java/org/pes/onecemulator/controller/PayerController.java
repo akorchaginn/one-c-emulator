@@ -1,14 +1,19 @@
 package org.pes.onecemulator.controller;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.pes.onecemulator.converter.PayerConverter;
 import org.pes.onecemulator.dto.PayerDto;
-import org.pes.onecemulator.service.api.PayerService;
+import org.pes.onecemulator.model.PayerModel;
+import org.pes.onecemulator.model.SimpleJsonResult;
+import org.pes.onecemulator.service.PayerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,90 +24,76 @@ import java.util.UUID;
 @RequestMapping("api/payer")
 public class PayerController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PayerController.class);
+
+    private static final Object OK = "OK";
+
     @Autowired
     private PayerService payerService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/getbyid/{id}")
-    public @ResponseBody ResponseEntity<PayerDto> getById(@PathVariable String id) {
+    @Autowired
+    private PayerConverter converter;
+
+    @GetMapping(value = "/get-by-id/{id}")
+    public @ResponseBody SimpleJsonResult getById(@PathVariable UUID id) {
         try {
-            return new ResponseEntity<>(
-                    payerService.getPayerById(UUID.fromString(id)),
-                    HttpStatus.OK
-            );
+            PayerDto dto = payerService.getById(id);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/list")
-    public @ResponseBody ResponseEntity<List<PayerDto>> list() {
+    @GetMapping(value = "/list")
+    public @ResponseBody SimpleJsonResult list() {
         try {
-            return new ResponseEntity<>(
-                    payerService.listPayer(),
-                    HttpStatus.OK
-            );
+            return new SimpleJsonResult(converter.convertToModel(payerService.list()));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/create")
-    public @ResponseBody ResponseEntity<PayerDto> create(@RequestBody PayerDto payerDto) {
+    @PostMapping(value = "/create")
+    public @ResponseBody SimpleJsonResult create(@RequestBody PayerModel model) {
         try {
-            return new ResponseEntity<>(
-                    payerService.createPayer(payerDto),
-                    HttpStatus.OK
-            );
+            PayerDto dto = converter.convertToDto(model);
+            dto = payerService.create(dto);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/create-all")
-    public @ResponseBody ResponseEntity<List<PayerDto>> create(@RequestBody List<PayerDto> payerDtos) {
+    @PostMapping(value = "/create-all")
+    public @ResponseBody SimpleJsonResult create(@RequestBody List<PayerModel> modelList) {
         try {
-            return new ResponseEntity<>(
-                    payerService.createPayer(payerDtos),
-                    HttpStatus.OK
-            );
+            for (PayerDto dto : converter.convertToDto(modelList)) {
+                payerService.create(dto);
+            }
+            return new SimpleJsonResult(converter.convertToModel(payerService.list()));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/update")
-    public @ResponseBody ResponseEntity<PayerDto> update(@RequestBody PayerDto payerDto) {
+    @PostMapping(value = "/update")
+    public @ResponseBody SimpleJsonResult update(@RequestBody PayerModel model) {
         try {
-            return new ResponseEntity<>(
-                    payerService.updatePayer(payerDto),
-                    HttpStatus.OK
-            );
+            PayerDto dto = converter.convertToDto(model);
+            dto = payerService.update(dto);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
-    public @ResponseBody ResponseEntity<PayerDto> delete(@PathVariable(value = "id") UUID id) {
+    @GetMapping(value = "/delete/{id}")
+    public SimpleJsonResult delete(@PathVariable(value = "id") UUID id) {
         try {
-            return new ResponseEntity<>(
-                    payerService.deletePayer(id),
-                    HttpStatus.OK
-            );
+            payerService.delete(id);
+            return new SimpleJsonResult(OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 }

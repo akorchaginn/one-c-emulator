@@ -1,23 +1,39 @@
-package org.pes.onecemulator.dto;
+package org.pes.onecemulator.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PayerDto extends AbstractObjectDto {
+import java.util.UUID;
 
+public class PayerModel {
+
+    @JsonProperty("id")
+    private UUID id;
+
+    @JsonProperty("address")
     private String address;
 
+    @JsonProperty("code")
     private String code;
 
+    @JsonProperty("fullName")
     private String fullName;
 
+    @JsonProperty("inn")
     private String inn;
 
+    @JsonProperty("kpp")
     private String kpp;
 
+    @JsonProperty("name")
     private String name;
 
-    private Set<InvoiceDto> invoices = new HashSet<>();
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getAddress() {
         return address;
@@ -65,13 +81,5 @@ public class PayerDto extends AbstractObjectDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<InvoiceDto> getInvoices() {
-        return invoices;
-    }
-
-    public void setInvoices(Set<InvoiceDto> invoices) {
-        this.invoices = invoices;
     }
 }

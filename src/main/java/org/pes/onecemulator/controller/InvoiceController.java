@@ -1,90 +1,80 @@
 package org.pes.onecemulator.controller;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.pes.onecemulator.converter.InvoiceConverter;
 import org.pes.onecemulator.dto.InvoiceDto;
-import org.pes.onecemulator.service.api.InvoiceService;
+import org.pes.onecemulator.model.InvoiceModel;
+import org.pes.onecemulator.model.SimpleJsonResult;
+import org.pes.onecemulator.service.InvoiceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("api/invoice")
 public class InvoiceController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceController.class);
+
+    private static final Object OK = "OK";
+
     @Autowired
     private InvoiceService invoiceService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/getbyid/{id}")
-    public @ResponseBody
-    ResponseEntity<InvoiceDto> getById(@PathVariable String id) {
+    @Autowired
+    private InvoiceConverter converter;
+
+    @GetMapping(value = "/get-by-id/{id}")
+    public @ResponseBody SimpleJsonResult getById(@PathVariable UUID id) {
         try {
-            return new ResponseEntity<>(
-                    invoiceService.getInvoiceById(UUID.fromString(id)),
-                    HttpStatus.OK
-            );
+            InvoiceDto dto = invoiceService.getIById(id);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/list")
-    public @ResponseBody ResponseEntity<List<InvoiceDto>> list() {
+    @GetMapping(value = "/list")
+    public @ResponseBody SimpleJsonResult list() {
         try {
-            return new ResponseEntity<>(
-                    invoiceService.listInvoice(),
-                    HttpStatus.OK
-            );
+            return new SimpleJsonResult(converter.convertToModel(invoiceService.list()));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/create")
-    public @ResponseBody ResponseEntity<InvoiceDto> create(@RequestBody InvoiceDto invoiceDto) {
+    @PostMapping(value = "/create")
+    public @ResponseBody SimpleJsonResult create(@RequestBody InvoiceModel model) {
         try {
-            return new ResponseEntity<>(
-                    invoiceService.createInvoice(invoiceDto),
-                    HttpStatus.OK
-            );
+            InvoiceDto dto = converter.convertToDto(model);
+            dto = invoiceService.create(dto);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/update")
-    public @ResponseBody ResponseEntity<InvoiceDto> update(@RequestBody InvoiceDto invoiceDto) throws Exception {
+    @PostMapping(value = "/update")
+    public @ResponseBody SimpleJsonResult update(@RequestBody InvoiceModel model) {
         try {
-            return new ResponseEntity<>(
-                    invoiceService.updateInvoice(invoiceDto),
-                    HttpStatus.OK
-            );
+            InvoiceDto dto = converter.convertToDto(model);
+            dto = invoiceService.update(dto);
+            return new SimpleJsonResult(converter.convertToModel(dto));
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
-    public ResponseEntity<InvoiceDto> delete(@PathVariable String id) {
+    @GetMapping(value = "/delete/{id}")
+    public SimpleJsonResult delete(@PathVariable UUID id) {
         try {
-            return new ResponseEntity<>(
-                    invoiceService.deleteInvoice(UUID.fromString(id)),
-                    HttpStatus.OK
-            );
+            invoiceService.delete(id);
+            return new SimpleJsonResult(OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
         }
     }
 }

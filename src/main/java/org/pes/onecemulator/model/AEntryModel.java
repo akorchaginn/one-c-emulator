@@ -1,21 +1,45 @@
-package org.pes.onecemulator.dto;
+package org.pes.onecemulator.model;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.pes.onecemulator.dto.ExpenseRequestDto;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.UUID;
 
-public class AccountingEntryDto extends AbstractObjectDto {
+public class AEntryModel {
 
+    @JsonProperty("id")
+    private UUID id;
+
+    @JsonProperty("operationCode")
     private String code;
 
+    @JsonProperty("date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Calendar date;
 
+    @JsonProperty("docName")
     private String documentName;
 
+    @JsonProperty("expenseNumber")
     private String expenseNumber;
 
+    @JsonIgnore
     private ExpenseRequestDto expenseRequest;
 
+    @JsonProperty("sum")
     private BigDecimal sum;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;
