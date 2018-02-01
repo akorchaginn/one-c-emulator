@@ -1,19 +1,19 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.dto.AccountingEntryDto;
+import org.pes.onecemulator.model.AEntryModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface AccountingEntryService {
 
-    AccountingEntryDto getById(UUID id) throws Exception;
+    AEntryModel getById(UUID id);
 
-    List<AccountingEntryDto> list();
+    List<AEntryModel> list();
 
-    AccountingEntryDto create(AccountingEntryDto dto) throws Exception;
+    AEntryModel create(AEntryModel model);
 
-    AccountingEntryDto update(AccountingEntryDto dto) throws Exception;
+    AEntryModel update(AEntryModel model);
 
     void delete(UUID id);
 }

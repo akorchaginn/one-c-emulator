@@ -2,9 +2,12 @@ package org.pes.onecemulator.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-public class PayerModel {
+public class PayerModel extends ApiError {
 
     @JsonProperty("id")
     private UUID id;
@@ -26,6 +29,17 @@ public class PayerModel {
 
     @JsonProperty("name")
     private String name;
+
+    @JsonProperty("source")
+    private Set<String> source = new HashSet<>();
+
+    public PayerModel() {
+        super();
+    }
+
+    public PayerModel(String error) {
+        super(error);
+    }
 
     public UUID getId() {
         return id;
@@ -81,5 +95,13 @@ public class PayerModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<String> getSource() {
+        return source;
+    }
+
+    public void setSource(Set<String> source) {
+        this.source = source;
     }
 }

@@ -11,10 +11,7 @@ import java.util.Calendar;
 
 @Entity
 @Table(name = "invoice")
-public class Invoice extends AbstractObject {
-
-    @Column(name = "source", nullable = false)
-    private String source;
+public class Invoice extends AbstractEntity {
 
     @Column(name = "date")
     private Calendar date;
@@ -24,10 +21,6 @@ public class Invoice extends AbstractObject {
 
     @Column(name = "number_oq")
     private String numberOq;
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "payer_id")
-    private Payer payer;
 
     @Column(name = "payment_date")
     private Calendar paymentDate;
@@ -44,13 +37,13 @@ public class Invoice extends AbstractObject {
     @Column(name = "external_id")
     private String externalId;
 
-    public String getSource() {
-        return source;
-    }
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "payer_id")
+    private Payer payer;
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "source_id")
+    private Source source;
 
     public Calendar getDate() {
         return date;
@@ -74,14 +67,6 @@ public class Invoice extends AbstractObject {
 
     public void setNumberOq(String numberOq) {
         this.numberOq = numberOq;
-    }
-
-    public Payer getPayer() {
-        return payer;
-    }
-
-    public void setPayer(Payer payer) {
-        this.payer = payer;
     }
 
     public Calendar getPaymentDate() {
@@ -122,5 +107,21 @@ public class Invoice extends AbstractObject {
 
     public void setExternalId(String externalId) {
         this.externalId = externalId;
+    }
+
+    public Payer getPayer() {
+        return payer;
+    }
+
+    public void setPayer(Payer payer) {
+        this.payer = payer;
+    }
+
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
     }
 }

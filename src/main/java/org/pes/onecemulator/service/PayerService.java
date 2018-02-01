@@ -1,21 +1,21 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.dto.PayerDto;
+import org.pes.onecemulator.model.PayerModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface PayerService {
 
-    PayerDto getById(UUID id) throws Exception;
+    PayerModel getById(UUID id);
 
-    PayerDto getByCode(String code) throws Exception;
+    PayerModel getByCode(String code);
 
-    List<PayerDto> list();
+    List<PayerModel> list();
 
-    PayerDto create(PayerDto payerDto) throws Exception;
+    PayerModel create(PayerModel model);
 
-    PayerDto update(PayerDto payerDto) throws Exception;
+    PayerModel update(PayerModel model);
 
     void delete(UUID id);
 }

@@ -5,15 +5,16 @@ import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.Response;
-import org.modelmapper.ModelMapper;
-import org.pes.onecemulator.dto.AccountingEntryDto;
+import org.pes.onecemulator.entity.AccountingEntry;
+import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
+import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.model.DocumentCrm;
-import org.pes.onecemulator.dto.ExpenseRequestDto;
 import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.PayerRepository;
+import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
 import org.pes.onecemulator.utils.CrmSecurityUtils;
 import org.slf4j.Logger;
@@ -23,12 +24,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 
 @Service
 public class CrmInteractionServiceImpl implements CrmInteractionService {
@@ -44,10 +45,13 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
+    @Autowired
+    private SourceRepository sourceRepository;
+
     public DocumentCrm getDocumentsCrmById(UUID id, String source) {
         Invoice invoice = invoiceRepository.findOneAndSource(id, source);
         if (invoice != null) {
-            return convertToDoc(invoice);
+            return getDocumentCrm(invoice);
         }
 
         return new DocumentCrm();
@@ -56,34 +60,51 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     public DocumentCrm getDocumentCrmByExternalId(String externalId, String source) {
         Invoice invoice = invoiceRepository.findByExternalIdAndSource(externalId, source);
         if (invoice != null) {
-            return convertToDoc(invoice);
+            return getDocumentCrm(invoice);
         }
 
         return new DocumentCrm();
     }
 
     public List<PayerCrm> getAllPayersCrm() {
-        return convertToPayerCrm(payerRepository.findAll());
+        List<Payer> payers = payerRepository.findAll();
+        return payers
+                .stream()
+                .map(this::getPayerCrm)
+                .collect(Collectors.toList());
     }
 
-    public void sendAccountingEntryToCrm(AccountingEntryDto accountingEntryDto) {
-        ExpenseRequestDto expenseRequestDto = accountingEntryDto.getExpenseRequest();
+    public List<PayerCrm> getAllPayersCrmBySource(String src) {
+        Source source = sourceRepository.findByName(src);
+        if (source != null) {
+            return source.getPayers()
+                    .stream()
+                    .map(this::getPayerCrm)
+                    .collect(Collectors.toList());
+        }
 
-        String endpointUrl = environment.getProperty("crm.interaction.url").replaceAll("\"", StringUtils.EMPTY)
-                + environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY);
+        return new ArrayList<>();
+    }
+
+    public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
+        String endpointUrl =
+                environment.getProperty("crm.interaction.url").replaceAll("\"", StringUtils.EMPTY) +
+                        environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY);
+
+        ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
 
         String parameterData = new StringJoiner(",")
-                .add(expenseRequestDto.getNumber())
-                .add(accountingEntryDto.getSum().toString())
-                .add(expenseRequestDto.getPaid().toString())
-                .add(expenseRequestDto.getCurrency())
-                .add(accountingEntryDto.getCode())
-                .add(accountingEntryDto.getDocumentName())
-                .add(expenseRequestDto.getConfirm().toString())
+                .add(expenseRequest.getNumber())
+                .add(expenseRequest.getSum().toString())
+                .add(expenseRequest.getPaid().toString())
+                .add(expenseRequest.getCurrency())
+                .add(accountingEntry.getCode())
+                .add(accountingEntry.getDocumentName())
+                .add(expenseRequest.getConfirm().toString())
                 .toString();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String parameterDate = simpleDateFormat.format(accountingEntryDto.getDate().getTime());
+        String parameterDate = simpleDateFormat.format(accountingEntry.getDate().getTime());
 
         String resultUrl = new StringJoiner("/")
                 .add(endpointUrl)
@@ -98,8 +119,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
             asyncHttpClient
                     .prepareGet(resultUrl)
                     .addHeader("crm-api-token", CrmSecurityUtils.CRM_TOKEN)
-                    .addHeader("crm-1c-database-source", expenseRequestDto.getSource())
-                    .execute(new CompletionHandler(accountingEntryDto.getId()));
+                    .addHeader("crm-1c-database-source", expenseRequest.getSource().getName())
+                    .execute(new CompletionHandler(accountingEntry.getId()));
 
         } catch (Exception e) {
             LOGGER.warn("Error request to CRM: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
@@ -126,26 +147,32 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         }
     }
 
-    private DocumentCrm convertToDoc(Invoice invoice) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(invoice, DocumentCrm.class);
+    private DocumentCrm getDocumentCrm(Invoice entity) {
+        final DocumentCrm model = new DocumentCrm();
+        model.setId(entity.getId());
+        model.setNumber(entity.getNumber());
+        model.setNumberOq(entity.getNumberOq());
+        model.setExternalId(entity.getExternalId());
+        model.setDate(entity.getDate());
+        model.setSum(entity.getSum());
+        model.setPaymentDate(entity.getPaymentDate());
+        model.setPaymentSum(entity.getPaymentSum());
+        model.setStatus(entity.getStatus());
+        model.setPayerName(entity.getPayer() != null ? entity.getPayer().getName() : null);
+
+        return model;
     }
 
-    private List<DocumentCrm> convertToDoc(List<Invoice> invoices) {
-        return invoices.stream().map(this::convertToDoc).collect(Collectors.toList());
-    }
+    private PayerCrm getPayerCrm(Payer entity) {
+        final PayerCrm model = new PayerCrm();
+        model.setId(entity.getAddress());
+        model.setCode(entity.getCode());
+        model.setName(entity.getName());
+        model.setFullName(entity.getFullName());
+        model.setAddress(entity.getAddress());
+        model.setInn(entity.getInn());
+        model.setKpp(entity.getKpp());
 
-    private Invoice convertToInvoice(DocumentCrm documentCrm) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(documentCrm, Invoice.class);
-    }
-
-    private PayerCrm convertToPayerCrm(Payer payer) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(payer, PayerCrm.class);
-    }
-
-    private List<PayerCrm> convertToPayerCrm(List<Payer> payers) {
-        return payers.stream().map(this::convertToPayerCrm).collect(Collectors.toList());
+        return model;
     }
 }

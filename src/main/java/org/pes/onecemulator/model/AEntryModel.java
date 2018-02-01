@@ -1,15 +1,13 @@
 package org.pes.onecemulator.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.pes.onecemulator.dto.ExpenseRequestDto;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.UUID;
 
-public class AEntryModel {
+public class AEntryModel extends ApiError {
 
     @JsonProperty("id")
     private UUID id;
@@ -27,11 +25,16 @@ public class AEntryModel {
     @JsonProperty("expenseNumber")
     private String expenseNumber;
 
-    @JsonIgnore
-    private ExpenseRequestDto expenseRequest;
-
     @JsonProperty("sum")
     private BigDecimal sum;
+
+    public AEntryModel() {
+        super();
+    }
+
+    public AEntryModel(String error) {
+        super(error);
+    }
 
     public UUID getId() {
         return id;
@@ -71,14 +74,6 @@ public class AEntryModel {
 
     public void setExpenseNumber(String expenseNumber) {
         this.expenseNumber = expenseNumber;
-    }
-
-    public ExpenseRequestDto getExpenseRequest() {
-        return expenseRequest;
-    }
-
-    public void setExpenseRequest(ExpenseRequestDto expenseRequest) {
-        this.expenseRequest = expenseRequest;
     }
 
     public BigDecimal getSum() {

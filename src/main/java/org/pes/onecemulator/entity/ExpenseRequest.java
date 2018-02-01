@@ -4,6 +4,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
@@ -12,10 +14,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "expense_request")
-public class ExpenseRequest extends AbstractObject {
-
-    @Column(name = "source", nullable = false)
-    private String source;
+public class ExpenseRequest extends AbstractEntity {
 
     @Column(name = "currency")
     private String currency;
@@ -32,16 +31,12 @@ public class ExpenseRequest extends AbstractObject {
     @Column(name = "sum")
     private BigDecimal sum;
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "source_id")
+    private Source source;
+
     @OneToMany(mappedBy = "expenseRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AccountingEntry> accountingEntries = new HashSet<>();
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
 
     public String getCurrency() {
         return currency;
@@ -81,6 +76,14 @@ public class ExpenseRequest extends AbstractObject {
 
     public void setSum(BigDecimal sum) {
         this.sum = sum;
+    }
+
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
     }
 
     public Set<AccountingEntry> getAccountingEntries() {

@@ -1,21 +1,19 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.dto.ExpenseRequestDto;
+import org.pes.onecemulator.model.ERequestModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ExpenseRequestService {
 
-    ExpenseRequestDto getById(UUID id) throws Exception;
+    ERequestModel getById(UUID id);
 
-    List<ExpenseRequestDto> list();
+    List<ERequestModel> list();
 
-    ExpenseRequestDto create(ExpenseRequestDto expenseRequestDto) throws Exception;
+    ERequestModel create(ERequestModel model);
 
-    ExpenseRequestDto update(ExpenseRequestDto expenseRequestDto) throws Exception;
-
-    ExpenseRequestDto getExpenseRequestByNumber(String number) throws Exception;
+    ERequestModel update(ERequestModel model);
 
     void delete(UUID id);
 }

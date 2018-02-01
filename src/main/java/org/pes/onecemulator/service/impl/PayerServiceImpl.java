@@ -1,16 +1,19 @@
 package org.pes.onecemulator.service.impl;
 
-import org.modelmapper.ModelMapper;
-import org.pes.onecemulator.dto.PayerDto;
 import org.pes.onecemulator.entity.Payer;
+import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.repository.PayerRepository;
+import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.PayerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,77 +25,139 @@ public class PayerServiceImpl implements PayerService {
     @Autowired
     private PayerRepository payerRepository;
 
-    public PayerDto getById(UUID id) throws Exception {
+    @Autowired
+    private SourceRepository sourceRepository;
+
+    public PayerModel getById(UUID id) {
         Payer payer = payerRepository.findOne(id);
         if (payer != null) {
-            return convertToDto(payer);
+            return getModel(payer);
         }
 
-        throw new Exception("Payer with id: " + id + " not found at database.");
+        return new PayerModel("Payer with id: " + id + " not found at database.");
     }
 
-    public PayerDto getByCode(String code) throws Exception {
+    public PayerModel getByCode(String code) {
         Payer payer = payerRepository.findByCode(code);
         if (payer != null) {
-            return convertToDto(payer);
+            return getModel(payer);
         }
 
-        throw new Exception("Payer with code: " + code + " not found at database.");
+        return new PayerModel("Payer with code: " + code + " not found at database.");
     }
 
-    public List<PayerDto> list() {
-        return convertToDto(payerRepository.findAll());
+    public List<PayerModel> list() {
+        List<Payer> payers = payerRepository.findAll();
+        return payers
+                .stream()
+                .map(this::getModel)
+                .collect(Collectors.toList());
     }
 
-    public PayerDto create(PayerDto payerDto) throws Exception {
-        if (payerDto != null) {
-            Payer payer = convertToEntity(payerDto);
-            payer = payerRepository.save(payer);
-            return convertToDto(payer);
-        }
+    public PayerModel create(PayerModel model) {
+        if (model != null && model.getSource() != null && !model.getSource().isEmpty()) {
 
-        throw new Exception("Payer is null.");
-    }
+            Set<Source> newSources = new HashSet<>();
+            model.getSource().forEach(s -> {
+                Source source = sourceRepository.findByName(s);
+                if (source != null) {
+                    newSources.add(source);
+                } else {
+                    Source newSource = new Source();
+                    newSource.setName(s);
+                    newSources.add(newSource);
+                }
+            });
 
-    public PayerDto update(PayerDto payerDto) throws Exception {
-        if (payerDto != null && payerDto.getId() != null && payerDto.getCode() != null) {
-            Payer payer = payerRepository.findOne(payerDto.getId());
-            if(payer != null) {
-                payer.setAddress(payerDto.getAddress());
-                payer.setCode(payerDto.getCode());
-                payer.setFullName(payerDto.getFullName());
-                payer.setInn(payerDto.getInn());
-                payer.setKpp(payerDto.getKpp());
-                payer.setName(payerDto.getName());
+            if (!newSources.isEmpty()) {
+                Payer payer = new Payer();
+                payer.setCode(model.getCode());
+                payer.setName(model.getName());
+                payer.setFullName(model.getFullName());
+                payer.setAddress(model.getAddress());
+                payer.setInn(model.getInn());
+                payer.setKpp(model.getKpp());
+                payer.setSources(newSources);
                 payer = payerRepository.save(payer);
-                return convertToDto(payer);
+
+                return getModel(payer);
             }
 
-            throw new Exception("Payer with id: " + payerDto.getId() + " not found at database.");
+            return new PayerModel("New source list is empty.");
         }
 
-        throw new Exception("Payer is null or id is null or code is null.");
+        return new PayerModel(
+                model == null
+                    ? "Model is null."
+                    : model.getSource() == null
+                        ? "Sources list is null."
+                        : "Source list is empty."
+        );
+    }
+
+    public PayerModel update(PayerModel model) {
+        if (model != null && model.getId() != null &&
+                model.getCode() != null && model.getSource() != null && !model.getSource().isEmpty()) {
+
+            Payer payer = payerRepository.findOne(model.getId());
+
+            if (payer != null) {
+
+                Set<Source> newSources = new HashSet<>();
+                model.getSource().forEach(s -> {
+                    Source source = sourceRepository.findByName(s);
+                    if (source != null) {
+                        newSources.add(source);
+                    } else {
+                        Source newSource = new Source();
+                        newSource.setName(s);
+                        sourceRepository.save(newSource);
+                    }
+                });
+
+                Set<Source> oldSources = new HashSet<>();
+
+                payer.getSources().forEach(s -> {
+                    if (!newSources.contains(s)) {
+                        oldSources.remove(s);
+                    } else {
+                        oldSources.add(s);
+                    }
+                });
+
+                payer.setAddress(model.getAddress());
+                payer.setCode(model.getCode());
+                payer.setFullName(model.getFullName());
+                payer.setInn(model.getInn());
+                payer.setKpp(model.getKpp());
+                payer.setName(model.getName());
+                payer.setSources(oldSources);
+                payer = payerRepository.save(payer);
+
+                return getModel(payer);
+            }
+
+            return new PayerModel("Payer with id: " + model.getId() + " not found at database.");
+        }
+
+        return new PayerModel("Payer is null or id is null or code is null.");
     }
 
     public void delete(UUID id) {
         payerRepository.delete(id);
     }
 
-    private PayerDto convertToDto(Payer payer) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(payer, PayerDto.class);
-    }
+    private PayerModel getModel(Payer entity) {
+        PayerModel model = new PayerModel();
+        model.setId(entity.getId());
+        model.setCode(entity.getCode());
+        model.setName(entity.getName());
+        model.setFullName(entity.getFullName());
+        model.setAddress(entity.getAddress());
+        model.setInn(entity.getInn());
+        model.setKpp(entity.getKpp());
+        model.setSource(entity.getSources().stream().map(Source::getName).collect(Collectors.toSet()));
 
-    private List<PayerDto> convertToDto(List<Payer> payers) {
-        return payers.parallelStream().map(this::convertToDto).collect(Collectors.toList());
-    }
-
-    private Payer convertToEntity(PayerDto payerDto) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(payerDto, Payer.class);
-    }
-
-    private List<Payer> convertToEntity(List<PayerDto> payerDtos) {
-        return payerDtos.parallelStream().map(this::convertToEntity).collect(Collectors.toList());
+        return model;
     }
 }

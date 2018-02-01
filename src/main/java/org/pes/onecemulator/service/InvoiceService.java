@@ -1,25 +1,25 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.dto.InvoiceDto;
+import org.pes.onecemulator.model.InvoiceModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface InvoiceService {
 
-    InvoiceDto getIById(UUID id) throws Exception;
+    InvoiceModel getById(UUID id);
 
-    InvoiceDto getByIdAndSource(UUID id, String source) throws Exception;
+    InvoiceModel getByIdAndSource(UUID id, String source);
 
-    InvoiceDto getByExternalId(String externalId) throws Exception;
+    InvoiceModel getByExternalId(String externalId);
 
-    InvoiceDto getByExternalIdAndSource(String externalId, String source) throws Exception;
+    InvoiceModel getByExternalIdAndSource(String externalId, String source);
 
-    List<InvoiceDto> list();
+    List<InvoiceModel> list();
 
-    InvoiceDto create(InvoiceDto invoiceDto) throws Exception;
+    InvoiceModel create(InvoiceModel model);
 
-    InvoiceDto update(InvoiceDto invoiceDto) throws Exception;
+    InvoiceModel update(InvoiceModel model);
 
     void delete(UUID id);
 }

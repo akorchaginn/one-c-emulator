@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class ERequestModel {
+public class ERequestModel extends ApiError {
 
     @JsonProperty("id")
     private UUID id;
@@ -30,6 +30,14 @@ public class ERequestModel {
 
     @JsonProperty("sum")
     private BigDecimal sum;
+
+    public ERequestModel() {
+        super();
+    }
+
+    public ERequestModel(String error) {
+        super(error);
+    }
 
     public UUID getId() {
         return id;

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.UUID;
 
-public class InvoiceModel {
+public class InvoiceModel extends ApiError {
 
     @JsonProperty("id")
     private UUID id;
@@ -43,6 +43,14 @@ public class InvoiceModel {
 
     @JsonProperty("externalId")
     private String externalId;
+
+    public InvoiceModel() {
+        super();
+    }
+
+    public InvoiceModel(String error) {
+        super(error);
+    }
 
     public UUID getId() {
         return id;

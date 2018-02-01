@@ -1,10 +1,6 @@
 package org.pes.onecemulator.controller;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.pes.onecemulator.converter.PayerConverter;
-import org.pes.onecemulator.dto.PayerDto;
 import org.pes.onecemulator.model.PayerModel;
-import org.pes.onecemulator.model.SimpleJsonResult;
 import org.pes.onecemulator.service.PayerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/payer")
@@ -31,69 +28,33 @@ public class PayerController {
     @Autowired
     private PayerService payerService;
 
-    @Autowired
-    private PayerConverter converter;
-
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody SimpleJsonResult getById(@PathVariable UUID id) {
-        try {
-            PayerDto dto = payerService.getById(id);
-            return new SimpleJsonResult(converter.convertToModel(dto));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public @ResponseBody PayerModel getById(@PathVariable UUID id) {
+        return payerService.getById(id);
     }
 
     @GetMapping(value = "/list")
-    public @ResponseBody SimpleJsonResult list() {
-        try {
-            return new SimpleJsonResult(converter.convertToModel(payerService.list()));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public @ResponseBody List<PayerModel> list() {
+        return payerService.list();
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody SimpleJsonResult create(@RequestBody PayerModel model) {
-        try {
-            PayerDto dto = converter.convertToDto(model);
-            dto = payerService.create(dto);
-            return new SimpleJsonResult(converter.convertToModel(dto));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public @ResponseBody PayerModel create(@RequestBody PayerModel model) {
+        return payerService.create(model);
     }
 
     @PostMapping(value = "/create-all")
-    public @ResponseBody SimpleJsonResult create(@RequestBody List<PayerModel> modelList) {
-        try {
-            for (PayerDto dto : converter.convertToDto(modelList)) {
-                payerService.create(dto);
-            }
-            return new SimpleJsonResult(converter.convertToModel(payerService.list()));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public @ResponseBody List<PayerModel> create(@RequestBody List<PayerModel> modelList) {
+        return modelList.stream().map(p -> payerService.create(p)).collect(Collectors.toList());
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody SimpleJsonResult update(@RequestBody PayerModel model) {
-        try {
-            PayerDto dto = converter.convertToDto(model);
-            dto = payerService.update(dto);
-            return new SimpleJsonResult(converter.convertToModel(dto));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public @ResponseBody PayerModel update(@RequestBody PayerModel model) {
+        return payerService.update(model);
     }
 
     @GetMapping(value = "/delete/{id}")
-    public SimpleJsonResult delete(@PathVariable(value = "id") UUID id) {
-        try {
-            payerService.delete(id);
-            return new SimpleJsonResult(OK);
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public void delete(@PathVariable(value = "id") UUID id) {
+        payerService.delete(id);
     }
 }

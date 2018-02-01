@@ -1,6 +1,6 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.dto.AccountingEntryDto;
+import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.PayerCrm;
 
@@ -15,5 +15,7 @@ public interface CrmInteractionService {
 
     List<PayerCrm> getAllPayersCrm();
 
-    void sendAccountingEntryToCrm(AccountingEntryDto dto);
+    List<PayerCrm> getAllPayersCrmBySource(String source);
+
+    void sendAccountingEntryToCrm(AccountingEntry accountingEntry);
 }

@@ -1,10 +1,11 @@
 package org.pes.onecemulator.service.impl;
 
-import org.modelmapper.ModelMapper;
-import org.pes.onecemulator.dto.ExpenseRequestDto;
 import org.pes.onecemulator.entity.ExpenseRequest;
+import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.model.ERequestModel;
 import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
+import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.ExpenseRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,71 +27,101 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     @Autowired
     private AccountingEntryRepository accountingEntryRepository;
 
-    public ExpenseRequestDto getById(UUID id) throws Exception {
+    @Autowired
+    private SourceRepository sourceRepository;
+
+    public ERequestModel getById(UUID id) {
         ExpenseRequest expenseRequest = expenseRequestRepository.findOne(id);
         if (expenseRequest != null) {
-            return convertToDto(expenseRequest);
+            return getModel(expenseRequest);
         }
 
-        throw new Exception("Expense request with id: " + id + " not found at database.");
+        return new ERequestModel("Expense request with id: " + id + " not found at database.");
     }
 
-    public List<ExpenseRequestDto> list() {
-        return convertToDto(expenseRequestRepository.findAll());
+    public List<ERequestModel> list() {
+        List<ExpenseRequest> expenseRequests = expenseRequestRepository.findAll();
+        return expenseRequests
+                .stream()
+                .map(this::getModel)
+                .collect(Collectors.toList());
     }
 
-    public ExpenseRequestDto create(ExpenseRequestDto dto) throws Exception {
-        if (dto != null && dto.getNumber() != null) {
-            ExpenseRequest expenseRequest = convertToEntity(dto);
-            expenseRequest = expenseRequestRepository.save(expenseRequest);
-            return convertToDto(expenseRequest);
-        }
-
-        throw new Exception("Expense request is null or number is null.");
-    }
-
-    public ExpenseRequestDto update(ExpenseRequestDto dto) throws Exception {
-        if (dto != null && dto.getId() != null && dto.getNumber() != null) {
-            ExpenseRequest expenseRequest = expenseRequestRepository.findOne(dto.getId());
-            if (expenseRequest != null) {
-                expenseRequest.setConfirm(dto.getConfirm());
-                expenseRequest.setCurrency(dto.getCurrency());
-                expenseRequest.setPaid(dto.getPaid());
-                expenseRequest.setSum(dto.getSum());
+    public ERequestModel create(ERequestModel model) {
+        if (model != null && model.getNumber() != null && model.getSource() != null) {
+            Source source = sourceRepository.findByName(model.getSource());
+            if (source != null) {
+                ExpenseRequest expenseRequest = new ExpenseRequest();
+                expenseRequest.setSource(source);
+                expenseRequest.setNumber(model.getNumber());
+                expenseRequest.setCurrency(model.getCurrency());
+                expenseRequest.setConfirm(model.getConfirm());
+                expenseRequest.setPaid(model.getPaid());
+                expenseRequest.setSum(model.getSum());
                 expenseRequest = expenseRequestRepository.save(expenseRequest);
-                return convertToDto(expenseRequest);
+
+                return getModel(expenseRequest);
             }
 
-            throw new Exception("Expense request with id: " + dto.getId() + " not found at database.");
+            return new ERequestModel("Source with name: " + model.getSource() + " not found at database.");
         }
 
-        throw new Exception("Expense request is null or id is null or number is null.");
+        return new ERequestModel(
+                model == null
+                        ? "Model is null."
+                        : model.getNumber() == null
+                            ? "Number is null."
+                            : "Source is null."
+        );
     }
 
-    public ExpenseRequestDto getExpenseRequestByNumber(String number) throws Exception {
-        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(number);
-        if (expenseRequest != null) {
-            return convertToDto(expenseRequest);
+    public ERequestModel update(ERequestModel model) {
+        if (model != null && model.getId() != null && model.getNumber() != null && model.getSource() != null) {
+            ExpenseRequest expenseRequest = expenseRequestRepository.findOne(model.getId());
+            if (expenseRequest != null) {
+                Source source = sourceRepository.findByName(model.getSource());
+                if (source != null) {
+                    expenseRequest.setSource(source);
+                    expenseRequest.setConfirm(model.getConfirm());
+                    expenseRequest.setCurrency(model.getCurrency());
+                    expenseRequest.setPaid(model.getPaid());
+                    expenseRequest.setSum(model.getSum());
+                    expenseRequest = expenseRequestRepository.save(expenseRequest);
+
+                    return getModel(expenseRequest);
+                }
+
+                return new ERequestModel("Source with name: " + model.getSource() + " not found at database.");
+            }
+
+            return new ERequestModel("Expense request with id: " + model.getId() + " not found at database.");
         }
 
-        throw new Exception("Expense request with number: " + number + " not found at database.");
+        return new ERequestModel(
+                model == null
+                        ? "Model is null."
+                        : model.getId() == null
+                            ? "Id is null."
+                            : model.getNumber() == null
+                                ? "Number is null."
+                                : "Source is null."
+        );
     }
 
     public void delete(UUID id) {
         expenseRequestRepository.delete(id);
     }
 
-    private ExpenseRequestDto convertToDto(ExpenseRequest expenseRequest) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(expenseRequest, ExpenseRequestDto.class);
-    }
+    private ERequestModel getModel(ExpenseRequest entity) {
+        final ERequestModel model = new ERequestModel();
+        model.setId(entity.getId());
+        model.setSource(entity.getSource().getName());
+        model.setNumber(entity.getNumber());
+        model.setCurrency(entity.getCurrency());
+        model.setConfirm(entity.getConfirm());
+        model.setPaid(entity.getPaid());
+        model.setSum(entity.getSum());
 
-    private List<ExpenseRequestDto> convertToDto(List<ExpenseRequest> accountingEntries) {
-        return accountingEntries.stream().map(this::convertToDto).collect(Collectors.toList());
-    }
-
-    private ExpenseRequest convertToEntity(ExpenseRequestDto accountingEntryDto) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(accountingEntryDto, ExpenseRequest.class);
+        return model;
     }
 }

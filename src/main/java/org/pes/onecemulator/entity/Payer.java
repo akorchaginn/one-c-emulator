@@ -1,10 +1,12 @@
 package org.pes.onecemulator.entity;
 
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
@@ -12,7 +14,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "payer")
-public class Payer extends AbstractObject {
+public class Payer extends AbstractEntity {
 
     @Column(name = "address")
     private String address;
@@ -34,6 +36,14 @@ public class Payer extends AbstractObject {
 
     @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Invoice> invoices = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "payer_source",
+            joinColumns = { @JoinColumn(name = "payer_id") },
+            inverseJoinColumns = { @JoinColumn(name = "source_id") }
+    )
+    private Set<Source> sources = new HashSet<>();
 
     public String getAddress() {
         return address;
@@ -91,8 +101,11 @@ public class Payer extends AbstractObject {
         this.invoices = invoices;
     }
 
-    @Override
-    public String toString() {
-        return getId() + ", " + getCode() + ", " + getName();
+    public Set<Source> getSources() {
+        return sources;
+    }
+
+    public void setSources(Set<Source> sources) {
+        this.sources = sources;
     }
 }

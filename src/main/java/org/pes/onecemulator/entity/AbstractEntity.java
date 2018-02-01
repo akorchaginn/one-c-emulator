@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 @MappedSuperclass
-public abstract class AbstractObject implements Serializable {
+public abstract class AbstractEntity implements Serializable {
 
     @Id
     @Type(type = "pg-uuid")

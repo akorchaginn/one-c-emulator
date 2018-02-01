@@ -1,9 +1,12 @@
 package org.pes.onecemulator.service.impl;
 
-import org.modelmapper.ModelMapper;
-import org.pes.onecemulator.dto.InvoiceDto;
 import org.pes.onecemulator.entity.Invoice;
+import org.pes.onecemulator.entity.Payer;
+import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.repository.InvoiceRepository;
+import org.pes.onecemulator.repository.PayerRepository;
+import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.InvoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,93 +25,135 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
-    public InvoiceDto getIById(UUID id) throws Exception {
+    @Autowired
+    private PayerRepository payerRepository;
+
+    @Autowired
+    private SourceRepository sourceRepository;
+
+    public InvoiceModel getById(UUID id) {
         Invoice invoice = invoiceRepository.findOne(id);
         if (invoice != null) {
-            return convertToDto(invoice);
+            return getModel(invoice);
         }
 
-        throw new Exception("Invoice with id: " + id + " not found at database.");
+        return new InvoiceModel("Invoice with id: " + id + " not found at database.");
     }
 
-    public InvoiceDto getByIdAndSource(UUID id, String source) throws Exception {
+    public InvoiceModel getByIdAndSource(UUID id, String source) {
         Invoice invoice = invoiceRepository.findOneAndSource(id, source);
         if (invoice != null) {
-            return convertToDto(invoice);
+            return getModel(invoice);
         }
 
-        throw new Exception("Invoice with id: " + id + " and source: " + source + " not found at database.");
+        return new InvoiceModel("Invoice with id: " + id + " and source: " + source + " not found at database.");
     }
 
-    public InvoiceDto getByExternalId(String externalId) throws Exception {
+    public InvoiceModel getByExternalId(String externalId) {
         Invoice invoice = invoiceRepository.findByExternalId(externalId);
         if (invoice != null) {
-            convertToDto(invoice);
+            return getModel(invoice);
         }
 
-        throw new Exception("Invoice with external id: " + externalId + " not found at database.");
+        return new InvoiceModel("Invoice with external id: " + externalId + " not found at database.");
     }
 
-    public InvoiceDto getByExternalIdAndSource(String externalId, String source) throws Exception {
+    public InvoiceModel getByExternalIdAndSource(String externalId, String source) {
         Invoice invoice = invoiceRepository.findByExternalIdAndSource(externalId, source);
         if (invoice != null) {
-            return convertToDto(invoice);
+            return getModel(invoice);
         }
 
-        throw new Exception("Invoice with external id: " + externalId + " and source: " + source + " not found at database.");
+        return new InvoiceModel("Invoice with external id: " + externalId
+                + " and source: " + source + " not found at database.");
     }
 
-    public List<InvoiceDto> list() {
-        return convertToDto(invoiceRepository.findAll());
+    public List<InvoiceModel> list() {
+        List<Invoice> invoices = invoiceRepository.findAll();
+        return invoices
+                .stream()
+                .map(this::getModel)
+                .collect(Collectors.toList());
     }
 
-    public InvoiceDto create(InvoiceDto invoiceDto) throws Exception {
-        if (invoiceDto != null) {
-            Invoice invoice = convertToEntity(invoiceDto);
-            invoice = invoiceRepository.save(invoice);
-            return convertToDto(invoice);
-        }
-
-        throw new Exception("Invoice is null.");
-    }
-
-    public InvoiceDto update(InvoiceDto invoiceDto) throws Exception {
-        if (invoiceDto != null && invoiceDto.getId() != null) {
-            Invoice invoice = invoiceRepository.findOne(invoiceDto.getId());
-            if (invoice != null) {
-                invoice.setDate(invoiceDto.getDate());
-                invoice.setSum(invoiceDto.getSum());
-                invoice.setNumberOq(invoiceDto.getNumberOq());
-                invoice.setNumber(invoiceDto.getNumber());
-                invoice.setPaymentDate(invoiceDto.getPaymentDate());
-                invoice.setPaymentSum(invoiceDto.getPaymentSum());
-                invoice.setStatus(invoiceDto.getStatus());
-                invoice.setExternalId(invoiceDto.getExternalId());
+    public InvoiceModel create(InvoiceModel model) {
+        if (model != null && model.getSource() != null && model.getPayerCode() != null) {
+            Source source = sourceRepository.findByName(model.getSource());
+            Payer payer = payerRepository.findByCode(model.getPayerCode());
+            if (source != null && payer != null && payer.getSources().contains(source)) {
+                Invoice invoice = new Invoice();
+                invoice.setPayer(payer);
+                invoice.setDate(model.getDate());
+                invoice.setExternalId(model.getExternalId());
+                invoice.setNumber(model.getNumber());
+                invoice.setNumberOq(model.getNumberOq());
+                invoice.setPaymentDate(model.getPaymentDate());
+                invoice.setPaymentSum(model.getPaymentSum());
+                invoice.setSource(source);
+                invoice.setStatus(model.getStatus());
+                invoice.setSum(model.getSum());
                 invoice = invoiceRepository.save(invoice);
-                return convertToDto(invoice);
+
+                return getModel(invoice);
             }
 
-            throw new Exception("Invoice with id: " + invoiceDto.getId() + " not found at database.");
+            return new InvoiceModel("Invoice is null or source is null or invoice payer is null.");
         }
 
-        throw new Exception("Invoice is null or id is null.");
+        return new InvoiceModel("Invoice is null or source is null.");
+    }
+
+    public InvoiceModel update(InvoiceModel model) {
+        if (model != null && model.getId() != null &&
+                model.getSource() != null && model.getPayerCode() != null) {
+
+            Invoice invoice = invoiceRepository.findOne(model.getId());
+            Source source = sourceRepository.findByName(model.getSource());
+            Payer payer = payerRepository.findByCode(model.getPayerCode());
+
+            if (invoice != null && source != null && payer != null && payer.getSources().contains(source)) {
+                invoice.setDate(model.getDate());
+                invoice.setSum(model.getSum());
+                invoice.setNumberOq(model.getNumberOq());
+                invoice.setNumber(model.getNumber());
+                invoice.setPaymentDate(model.getPaymentDate());
+                invoice.setPaymentSum(model.getPaymentSum());
+                invoice.setStatus(model.getStatus());
+                invoice.setExternalId(model.getExternalId());
+
+                if (invoice.getSource() != source) {
+                    invoice.setSource(source);
+                }
+
+                invoice = invoiceRepository.save(invoice);
+
+
+                return getModel(invoice);
+            }
+
+            return new InvoiceModel("Invoice with id: " + model.getId() + " not found at database.");
+        }
+
+        return new InvoiceModel("Invoice is null or id is null or source is null or payer is null.");
     }
 
     public void delete(UUID id) {
         invoiceRepository.delete(id);
     }
 
-    private InvoiceDto convertToDto(Invoice invoice) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(invoice, InvoiceDto.class);
-    }
+    private InvoiceModel getModel(Invoice entity) {
+        InvoiceModel model = new InvoiceModel();
+        model.setId(entity.getId());
+        model.setSum(entity.getSum());
+        model.setStatus(entity.getStatus());
+        model.setSource(entity.getSource().getName());
+        model.setPaymentSum(entity.getPaymentSum());
+        model.setPaymentDate(entity.getPaymentDate());
+        model.setPayerCode(entity.getPayer().getCode());
+        model.setNumberOq(entity.getNumberOq());
+        model.setExternalId(entity.getExternalId());
+        model.setDate(entity.getDate());
 
-    private List<InvoiceDto> convertToDto(List<Invoice> invoices) {
-        return invoices.stream().map(this::convertToDto).collect(Collectors.toList());
-    }
-
-    private Invoice convertToEntity(InvoiceDto invoiceDto) {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(invoiceDto, Invoice.class);
+        return model;
     }
 }

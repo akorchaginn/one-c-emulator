@@ -1,16 +1,13 @@
 package org.pes.onecemulator.controller;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.pes.onecemulator.converter.ExpenseRequestConverter;
-import org.pes.onecemulator.dto.ExpenseRequestDto;
 import org.pes.onecemulator.model.ERequestModel;
-import org.pes.onecemulator.model.SimpleJsonResult;
 import org.pes.onecemulator.service.ExpenseRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,58 +21,28 @@ public class ExpenseRequestController {
     @Autowired
     private ExpenseRequestService expenseRequestService;
 
-    @Autowired
-    private ExpenseRequestConverter converter;
-
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody SimpleJsonResult getById(@PathVariable UUID id) {
-        try {
-            ExpenseRequestDto dto = expenseRequestService.getById(id);
-            return new SimpleJsonResult(converter.convertToModel(dto));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
-
+    public @ResponseBody ERequestModel getById(@PathVariable UUID id) {
+        return expenseRequestService.getById(id);
     }
 
     @GetMapping(value = "/list")
-    public @ResponseBody SimpleJsonResult list() {
-        try {
-            return new SimpleJsonResult(converter.convertToModel(expenseRequestService.list()));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public @ResponseBody List<ERequestModel> list() {
+        return expenseRequestService.list();
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody SimpleJsonResult create(@RequestBody ERequestModel model) {
-        try {
-            ExpenseRequestDto dto = converter.convertToDto(model);
-            dto = expenseRequestService.create(dto);
-            return new SimpleJsonResult(converter.convertToModel(dto));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public @ResponseBody ERequestModel create(@RequestBody ERequestModel model) {
+        return expenseRequestService.create(model);
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody SimpleJsonResult update(@RequestBody ERequestModel model) {
-        try {
-            ExpenseRequestDto dto = converter.convertToDto(model);
-            dto = expenseRequestService.update(dto);
-            return new SimpleJsonResult(converter.convertToModel(dto));
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public @ResponseBody ERequestModel update(@RequestBody ERequestModel model) {
+        return expenseRequestService.update(model);
     }
 
     @GetMapping(value = "/delete/{id}")
-    public SimpleJsonResult delete(@PathVariable(value = "id") UUID id) {
-        try {
-            expenseRequestService.delete(id);
-            return new SimpleJsonResult(OK);
-        } catch (Exception e) {
-            return new SimpleJsonResult(ExceptionUtils.getRootCauseMessage(e));
-        }
+    public void delete(@PathVariable(value = "id") UUID id) {
+        expenseRequestService.delete(id);
     }
 }
