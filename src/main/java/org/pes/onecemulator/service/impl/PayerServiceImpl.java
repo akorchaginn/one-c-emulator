@@ -111,7 +111,7 @@ public class PayerServiceImpl implements PayerService {
                     } else {
                         Source newSource = new Source();
                         newSource.setName(s);
-                        sourceRepository.save(newSource);
+                        newSources.add(newSource);
                     }
                 });
 
