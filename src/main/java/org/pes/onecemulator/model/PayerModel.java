@@ -1,5 +1,6 @@
 package org.pes.onecemulator.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class PayerModel extends ApiError {
     private String name;
 
     @JsonProperty("source")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private Set<String> source = new HashSet<>();
 
     public PayerModel() {

@@ -114,27 +114,20 @@ public class PayerServiceImpl implements PayerService {
                         newSources.add(newSource);
                     }
                 });
+                if (!newSources.isEmpty()) {
+                    payer.setAddress(model.getAddress());
+                    payer.setCode(model.getCode());
+                    payer.setFullName(model.getFullName());
+                    payer.setInn(model.getInn());
+                    payer.setKpp(model.getKpp());
+                    payer.setName(model.getName());
+                    payer.setSources(newSources);
+                    payer = payerRepository.save(payer);
 
-                Set<Source> oldSources = new HashSet<>();
+                    return getModel(payer);
+                }
 
-                payer.getSources().forEach(s -> {
-                    if (!newSources.contains(s)) {
-                        oldSources.remove(s);
-                    } else {
-                        oldSources.add(s);
-                    }
-                });
-
-                payer.setAddress(model.getAddress());
-                payer.setCode(model.getCode());
-                payer.setFullName(model.getFullName());
-                payer.setInn(model.getInn());
-                payer.setKpp(model.getKpp());
-                payer.setName(model.getName());
-                payer.setSources(oldSources);
-                payer = payerRepository.save(payer);
-
-                return getModel(payer);
+                return new PayerModel("Payer source is empty.");
             }
 
             return new PayerModel("Payer with id: " + model.getId() + " not found at database.");
