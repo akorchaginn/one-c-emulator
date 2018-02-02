@@ -23,7 +23,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<hibernate.version>5.2.12.Final</hibernate.version>
-		<modelmapper.version>1.1.2</modelmapper.version>
 		<HikariCP.version>2.7.6</HikariCP.version>
 		<jetty.version>9.4.6.v20170531</jetty.version>
 		<springfox.version>2.8.0</springfox.version>
@@ -109,12 +108,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>${modelmapper.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${common-lang3.version}</version>
@@ -142,6 +135,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>
