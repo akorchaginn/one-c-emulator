@@ -97,10 +97,22 @@ public class InvoiceServiceImpl implements InvoiceService {
                 return getModel(invoice);
             }
 
-            return new InvoiceModel("Invoice is null or source is null or invoice payer is null.");
+            return new InvoiceModel(
+                    source == null
+                        ? "Source with name: " + model.getSource() + " not found at database."
+                        : payer == null
+                            ? "Payer is null."
+                            : "Invoice source not equal payer source."
+            );
         }
 
-        return new InvoiceModel("Invoice is null or source is null.");
+        return new InvoiceModel(
+                model == null
+                        ? "Model is null."
+                        : model.getSource() == null
+                        ? "Source is null."
+                        : "Payer code is null."
+        );
     }
 
     public InvoiceModel update(InvoiceModel model) {
@@ -127,14 +139,29 @@ public class InvoiceServiceImpl implements InvoiceService {
 
                 invoice = invoiceRepository.save(invoice);
 
-
                 return getModel(invoice);
             }
 
-            return new InvoiceModel("Invoice with id: " + model.getId() + " not found at database.");
+            return new InvoiceModel(
+                    invoice == null
+                        ? "Invoice with id: " + model.getId() + "not found at database."
+                        : source == null
+                            ? "Source with name: " + model.getSource() + "not found at database."
+                            : payer == null
+                                ? "Payer with code: " + model.getPayerCode() + " not found at database."
+                                : "Invoice source not equal payer source."
+            );
         }
 
-        return new InvoiceModel("Invoice is null or id is null or source is null or payer is null.");
+        return new InvoiceModel(
+                model == null
+                    ? "Model is null."
+                    : model.getId() == null
+                        ? "Id is null."
+                        : model.getSource() == null
+                            ? "Source is null."
+                            : "Payer code is null."
+        );
     }
 
     public void delete(UUID id) {
