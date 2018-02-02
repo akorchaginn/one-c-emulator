@@ -55,6 +55,6 @@ public class CrmInteractionController {
 
     @PostMapping(value = "{source}/hs/Con")
     public @ResponseBody List<PayerCrm> getAllPayers(@PathVariable(value = "source") String source) {
-        return crmInteractionService.getAllPayersCrm();
+        return crmInteractionService.getAllPayersCrmBySource(source);
     }
 }
