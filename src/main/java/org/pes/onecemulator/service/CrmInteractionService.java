@@ -13,8 +13,6 @@ public interface CrmInteractionService {
 
     DocumentCrm getDocumentCrmByExternalId(String externalId, String source);
 
-    List<PayerCrm> getAllPayersCrm();
-
     List<PayerCrm> getAllPayersCrmBySource(String source);
 
     void sendAccountingEntryToCrm(AccountingEntry accountingEntry);

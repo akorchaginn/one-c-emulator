@@ -16,7 +16,6 @@ import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
-import org.pes.onecemulator.utils.CrmSecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +47,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Autowired
     private SourceRepository sourceRepository;
 
-    public DocumentCrm getDocumentsCrmById(UUID id, String source) {
-        Invoice invoice = invoiceRepository.findOneAndSource(id, source);
+    public DocumentCrm getDocumentsCrmById(UUID id, String sourceName) {
+        Invoice invoice = invoiceRepository.findByIdAndSource(id, sourceName);
         if (invoice != null) {
             return getDocumentCrm(invoice);
         }
@@ -57,8 +56,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         return new DocumentCrm();
     }
 
-    public DocumentCrm getDocumentCrmByExternalId(String externalId, String source) {
-        Invoice invoice = invoiceRepository.findByExternalIdAndSource(externalId, source);
+    public DocumentCrm getDocumentCrmByExternalId(String externalId, String sourceName) {
+        Invoice invoice = invoiceRepository.findByExternalIdAndSource(externalId, sourceName);
         if (invoice != null) {
             return getDocumentCrm(invoice);
         }
@@ -66,16 +65,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         return new DocumentCrm();
     }
 
-    public List<PayerCrm> getAllPayersCrm() {
-        List<Payer> payers = payerRepository.findAll();
-        return payers
-                .stream()
-                .map(this::getPayerCrm)
-                .collect(Collectors.toList());
-    }
-
-    public List<PayerCrm> getAllPayersCrmBySource(String src) {
-        Source source = sourceRepository.findByName(src);
+    public List<PayerCrm> getAllPayersCrmBySource(String sourceName) {
+        Source source = sourceRepository.findByName(sourceName);
         if (source != null) {
             return source.getPayers()
                     .stream()
@@ -87,9 +78,13 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
-        String endpointUrl =
-                environment.getProperty("crm.interaction.url").replaceAll("\"", StringUtils.EMPTY) +
-                        environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY);
+        final String host = environment.getProperty("crm.interaction.host").replaceAll("\"", StringUtils.EMPTY);
+
+        final String uri = environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY);
+
+        final String token = environment.getProperty("crm.interaction.token");
+
+        final String endpointCrmApiUrl = host + uri;
 
         ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
 
@@ -107,7 +102,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         String parameterDate = simpleDateFormat.format(accountingEntry.getDate().getTime());
 
         String resultUrl = new StringJoiner("/")
-                .add(endpointUrl)
+                .add(endpointCrmApiUrl)
                 .add(parameterData)
                 .add(parameterDate)
                 .toString();
@@ -118,7 +113,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
             AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
             asyncHttpClient
                     .prepareGet(resultUrl)
-                    .addHeader("crm-api-token", CrmSecurityUtils.CRM_TOKEN)
+                    .addHeader("crm-api-token", token)
                     .addHeader("crm-1c-database-source", expenseRequest.getSource().getName())
                     .execute(new CompletionHandler(accountingEntry.getId()));
 
@@ -134,7 +129,9 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         @Override
         public Void onCompleted(Response response) {
             try {
-                LOGGER.info(String.format("End request to CRM for new AccountingEntry %s: %s", aEnId.toString(),  response.getResponseBody()));
+                LOGGER.info(
+                        String.format("End request to CRM for new AccountingEntry %s: %s",
+                                aEnId.toString(),  response.getResponseBody()));
             } catch (Exception e) {
                 LOGGER.warn("Error onCompleted(): "+ e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             }
@@ -148,30 +145,30 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     private DocumentCrm getDocumentCrm(Invoice entity) {
-        final DocumentCrm model = new DocumentCrm();
+        DocumentCrm model = new DocumentCrm();
         model.setId(entity.getId());
         model.setNumber(entity.getNumber());
         model.setNumberOq(entity.getNumberOq());
-        model.setExternalId(entity.getExternalId());
-        model.setDate(entity.getDate());
+        model.setPayerName(entity.getPayer() != null ? entity.getPayer().getName() : null);
         model.setSum(entity.getSum());
+        model.setDate(entity.getDate());
+        model.setStatus(entity.getStatus());
         model.setPaymentDate(entity.getPaymentDate());
         model.setPaymentSum(entity.getPaymentSum());
-        model.setStatus(entity.getStatus());
-        model.setPayerName(entity.getPayer() != null ? entity.getPayer().getName() : null);
+        model.setExternalId(entity.getExternalId());
 
         return model;
     }
 
     private PayerCrm getPayerCrm(Payer entity) {
-        final PayerCrm model = new PayerCrm();
+        PayerCrm model = new PayerCrm();
         model.setId(entity.getAddress());
         model.setCode(entity.getCode());
         model.setName(entity.getName());
         model.setFullName(entity.getFullName());
-        model.setAddress(entity.getAddress());
         model.setInn(entity.getInn());
         model.setKpp(entity.getKpp());
+        model.setAddress(entity.getAddress());
 
         return model;
     }

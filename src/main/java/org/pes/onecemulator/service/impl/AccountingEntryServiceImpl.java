@@ -48,17 +48,18 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     }
 
     public AEntryModel create(AEntryModel model) {
-        if (model != null && model.getExpenseNumber() != null) {
+        if (model != null && model.getExpenseNumber() != null && model.getDate() != null) {
             ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
             if (expenseRequest != null) {
                 AccountingEntry accountingEntry = new AccountingEntry();
                 accountingEntry.setCode(model.getCode());
+                accountingEntry.setDate(model.getDate());
                 accountingEntry.setDocumentName(model.getDocumentName());
                 accountingEntry.setExpenseRequest(expenseRequest);
                 accountingEntry.setSum(model.getSum());
-                accountingEntry.setDate(model.getDate());
                 accountingEntry = accountingEntryRepository.save(accountingEntry);
 
+                // Запрос в CRM
                 crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
                 return getModel(accountingEntry);
@@ -74,7 +75,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     }
 
     public AEntryModel update(AEntryModel model) {
-        if (model != null && model.getId() != null && model.getExpenseNumber() != null) {
+        if (model != null && model.getId() != null && model.getExpenseNumber() != null && model.getDate() != null) {
             ExpenseRequest expenseRequest =
                     expenseRequestRepository.findByNumber(model.getExpenseNumber());
             if (expenseRequest != null) {
@@ -83,9 +84,11 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
                     accountingEntry.setCode(model.getCode());
                     accountingEntry.setDate(model.getDate());
                     accountingEntry.setDocumentName(model.getDocumentName());
+                    accountingEntry.setExpenseRequest(expenseRequest);
                     accountingEntry.setSum(model.getSum());
                     accountingEntry = accountingEntryRepository.save(accountingEntry);
 
+                    // Запрос в CRM
                     crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
                     return getModel(accountingEntry);
@@ -114,14 +117,15 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     }
 
     private AEntryModel getModel(AccountingEntry entity) {
-        final AEntryModel model = new AEntryModel();
+        AEntryModel model = new AEntryModel();
         model.setId(entity.getId());
         model.setCode(entity.getCode());
+        model.setDate(entity.getDate());
+        model.setDocumentName(entity.getDocumentName());
         model.setExpenseNumber(entity.getExpenseRequest() != null
                 ? entity.getExpenseRequest().getNumber()
                 : null
         );
-        model.setDocumentName(entity.getDocumentName());
         model.setSum(entity.getSum());
 
         return model;

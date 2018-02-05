@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,11 +12,11 @@ public class PayerModel extends ApiError {
     @JsonProperty("id")
     private UUID id;
 
-    @JsonProperty("address")
-    private String address;
-
     @JsonProperty("code")
     private String code;
+
+    @JsonProperty("name")
+    private String name;
 
     @JsonProperty("fullName")
     private String fullName;
@@ -28,8 +27,8 @@ public class PayerModel extends ApiError {
     @JsonProperty("kpp")
     private String kpp;
 
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("address")
+    private String address;
 
     @JsonProperty("source")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -51,20 +50,20 @@ public class PayerModel extends ApiError {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getCode() {
         return code;
     }
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getFullName() {
@@ -91,12 +90,12 @@ public class PayerModel extends ApiError {
         this.kpp = kpp;
     }
 
-    public String getName() {
-        return name;
+    public String getAddress() {
+        return address;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Set<String> getSource() {

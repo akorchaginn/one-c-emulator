@@ -37,15 +37,6 @@ public class PayerServiceImpl implements PayerService {
         return new PayerModel("Payer with id: " + id + " not found at database.");
     }
 
-    public PayerModel getByCode(String code) {
-        Payer payer = payerRepository.findByCode(code);
-        if (payer != null) {
-            return getModel(payer);
-        }
-
-        return new PayerModel("Payer with code: " + code + " not found at database.");
-    }
-
     public List<PayerModel> list() {
         List<Payer> payers = payerRepository.findAll();
         return payers
@@ -74,9 +65,9 @@ public class PayerServiceImpl implements PayerService {
                 payer.setCode(model.getCode());
                 payer.setName(model.getName());
                 payer.setFullName(model.getFullName());
-                payer.setAddress(model.getAddress());
                 payer.setInn(model.getInn());
                 payer.setKpp(model.getKpp());
+                payer.setAddress(model.getAddress());
                 payer.setSources(newSources);
                 payer = payerRepository.save(payer);
 
@@ -115,12 +106,12 @@ public class PayerServiceImpl implements PayerService {
                     }
                 });
                 if (!newSources.isEmpty()) {
-                    payer.setAddress(model.getAddress());
                     payer.setCode(model.getCode());
+                    payer.setName(model.getName());
                     payer.setFullName(model.getFullName());
                     payer.setInn(model.getInn());
                     payer.setKpp(model.getKpp());
-                    payer.setName(model.getName());
+                    payer.setAddress(model.getAddress());
                     payer.setSources(newSources);
                     payer = payerRepository.save(payer);
 
@@ -146,9 +137,9 @@ public class PayerServiceImpl implements PayerService {
         model.setCode(entity.getCode());
         model.setName(entity.getName());
         model.setFullName(entity.getFullName());
-        model.setAddress(entity.getAddress());
         model.setInn(entity.getInn());
         model.setKpp(entity.getKpp());
+        model.setAddress(entity.getAddress());
         model.setSource(entity.getSources().stream().map(Source::getName).collect(Collectors.toSet()));
 
         return model;

@@ -9,8 +9,6 @@ public interface PayerService {
 
     PayerModel getById(UUID id);
 
-    PayerModel getByCode(String code);
-
     List<PayerModel> list();
 
     PayerModel create(PayerModel model);

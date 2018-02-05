@@ -16,8 +16,6 @@ public class AccountingEntryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountingEntryController.class);
 
-    private static final Object OK = "OK";
-
     @Autowired
     private AccountingEntryService accountingEntryService;
 

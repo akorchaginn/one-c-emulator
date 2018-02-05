@@ -16,8 +16,6 @@ public class ExpenseRequestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseRequestController.class);
 
-    private static final Object OK = "OK";
-
     @Autowired
     private ExpenseRequestService expenseRequestService;
 

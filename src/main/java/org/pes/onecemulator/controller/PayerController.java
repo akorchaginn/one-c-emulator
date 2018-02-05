@@ -23,8 +23,6 @@ public class PayerController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PayerController.class);
 
-    private static final Object OK = "OK";
-
     @Autowired
     private PayerService payerService;
 
@@ -39,11 +37,6 @@ public class PayerController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody PayerModel create(@RequestBody PayerModel model) {
-        return payerService.create(model);
-    }
-
-    @PostMapping(value = "/create-all")
     public @ResponseBody List<PayerModel> create(@RequestBody List<PayerModel> modelList) {
         return modelList.stream().map(p -> payerService.create(p)).collect(Collectors.toList());
     }

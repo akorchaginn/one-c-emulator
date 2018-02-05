@@ -16,8 +16,6 @@ public class InvoiceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceController.class);
 
-    private static final Object OK = "OK";
-
     @Autowired
     private InvoiceService invoiceService;
 

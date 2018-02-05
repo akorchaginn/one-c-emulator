@@ -53,10 +53,10 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
             if (source != null) {
                 ExpenseRequest expenseRequest = new ExpenseRequest();
                 expenseRequest.setSource(source);
-                expenseRequest.setNumber(model.getNumber());
                 expenseRequest.setCurrency(model.getCurrency());
                 expenseRequest.setConfirm(model.getConfirm());
                 expenseRequest.setPaid(model.getPaid());
+                expenseRequest.setNumber(model.getNumber());
                 expenseRequest.setSum(model.getSum());
                 expenseRequest = expenseRequestRepository.save(expenseRequest);
 
@@ -82,9 +82,10 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
                 Source source = sourceRepository.findByName(model.getSource());
                 if (source != null) {
                     expenseRequest.setSource(source);
-                    expenseRequest.setConfirm(model.getConfirm());
                     expenseRequest.setCurrency(model.getCurrency());
+                    expenseRequest.setConfirm(model.getConfirm());
                     expenseRequest.setPaid(model.getPaid());
+                    expenseRequest.setNumber(model.getNumber());
                     expenseRequest.setSum(model.getSum());
                     expenseRequest = expenseRequestRepository.save(expenseRequest);
 
@@ -113,13 +114,13 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     }
 
     private ERequestModel getModel(ExpenseRequest entity) {
-        final ERequestModel model = new ERequestModel();
+        ERequestModel model = new ERequestModel();
         model.setId(entity.getId());
         model.setSource(entity.getSource().getName());
-        model.setNumber(entity.getNumber());
         model.setCurrency(entity.getCurrency());
         model.setConfirm(entity.getConfirm());
         model.setPaid(entity.getPaid());
+        model.setNumber(entity.getNumber());
         model.setSum(entity.getSum());
 
         return model;
