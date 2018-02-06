@@ -3,7 +3,6 @@ package org.pes.onecemulator.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.BoundRequestBuilder;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.Request;
 import org.asynchttpclient.Response;
@@ -18,6 +17,7 @@ import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
+import org.pes.onecemulator.service.utils.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -82,7 +81,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
 
-        requireNonNullAccountingEntry(accountingEntry);
+        ValidationUtils.requireNonNull(accountingEntry);
 
         final String host = environment.getRequiredProperty("crm.interaction.host")
                 .replaceAll("\"", StringUtils.EMPTY);
@@ -142,7 +141,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
             try {
                 LOGGER.info(
                         String.format("End request to CRM for new AccountingEntry %s: %s",
-                                accountingEntryId.toString(),  response.getResponseBody()));
+                                accountingEntryId.toString(),  response.getStatusCode()));
             } catch (Exception e) {
                 LOGGER.warn("Error onCompleted(): "+ e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             }
@@ -153,36 +152,6 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         public void onThrowable(Throwable t) {
             LOGGER.error("Error request to CRM: " + t.getMessage() +"\n" + Arrays.toString(t.getStackTrace()));
         }
-    }
-
-    private void requireNonNullAccountingEntry(AccountingEntry accountingEntry) {
-        Objects.requireNonNull(accountingEntry,
-                "AccountingEntry is null.");
-        ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
-        Objects.requireNonNull(expenseRequest,
-                "ExpenseRequest is null.");
-        Objects.requireNonNull(expenseRequest.getNumber(),
-                "expenseRequest.getNumber() is null.");
-        Objects.requireNonNull(expenseRequest.getConfirm(),
-                "expenseRequest.getConfirm() is null.");
-        Objects.requireNonNull(expenseRequest.getPaid(),
-                "expenseRequest.getPaid() is null.");
-        Objects.requireNonNull(expenseRequest.getCurrency(),
-                "expenseRequest.getCurrency() is null.");
-        Objects.requireNonNull(expenseRequest.getSource(),
-                "expenseRequest.getSource() is null.");
-        Objects.requireNonNull(expenseRequest.getSource().getName(),
-                "expenseRequest.getSource().getName() is null.");
-        Objects.requireNonNull(accountingEntry.getId(),
-                "accountingEntry.getId() is null.");
-        Objects.requireNonNull(accountingEntry.getSum(),
-                "accountingEntry.getSum() is null.");
-        Objects.requireNonNull(accountingEntry.getCode(),
-                "accountingEntry.getCode() is null.");
-        Objects.requireNonNull(accountingEntry.getDocumentName(),
-                "accountingEntry.getDocumentName() is null.");
-        Objects.requireNonNull(accountingEntry.getDate(),
-                "accountingEntry.getDate() is null.");
     }
 
     private DocumentCrm getDocumentCrm(Invoice entity) {
