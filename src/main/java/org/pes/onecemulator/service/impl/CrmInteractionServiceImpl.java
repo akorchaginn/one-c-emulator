@@ -83,42 +83,22 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
         ValidationUtils.requireNonNull(accountingEntry);
 
-        final String host = environment.getRequiredProperty("crm.interaction.host")
-                .replaceAll("\"", StringUtils.EMPTY);
-
-        final String uri = environment.getRequiredProperty("crm.interaction.uri")
-                .replaceAll("\"", StringUtils.EMPTY);
+        final String endpointUrl =
+                environment.getRequiredProperty("crm.interaction.host")
+                    .replaceAll("\"", StringUtils.EMPTY) +
+                environment.getRequiredProperty("crm.interaction.uri")
+                    .replaceAll("\"", StringUtils.EMPTY);
 
         final String token = environment.getRequiredProperty("crm.interaction.token")
                 .replaceAll("\"", StringUtils.EMPTY);
 
-        ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
-
-        String parameterData = new StringJoiner(",")
-                .add(expenseRequest.getNumber())
-                .add(expenseRequest.getConfirm().toString())
-                .add(expenseRequest.getPaid().toString())
-                .add(expenseRequest.getCurrency())
-                .add(accountingEntry.getSum().toString())
-                .add(accountingEntry.getCode())
-                .add(accountingEntry.getDocumentName())
-                .toString();
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String parameterDate = simpleDateFormat.format(accountingEntry.getDate().getTime());
-
-        String resultUrl = new StringJoiner("/")
-                .add(host + uri)
-                .add(parameterData)
-                .add(parameterDate)
-                .toString();
-
         try {
             AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
             Request request = asyncHttpClient
-                    .prepareGet(resultUrl)
+                    .prepareGet(createDataUrl(endpointUrl, accountingEntry))
                     .addHeader("crm-api-token", token)
-                    .addHeader("crm-1c-database-source", expenseRequest.getSource().getName())
+                    .addHeader("crm-1c-database-source",
+                            accountingEntry.getExpenseRequest().getSource().getName())
                     .build();
 
             LOGGER.info("Start request to CRM: " + request.getUrl() + " : " + request.getHeaders().toString());
@@ -152,6 +132,28 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         public void onThrowable(Throwable t) {
             LOGGER.error("Error request to CRM: " + t.getMessage() +"\n" + Arrays.toString(t.getStackTrace()));
         }
+    }
+
+    private String createDataUrl(String endpointUrl, AccountingEntry accountingEntry) {
+        // Порядок join'а важен!
+        String parameterData = new StringJoiner(",")
+                .add(accountingEntry.getExpenseRequest().getNumber())
+                .add(accountingEntry.getSum().toString())
+                .add(accountingEntry.getExpenseRequest().getPaid().toString())
+                .add(accountingEntry.getExpenseRequest().getCurrency())
+                .add(accountingEntry.getCode())
+                .add(accountingEntry.getDocumentName())
+                .add(accountingEntry.getExpenseRequest().getConfirm().toString())
+                .toString();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String parameterDate = simpleDateFormat.format(accountingEntry.getDate().getTime());
+
+        return new StringJoiner("/")
+                .add(endpointUrl)
+                .add(parameterData)
+                .add(parameterDate)
+                .toString();
     }
 
     private DocumentCrm getDocumentCrm(Invoice entity) {
