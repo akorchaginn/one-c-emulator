@@ -3,7 +3,9 @@ package org.pes.onecemulator.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.BoundRequestBuilder;
 import org.asynchttpclient.DefaultAsyncHttpClient;
+import org.asynchttpclient.Request;
 import org.asynchttpclient.Response;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.ExpenseRequest;
@@ -79,48 +81,50 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
-        Objects.requireNonNull(accountingEntry);
+        requireNonNullAccountingEntry(accountingEntry);
 
-        final String host = environment.getProperty("crm.interaction.host").replaceAll("\"", StringUtils.EMPTY);
+        final String host = Objects.requireNonNull(
+                environment.getProperty("crm.interaction.host").replaceAll("\"", StringUtils.EMPTY));
 
-        final String uri = environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY);
+        final String uri = Objects.requireNonNull(
+                environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY));
 
-        final String token = environment.getProperty("crm.interaction.token");
+        final String token = Objects.requireNonNull(environment.getProperty("crm.interaction.token"));
 
         final String endpointCrmApiUrl = host + uri;
 
         ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
 
-        Objects.requireNonNull(expenseRequest);
-
         String parameterData = new StringJoiner(",")
-                .add(Objects.requireNonNull(expenseRequest.getNumber()))
-                .add(Objects.requireNonNull(expenseRequest.getConfirm()).toString())
-                .add(Objects.requireNonNull(expenseRequest.getPaid()).toString())
-                .add(Objects.requireNonNull(expenseRequest.getCurrency()))
-                .add(Objects.requireNonNull(accountingEntry.getSum()).toString())
-                .add(Objects.requireNonNull(accountingEntry.getCode()))
-                .add(Objects.requireNonNull(accountingEntry.getDocumentName()))
+                .add(expenseRequest.getNumber())
+                .add(expenseRequest.getConfirm().toString())
+                .add(expenseRequest.getPaid().toString())
+                .add(expenseRequest.getCurrency())
+                .add(accountingEntry.getSum().toString())
+                .add(accountingEntry.getCode())
+                .add(accountingEntry.getDocumentName())
                 .toString();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String parameterDate = simpleDateFormat.format(Objects.requireNonNull(accountingEntry.getDate()).getTime());
+        String parameterDate = simpleDateFormat.format(accountingEntry.getDate().getTime());
 
         String resultUrl = new StringJoiner("/")
-                .add(Objects.requireNonNull(endpointCrmApiUrl))
+                .add(endpointCrmApiUrl)
                 .add(parameterData)
                 .add(parameterDate)
                 .toString();
 
         try {
-            LOGGER.info("Start request to CRM: " + resultUrl);
-
             AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
-            asyncHttpClient
+            Request request = asyncHttpClient
                     .prepareGet(resultUrl)
-                    .addHeader("crm-api-token", Objects.requireNonNull(token))
-                    .addHeader("crm-1c-database-source", Objects.requireNonNull(expenseRequest.getSource()).getName())
-                    .execute(new CompletionHandler(accountingEntry.getId()));
+                    .addHeader("crm-api-token", token)
+                    .addHeader("crm-1c-database-source", expenseRequest.getSource().getName())
+                    .build();
+
+            LOGGER.info("Start request to CRM: " + request.getUrl() + " : " + request.getHeaders().toString());
+
+            asyncHttpClient.executeRequest(request, new CompletionHandler(accountingEntry.getId()));
 
         } catch (Exception e) {
             LOGGER.warn("Error request to CRM: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
@@ -149,6 +153,36 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         public void onThrowable(Throwable t) {
             LOGGER.error("Error request to CRM: " + t.getMessage() +"\n" + Arrays.toString(t.getStackTrace()));
         }
+    }
+
+    private void requireNonNullAccountingEntry(AccountingEntry accountingEntry) {
+        Objects.requireNonNull(accountingEntry,
+                "AccountingEntry is null.");
+        ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
+        Objects.requireNonNull(expenseRequest,
+                "ExpenseRequest is null.");
+        Objects.requireNonNull(expenseRequest.getNumber(),
+                "expenseRequest.getNumber() is null.");
+        Objects.requireNonNull(expenseRequest.getConfirm(),
+                "expenseRequest.getConfirm() is null.");
+        Objects.requireNonNull(expenseRequest.getPaid(),
+                "expenseRequest.getPaid() is null.");
+        Objects.requireNonNull(expenseRequest.getCurrency(),
+                "expenseRequest.getCurrency() is null.");
+        Objects.requireNonNull(expenseRequest.getSource(),
+                "expenseRequest.getSource() is null.");
+        Objects.requireNonNull(expenseRequest.getSource().getName(),
+                "expenseRequest.getSource().getName() is null.");
+        Objects.requireNonNull(accountingEntry.getId(),
+                "accountingEntry.getId() is null.");
+        Objects.requireNonNull(accountingEntry.getSum(),
+                "accountingEntry.getSum() is null.");
+        Objects.requireNonNull(accountingEntry.getCode(),
+                "accountingEntry.getCode() is null.");
+        Objects.requireNonNull(accountingEntry.getDocumentName(),
+                "accountingEntry.getDocumentName() is null.");
+        Objects.requireNonNull(accountingEntry.getDate(),
+                "accountingEntry.getDate() is null.");
     }
 
     private DocumentCrm getDocumentCrm(Invoice entity) {
