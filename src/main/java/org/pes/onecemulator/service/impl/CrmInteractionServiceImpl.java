@@ -81,17 +81,17 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
+
         requireNonNullAccountingEntry(accountingEntry);
 
-        final String host = Objects.requireNonNull(
-                environment.getProperty("crm.interaction.host").replaceAll("\"", StringUtils.EMPTY));
+        final String host = environment.getRequiredProperty("crm.interaction.host")
+                .replaceAll("\"", StringUtils.EMPTY);
 
-        final String uri = Objects.requireNonNull(
-                environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY));
+        final String uri = environment.getRequiredProperty("crm.interaction.uri")
+                .replaceAll("\"", StringUtils.EMPTY);
 
-        final String token = Objects.requireNonNull(environment.getProperty("crm.interaction.token"));
-
-        final String endpointCrmApiUrl = host + uri;
+        final String token = environment.getRequiredProperty("crm.interaction.token")
+                .replaceAll("\"", StringUtils.EMPTY);
 
         ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
 
@@ -109,7 +109,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         String parameterDate = simpleDateFormat.format(accountingEntry.getDate().getTime());
 
         String resultUrl = new StringJoiner("/")
-                .add(endpointCrmApiUrl)
+                .add(host + uri)
                 .add(parameterData)
                 .add(parameterDate)
                 .toString();
