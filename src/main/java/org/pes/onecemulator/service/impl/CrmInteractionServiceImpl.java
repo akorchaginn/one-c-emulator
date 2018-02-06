@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -78,6 +79,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
+        Objects.requireNonNull(accountingEntry);
+
         final String host = environment.getProperty("crm.interaction.host").replaceAll("\"", StringUtils.EMPTY);
 
         final String uri = environment.getProperty("crm.interaction.uri").replaceAll("\"", StringUtils.EMPTY);
@@ -88,21 +91,23 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
         ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
 
+        Objects.requireNonNull(expenseRequest);
+
         String parameterData = new StringJoiner(",")
-                .add(expenseRequest.getNumber())
-                .add(expenseRequest.getSum().toString())
-                .add(expenseRequest.getPaid().toString())
-                .add(expenseRequest.getCurrency())
-                .add(accountingEntry.getCode())
-                .add(accountingEntry.getDocumentName())
-                .add(expenseRequest.getConfirm().toString())
+                .add(Objects.requireNonNull(expenseRequest.getNumber()))
+                .add(Objects.requireNonNull(expenseRequest.getSum()).toString())
+                .add(Objects.requireNonNull(expenseRequest.getPaid()).toString())
+                .add(Objects.requireNonNull(expenseRequest.getCurrency()))
+                .add(Objects.requireNonNull(accountingEntry.getCode()))
+                .add(Objects.requireNonNull(accountingEntry.getDocumentName()))
+                .add(Objects.requireNonNull(expenseRequest.getConfirm()).toString())
                 .toString();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String parameterDate = simpleDateFormat.format(accountingEntry.getDate().getTime());
+        String parameterDate = simpleDateFormat.format(Objects.requireNonNull(accountingEntry.getDate()).getTime());
 
         String resultUrl = new StringJoiner("/")
-                .add(endpointCrmApiUrl)
+                .add(Objects.requireNonNull(endpointCrmApiUrl))
                 .add(parameterData)
                 .add(parameterDate)
                 .toString();
@@ -113,8 +118,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
             AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
             asyncHttpClient
                     .prepareGet(resultUrl)
-                    .addHeader("crm-api-token", token)
-                    .addHeader("crm-1c-database-source", expenseRequest.getSource().getName())
+                    .addHeader("crm-api-token", Objects.requireNonNull(token))
+                    .addHeader("crm-1c-database-source", Objects.requireNonNull(expenseRequest.getSource()).getName())
                     .execute(new CompletionHandler(accountingEntry.getId()));
 
         } catch (Exception e) {
@@ -123,15 +128,17 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     private static class CompletionHandler extends AsyncCompletionHandler<Void> {
-        private final UUID aEnId;
-        CompletionHandler(UUID aEnId) { this.aEnId = aEnId; }
+
+        private final UUID accountingEntryId;
+
+        CompletionHandler(UUID aEnId) { this.accountingEntryId = aEnId; }
 
         @Override
         public Void onCompleted(Response response) {
             try {
                 LOGGER.info(
                         String.format("End request to CRM for new AccountingEntry %s: %s",
-                                aEnId.toString(),  response.getResponseBody()));
+                                accountingEntryId.toString(),  response.getResponseBody()));
             } catch (Exception e) {
                 LOGGER.warn("Error onCompleted(): "+ e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             }

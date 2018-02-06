@@ -48,68 +48,77 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     }
 
     public AEntryModel create(AEntryModel model) {
-        if (model != null && model.getExpenseNumber() != null && model.getDate() != null) {
-            ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
-            if (expenseRequest != null) {
-                AccountingEntry accountingEntry = new AccountingEntry();
-                accountingEntry.setCode(model.getCode());
-                accountingEntry.setDate(model.getDate());
-                accountingEntry.setDocumentName(model.getDocumentName());
-                accountingEntry.setExpenseRequest(expenseRequest);
-                accountingEntry.setSum(model.getSum());
-                accountingEntry = accountingEntryRepository.save(accountingEntry);
 
-                // Запрос в CRM
-                crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
-
-                return getModel(accountingEntry);
-            }
-
-            return new AEntryModel(
-                    "Expense request with number: " + model.getExpenseNumber()
-                    + " not found at database."
-            );
+        if (model == null) {
+            return new AEntryModel("Model is null.");
         }
 
-        return new AEntryModel(model == null ? "Model is null." : "Expense number is null.");
+        if (model.getExpenseNumber() == null) {
+            return new AEntryModel("Expense number is null.");
+        }
+
+        if (model.getDate() == null) {
+            return new AEntryModel("Date is null.");
+        }
+
+        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
+
+        if (expenseRequest == null) {
+            return new AEntryModel(
+                    "Expense request with number: " + model.getExpenseNumber() + " not found at database.");
+        }
+
+        AccountingEntry accountingEntry = new AccountingEntry();
+        accountingEntry.setCode(model.getCode());
+        accountingEntry.setDate(model.getDate());
+        accountingEntry.setDocumentName(model.getDocumentName());
+        accountingEntry.setExpenseRequest(expenseRequest);
+        accountingEntry.setSum(model.getSum());
+        accountingEntry = accountingEntryRepository.save(accountingEntry);
+
+        // Запрос в CRM
+        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
+
+        return getModel(accountingEntry);
     }
 
     public AEntryModel update(AEntryModel model) {
-        if (model != null && model.getId() != null && model.getExpenseNumber() != null && model.getDate() != null) {
-            ExpenseRequest expenseRequest =
-                    expenseRequestRepository.findByNumber(model.getExpenseNumber());
-            if (expenseRequest != null) {
-                AccountingEntry accountingEntry = accountingEntryRepository.findOne(model.getId());
-                if (accountingEntry != null) {
-                    accountingEntry.setCode(model.getCode());
-                    accountingEntry.setDate(model.getDate());
-                    accountingEntry.setDocumentName(model.getDocumentName());
-                    accountingEntry.setExpenseRequest(expenseRequest);
-                    accountingEntry.setSum(model.getSum());
-                    accountingEntry = accountingEntryRepository.save(accountingEntry);
-
-                    // Запрос в CRM
-                    crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
-
-                    return getModel(accountingEntry);
-                }
-
-                return new AEntryModel("Accounting entry with id: " + model.getId() + "not found at database.");
-            }
-
-            return new AEntryModel(
-                    "Expense request with number: " + model.getExpenseNumber()
-                    + " not found at database."
-            );
+        if (model == null) {
+            return new AEntryModel("Model is null.");
         }
 
-        return new AEntryModel(
-                model == null
-                        ? "Model is null."
-                        : model.getId() == null
-                            ? "Id is null"
-                            : "Expense number is null"
-        );
+        if (model.getExpenseNumber() == null) {
+            return new AEntryModel("Expense number is null.");
+        }
+
+        if (model.getDate() == null) {
+            return new AEntryModel("Date is null.");
+        }
+
+        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
+
+        if (expenseRequest == null) {
+            return new AEntryModel(
+                    "Expense request with number: " + model.getExpenseNumber() + " not found at database.");
+        }
+
+        AccountingEntry accountingEntry = accountingEntryRepository.findOne(model.getId());
+
+        if (accountingEntry == null) {
+            return new AEntryModel("Accounting entry with id: " + model.getId() + "not found at database.");
+        }
+
+        accountingEntry.setCode(model.getCode());
+        accountingEntry.setDate(model.getDate());
+        accountingEntry.setDocumentName(model.getDocumentName());
+        accountingEntry.setExpenseRequest(expenseRequest);
+        accountingEntry.setSum(model.getSum());
+        accountingEntry = accountingEntryRepository.save(accountingEntry);
+
+        // Запрос в CRM
+        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
+
+        return getModel(accountingEntry);
     }
 
     public void delete(UUID id) {

@@ -46,85 +46,98 @@ public class PayerServiceImpl implements PayerService {
     }
 
     public PayerModel create(PayerModel model) {
-        if (model != null && model.getSource() != null && !model.getSource().isEmpty()) {
 
-            Set<Source> newSources = new HashSet<>();
-            model.getSource().forEach(s -> {
-                Source source = sourceRepository.findByName(s);
-                if (source != null) {
-                    newSources.add(source);
-                } else {
-                    Source newSource = new Source();
-                    newSource.setName(s);
-                    newSources.add(newSource);
-                }
-            });
+        if (model == null) {
+            return new PayerModel("Model is null.");
+        }
 
-            if (!newSources.isEmpty()) {
-                Payer payer = new Payer();
-                payer.setCode(model.getCode());
-                payer.setName(model.getName());
-                payer.setFullName(model.getFullName());
-                payer.setInn(model.getInn());
-                payer.setKpp(model.getKpp());
-                payer.setAddress(model.getAddress());
-                payer.setSources(newSources);
-                payer = payerRepository.save(payer);
+        if (model.getSource() == null) {
+            return new PayerModel("Sources list is null.");
+        }
 
-                return getModel(payer);
+        if (model.getSource().isEmpty()) {
+            return new PayerModel("Source list is empty.");
+        }
+
+        Set<Source> newSources = new HashSet<>();
+        model.getSource().forEach(s -> {
+            Source source = sourceRepository.findByName(s);
+            if (source != null) {
+                newSources.add(source);
+            } else {
+                Source newSource = new Source();
+                newSource.setName(s);
+                newSources.add(newSource);
             }
+        });
 
+        if (newSources.isEmpty()) {
             return new PayerModel("New source list is empty.");
         }
 
-        return new PayerModel(
-                model == null
-                    ? "Model is null."
-                    : model.getSource() == null
-                        ? "Sources list is null."
-                        : "Source list is empty."
-        );
+        Payer payer = new Payer();
+        payer.setCode(model.getCode());
+        payer.setName(model.getName());
+        payer.setFullName(model.getFullName());
+        payer.setInn(model.getInn());
+        payer.setKpp(model.getKpp());
+        payer.setAddress(model.getAddress());
+        payer.setSources(newSources);
+        payer = payerRepository.save(payer);
+
+        return getModel(payer);
     }
 
     public PayerModel update(PayerModel model) {
-        if (model != null && model.getId() != null &&
-                model.getCode() != null && model.getSource() != null && !model.getSource().isEmpty()) {
 
-            Payer payer = payerRepository.findOne(model.getId());
+        if (model == null) {
+            return new PayerModel("Model is null.");
+        }
 
-            if (payer != null) {
+        if (model.getId() == null) {
+            return new PayerModel("Id is null.");
+        }
 
-                Set<Source> newSources = new HashSet<>();
-                model.getSource().forEach(s -> {
-                    Source source = sourceRepository.findByName(s);
-                    if (source != null) {
-                        newSources.add(source);
-                    } else {
-                        Source newSource = new Source();
-                        newSource.setName(s);
-                        newSources.add(newSource);
-                    }
-                });
-                if (!newSources.isEmpty()) {
-                    payer.setCode(model.getCode());
-                    payer.setName(model.getName());
-                    payer.setFullName(model.getFullName());
-                    payer.setInn(model.getInn());
-                    payer.setKpp(model.getKpp());
-                    payer.setAddress(model.getAddress());
-                    payer.setSources(newSources);
-                    payer = payerRepository.save(payer);
+        if (model.getSource() == null) {
+            return new PayerModel("Sources list is null.");
+        }
 
-                    return getModel(payer);
-                }
+        if (model.getSource().isEmpty()) {
+            return new PayerModel("Source list is empty.");
+        }
 
-                return new PayerModel("Payer source is empty.");
-            }
+        Payer payer = payerRepository.findOne(model.getId());
 
+        if (payer == null) {
             return new PayerModel("Payer with id: " + model.getId() + " not found at database.");
         }
 
-        return new PayerModel("Payer is null or id is null or code is null.");
+        Set<Source> newSources = new HashSet<>();
+        model.getSource().forEach(s -> {
+            Source source = sourceRepository.findByName(s);
+            if (source != null) {
+                newSources.add(source);
+            } else {
+                Source newSource = new Source();
+                newSource.setName(s);
+                newSources.add(newSource);
+            }
+        });
+
+        if (newSources.isEmpty()) {
+            return new PayerModel("New source list is empty.");
+        }
+
+        payer.setCode(model.getCode());
+        payer.setName(model.getName());
+        payer.setFullName(model.getFullName());
+        payer.setInn(model.getInn());
+        payer.setKpp(model.getKpp());
+        payer.setAddress(model.getAddress());
+        payer.setSources(newSources);
+        payer = payerRepository.save(payer);
+
+        return getModel(payer);
     }
 
     public void delete(UUID id) {

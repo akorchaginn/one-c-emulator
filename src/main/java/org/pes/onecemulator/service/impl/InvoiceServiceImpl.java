@@ -49,92 +49,108 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     public InvoiceModel create(InvoiceModel model) {
-        if (model != null && model.getSource() != null && model.getPayerCode() != null) {
-            Source source = sourceRepository.findByName(model.getSource());
-            Payer payer = payerRepository.findByCode(model.getPayerCode());
-            if (source != null && payer != null && payer.getSources().contains(source)) {
-                Invoice invoice = new Invoice();
-                invoice.setSource(source);
-                invoice.setDate(model.getDate());
-                invoice.setNumber(model.getNumber());
-                invoice.setNumberOq(model.getNumberOq());
-                invoice.setPayer(payer);
-                invoice.setPaymentDate(model.getPaymentDate());
-                invoice.setPaymentSum(model.getPaymentSum());
-                invoice.setStatus(model.getStatus());
-                invoice.setSum(model.getSum());
-                invoice.setExternalId(model.getExternalId());
-                invoice = invoiceRepository.save(invoice);
 
-                return getModel(invoice);
-            }
-
-            return new InvoiceModel(
-                    source == null
-                        ? "Source with name: " + model.getSource() + " not found at database."
-                        : payer == null
-                            ? "Payer is null."
-                            : "Invoice source not equal payer source."
-            );
+        if (model == null) {
+            return new InvoiceModel("Model is null.");
         }
 
-        return new InvoiceModel(
-                model == null
-                        ? "Model is null."
-                        : model.getSource() == null
-                        ? "Source is null."
-                        : "Payer code is null."
-        );
+        if (model.getSource() == null) {
+            return new InvoiceModel("Source is null.");
+        }
+
+        if (model.getPayerCode() == null) {
+            return new InvoiceModel("Payer code is null.");
+        }
+
+        Source source = sourceRepository.findByName(model.getSource());
+
+        if (source == null) {
+            return new InvoiceModel("Source with name: " + model.getSource() + " not found at database.");
+        }
+
+        Payer payer = payerRepository.findByCode(model.getPayerCode());
+
+        if (payer == null) {
+            return new InvoiceModel("Payer with code: " + model.getPayerCode() + " not found at database.");
+        }
+
+        if (!payer.getSources().contains(source)) {
+            return new InvoiceModel("Invoice source not equal payer source.");
+        }
+
+        Invoice invoice = new Invoice();
+        invoice.setSource(source);
+        invoice.setDate(model.getDate());
+        invoice.setNumber(model.getNumber());
+        invoice.setNumberOq(model.getNumberOq());
+        invoice.setPayer(payer);
+        invoice.setPaymentDate(model.getPaymentDate());
+        invoice.setPaymentSum(model.getPaymentSum());
+        invoice.setStatus(model.getStatus());
+        invoice.setSum(model.getSum());
+        invoice.setExternalId(model.getExternalId());
+        invoice = invoiceRepository.save(invoice);
+
+        return getModel(invoice);
     }
 
     public InvoiceModel update(InvoiceModel model) {
-        if (model != null && model.getId() != null &&
-                model.getSource() != null && model.getPayerCode() != null) {
 
-            Invoice invoice = invoiceRepository.findOne(model.getId());
-            Source source = sourceRepository.findByName(model.getSource());
-            Payer payer = payerRepository.findByCode(model.getPayerCode());
-
-            if (invoice != null && source != null && payer != null && payer.getSources().contains(source)) {
-                if (invoice.getSource() != source) {
-                    invoice.setSource(source);
-                }
-                invoice.setDate(model.getDate());
-                invoice.setNumber(model.getNumber());
-                invoice.setNumberOq(model.getNumberOq());
-                if (invoice.getPayer() != payer) {
-                    invoice.setPayer(payer);
-                }
-                invoice.setPaymentDate(model.getPaymentDate());
-                invoice.setPaymentSum(model.getPaymentSum());
-                invoice.setStatus(model.getStatus());
-                invoice.setSum(model.getSum());
-                invoice.setExternalId(model.getExternalId());
-                invoice = invoiceRepository.save(invoice);
-
-                return getModel(invoice);
-            }
-
-            return new InvoiceModel(
-                    invoice == null
-                        ? "Invoice with id: " + model.getId() + "not found at database."
-                        : source == null
-                            ? "Source with name: " + model.getSource() + "not found at database."
-                            : payer == null
-                                ? "Payer with code: " + model.getPayerCode() + " not found at database."
-                                : "Invoice source not equal payer source."
-            );
+        if (model == null) {
+            return new InvoiceModel("Model is null.");
         }
 
-        return new InvoiceModel(
-                model == null
-                    ? "Model is null."
-                    : model.getId() == null
-                        ? "Id is null."
-                        : model.getSource() == null
-                            ? "Source is null."
-                            : "Payer code is null."
-        );
+        if (model.getId() == null) {
+            return new InvoiceModel("Id is null.");
+        }
+
+        if (model.getSource() == null) {
+            return new InvoiceModel("Source is null.");
+        }
+
+        if (model.getPayerCode() == null) {
+            return new InvoiceModel("Payer code is null.");
+        }
+
+        Invoice invoice = invoiceRepository.findOne(model.getId());
+
+        if (invoice == null) {
+            return new InvoiceModel("Invoice with id: " + model.getId() + "not found at database.");
+        }
+
+        Source source = sourceRepository.findByName(model.getSource());
+
+        if (source == null) {
+            return new InvoiceModel("Source with name: " + model.getSource() + "not found at database.");
+        }
+
+        Payer payer = payerRepository.findByCode(model.getPayerCode());
+
+        if (payer == null) {
+            return new InvoiceModel("Payer with code: " + model.getPayerCode() + "not found at database.");
+        }
+
+        if (!payer.getSources().contains(source)) {
+            return new InvoiceModel("Invoice source not equal payer source.");
+        }
+
+        if (invoice.getSource() != source) {
+            invoice.setSource(source);
+        }
+        invoice.setDate(model.getDate());
+        invoice.setNumber(model.getNumber());
+        invoice.setNumberOq(model.getNumberOq());
+        if (invoice.getPayer() != payer) {
+            invoice.setPayer(payer);
+        }
+        invoice.setPaymentDate(model.getPaymentDate());
+        invoice.setPaymentSum(model.getPaymentSum());
+        invoice.setStatus(model.getStatus());
+        invoice.setSum(model.getSum());
+        invoice.setExternalId(model.getExternalId());
+        invoice = invoiceRepository.save(invoice);
+
+        return getModel(invoice);
     }
 
     public void delete(UUID id) {

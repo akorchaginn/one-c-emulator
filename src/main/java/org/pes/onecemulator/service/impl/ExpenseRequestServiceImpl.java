@@ -48,65 +48,76 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     }
 
     public ERequestModel create(ERequestModel model) {
-        if (model != null && model.getNumber() != null && model.getSource() != null) {
-            Source source = sourceRepository.findByName(model.getSource());
-            if (source != null) {
-                ExpenseRequest expenseRequest = new ExpenseRequest();
-                expenseRequest.setSource(source);
-                expenseRequest.setCurrency(model.getCurrency());
-                expenseRequest.setConfirm(model.getConfirm());
-                expenseRequest.setPaid(model.getPaid());
-                expenseRequest.setNumber(model.getNumber());
-                expenseRequest.setSum(model.getSum());
-                expenseRequest = expenseRequestRepository.save(expenseRequest);
 
-                return getModel(expenseRequest);
-            }
+        if (model == null) {
+            return new ERequestModel("Model is null.");
+        }
 
+        if (model.getNumber() == null) {
+            return new ERequestModel("Number is null.");
+        }
+
+        if (model.getSource() == null) {
+            return new ERequestModel("Source is null.");
+        }
+
+        Source source = sourceRepository.findByName(model.getSource());
+
+        if (source == null) {
             return new ERequestModel("Source with name: " + model.getSource() + " not found at database.");
         }
 
-        return new ERequestModel(
-                model == null
-                        ? "Model is null."
-                        : model.getNumber() == null
-                            ? "Number is null."
-                            : "Source is null."
-        );
+        ExpenseRequest expenseRequest = new ExpenseRequest();
+        expenseRequest.setSource(source);
+        expenseRequest.setCurrency(model.getCurrency());
+        expenseRequest.setConfirm(model.getConfirm());
+        expenseRequest.setPaid(model.getPaid());
+        expenseRequest.setNumber(model.getNumber());
+        expenseRequest.setSum(model.getSum());
+        expenseRequest = expenseRequestRepository.save(expenseRequest);
+
+        return getModel(expenseRequest);
     }
 
     public ERequestModel update(ERequestModel model) {
-        if (model != null && model.getId() != null && model.getNumber() != null && model.getSource() != null) {
-            ExpenseRequest expenseRequest = expenseRequestRepository.findOne(model.getId());
-            if (expenseRequest != null) {
-                Source source = sourceRepository.findByName(model.getSource());
-                if (source != null) {
-                    expenseRequest.setSource(source);
-                    expenseRequest.setCurrency(model.getCurrency());
-                    expenseRequest.setConfirm(model.getConfirm());
-                    expenseRequest.setPaid(model.getPaid());
-                    expenseRequest.setNumber(model.getNumber());
-                    expenseRequest.setSum(model.getSum());
-                    expenseRequest = expenseRequestRepository.save(expenseRequest);
 
-                    return getModel(expenseRequest);
-                }
+        if (model == null) {
+            return new ERequestModel("Model is null.");
+        }
 
-                return new ERequestModel("Source with name: " + model.getSource() + " not found at database.");
-            }
+        if (model.getId() == null) {
+            return new ERequestModel("Id is null.");
+        }
 
+        if (model.getNumber() == null) {
+            return new ERequestModel("Number is null.");
+        }
+
+        if (model.getSource() == null) {
+            return new ERequestModel("Source is null.");
+        }
+
+        ExpenseRequest expenseRequest = expenseRequestRepository.findOne(model.getId());
+
+        if (expenseRequest == null) {
             return new ERequestModel("Expense request with id: " + model.getId() + " not found at database.");
         }
 
-        return new ERequestModel(
-                model == null
-                        ? "Model is null."
-                        : model.getId() == null
-                            ? "Id is null."
-                            : model.getNumber() == null
-                                ? "Number is null."
-                                : "Source is null."
-        );
+        Source source = sourceRepository.findByName(model.getSource());
+
+        if (source == null) {
+            return new ERequestModel("Source with name: " + model.getSource() + " not found at database.");
+        }
+
+        expenseRequest.setSource(source);
+        expenseRequest.setCurrency(model.getCurrency());
+        expenseRequest.setConfirm(model.getConfirm());
+        expenseRequest.setPaid(model.getPaid());
+        expenseRequest.setNumber(model.getNumber());
+        expenseRequest.setSum(model.getSum());
+        expenseRequest = expenseRequestRepository.save(expenseRequest);
+
+        return getModel(expenseRequest);
     }
 
     public void delete(UUID id) {
