@@ -95,12 +95,12 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
         String parameterData = new StringJoiner(",")
                 .add(Objects.requireNonNull(expenseRequest.getNumber()))
-                .add(Objects.requireNonNull(expenseRequest.getSum()).toString())
+                .add(Objects.requireNonNull(expenseRequest.getConfirm()).toString())
                 .add(Objects.requireNonNull(expenseRequest.getPaid()).toString())
                 .add(Objects.requireNonNull(expenseRequest.getCurrency()))
+                .add(Objects.requireNonNull(accountingEntry.getSum()).toString())
                 .add(Objects.requireNonNull(accountingEntry.getCode()))
                 .add(Objects.requireNonNull(accountingEntry.getDocumentName()))
-                .add(Objects.requireNonNull(expenseRequest.getConfirm()).toString())
                 .toString();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
