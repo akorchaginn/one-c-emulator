@@ -1,16 +1,10 @@
 package org.pes.onecemulator.service.impl;
 
-import org.apache.commons.lang3.StringUtils;
-import org.asynchttpclient.AsyncCompletionHandler;
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClient;
-import org.asynchttpclient.Request;
-import org.asynchttpclient.Response;
 import org.pes.onecemulator.entity.AccountingEntry;
-import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.httpclient.CrmClient;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
@@ -21,13 +15,14 @@ import org.pes.onecemulator.service.utils.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -48,6 +43,15 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     @Autowired
     private SourceRepository sourceRepository;
+
+    @Value("${crm.interaction.host:#{null}}")
+    private String crmHost;
+
+    @Value("${crm.interaction.uri:#{null}}")
+    private String crmUri;
+
+    @Value("${crm.interaction.token:#{null}}")
+    private String crmToken;
 
     public DocumentCrm getDocumentsCrmById(UUID id, String sourceName) {
         Invoice invoice = invoiceRepository.findByIdAndSource(id, sourceName);
@@ -80,57 +84,17 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
-
-        ValidationUtils.validateAccountingEntryForCrmRequest(accountingEntry);
-
-        final String endpointUrl =
-                environment.getRequiredProperty("crm.interaction.host")
-                    .replaceAll("\"", StringUtils.EMPTY) +
-                environment.getRequiredProperty("crm.interaction.uri")
-                    .replaceAll("\"", StringUtils.EMPTY);
-
-        final String token = environment.getRequiredProperty("crm.interaction.token")
-                .replaceAll("\"", StringUtils.EMPTY);
-
         try {
-            AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
-            Request request = asyncHttpClient
-                    .prepareGet(createDataUrl(endpointUrl, accountingEntry))
-                    .addHeader("crm-api-token", token)
-                    .addHeader("crm-1c-database-source",
-                            accountingEntry.getExpenseRequest().getSource().getName())
-                    .build();
-
-            LOGGER.info("Start request to CRM: " + request.getUrl() + " : " + request.getHeaders().toString());
-
-            asyncHttpClient.executeRequest(request, new CompletionHandler(accountingEntry.getId()));
-
+            ValidationUtils.validateAccountingEntryForCrmRequest(accountingEntry);
+            final String host = Objects.requireNonNull(crmHost);
+            final String uri =  Objects.requireNonNull(crmUri);
+            final String token = Objects.requireNonNull(crmToken);
+            final String dataUrl = createDataUrl(host + uri, accountingEntry);
+            final String sourceName = accountingEntry.getExpenseRequest().getSource().getName();
+            final UUID id = accountingEntry.getId();
+            CrmClient.expenseRequest(dataUrl, token, sourceName, id);
         } catch (Exception e) {
-            LOGGER.warn("Error request to CRM: " + e.getMessage() + "\n\t" + Arrays.toString(e.getStackTrace()));
-        }
-    }
-
-    private static class CompletionHandler extends AsyncCompletionHandler<Void> {
-
-        private final UUID accountingEntryId;
-
-        CompletionHandler(UUID aEnId) { this.accountingEntryId = aEnId; }
-
-        @Override
-        public Void onCompleted(Response response) {
-            try {
-                LOGGER.info(
-                        String.format("End request to CRM for new AccountingEntry %s: %s",
-                                accountingEntryId.toString(),  response.getStatusCode()));
-            } catch (Exception e) {
-                LOGGER.warn("Error onCompleted(): "+ e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
-            }
-            return null;
-        }
-
-        @Override
-        public void onThrowable(Throwable t) {
-            LOGGER.error("Error request to CRM: " + t.getMessage() +"\n" + Arrays.toString(t.getStackTrace()));
+            LOGGER.error("Send accounting entry error: ", e);
         }
     }
 
