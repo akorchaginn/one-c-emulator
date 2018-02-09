@@ -81,7 +81,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
 
-        ValidationUtils.requireNonNull(accountingEntry);
+        ValidationUtils.validateAccountingEntryForCrmRequest(accountingEntry);
 
         final String endpointUrl =
                 environment.getRequiredProperty("crm.interaction.host")
