@@ -2,8 +2,10 @@ package org.pes.onecemulator.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,9 +15,11 @@ public class PayerModel extends ApiError {
     private UUID id;
 
     @JsonProperty("code")
+    @NotEmpty
     private String code;
 
     @JsonProperty("name")
+    @NotEmpty
     private String name;
 
     @JsonProperty("fullName")
@@ -32,15 +36,16 @@ public class PayerModel extends ApiError {
 
     @JsonProperty("source")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private Set<String> source = new HashSet<>();
+    @NotEmpty
+    private Set<String> sources = new HashSet<>();
 
     public PayerModel() {
         super();
-    }
+   }
 
     public PayerModel(String error) {
         super(error);
-    }
+   }
 
     public UUID getId() {
         return id;
@@ -98,11 +103,38 @@ public class PayerModel extends ApiError {
         this.address = address;
     }
 
-    public Set<String> getSource() {
-        return source;
+    public Set<String> getSources() {
+        return sources;
     }
 
-    public void setSource(Set<String> source) {
-        this.source = source;
+    public void setSources(Set<String> source) {
+        this.sources = source;
+    }
+
+    public boolean containsWithIgnoreCase(String text) {
+        return code.toLowerCase().contains(text)
+                || name.toLowerCase().contains(text)
+                || sources.stream().anyMatch(s -> s.toLowerCase().contains(text));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PayerModel)) return false;
+        if (!super.equals(o)) return false;
+        PayerModel model = (PayerModel) o;
+        return Objects.equals(id, model.id) &&
+                Objects.equals(code, model.code) &&
+                Objects.equals(name, model.name) &&
+                Objects.equals(fullName, model.fullName) &&
+                Objects.equals(inn, model.inn) &&
+                Objects.equals(kpp, model.kpp) &&
+                Objects.equals(address, model.address) &&
+                Objects.equals(sources, model.sources);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, code, name, fullName, inn, kpp, address, sources);
     }
 }

@@ -13,7 +13,7 @@ public final class CrmClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CrmClient.class);
 
-    private static AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
+    private static final AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
 
     public static void expenseRequest(String url, String token, String sourceName, UUID id) {
         try {

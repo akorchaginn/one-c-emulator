@@ -37,7 +37,7 @@ public class Payer extends AbstractEntity {
     @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Invoice> invoices = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "payer_source",
             joinColumns = { @JoinColumn(name = "payer_id") },

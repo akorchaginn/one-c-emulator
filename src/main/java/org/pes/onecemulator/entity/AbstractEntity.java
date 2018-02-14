@@ -15,6 +15,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -78,5 +79,21 @@ public abstract class AbstractEntity implements Serializable {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractEntity)) return false;
+        AbstractEntity that = (AbstractEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(createdTime, that.createdTime) &&
+                Objects.equals(updatedTime, that.updatedTime) &&
+                Objects.equals(version, that.version);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createdTime, updatedTime, version);
     }
 }

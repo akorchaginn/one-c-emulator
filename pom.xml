@@ -118,7 +118,34 @@
 			<artifactId>async-http-client</artifactId>
 			<version>${async-http-client.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.vaadin/vaadin-spring-boot-starter -->
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-spring-boot-starter</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 	</dependencies>
+
+    <repositories>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
+        </repository>
+    </repositories>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>8.3.1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<finalName>one-c</finalName>

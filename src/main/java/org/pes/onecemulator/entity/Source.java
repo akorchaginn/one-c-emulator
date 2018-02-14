@@ -8,6 +8,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -48,5 +49,30 @@ public class Source extends AbstractEntity {
 
     public void setExpenseRequests(Set<ExpenseRequest> expenseRequests) {
         this.expenseRequests = expenseRequests;
+    }
+
+    public Set<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(Set<Invoice> invoices) {
+        this.invoices = invoices;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Source)) return false;
+        if (!super.equals(o)) return false;
+        Source source = (Source) o;
+        return Objects.equals(name, source.name) &&
+                Objects.equals(payers, source.payers) &&
+                Objects.equals(expenseRequests, source.expenseRequests) &&
+                Objects.equals(invoices, source.invoices);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, payers, expenseRequests, invoices);
     }
 }
