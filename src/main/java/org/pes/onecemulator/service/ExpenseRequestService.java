@@ -1,19 +1,19 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.model.ERequestModel;
+import org.pes.onecemulator.model.ExpenseRequestModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ExpenseRequestService {
 
-    ERequestModel getById(UUID id);
+    ExpenseRequestModel getById(UUID id);
 
-    List<ERequestModel> list();
+    List<ExpenseRequestModel> list();
 
-    ERequestModel create(ERequestModel model);
+    ExpenseRequestModel create(ExpenseRequestModel model);
 
-    ERequestModel update(ERequestModel model);
+    ExpenseRequestModel update(ExpenseRequestModel model);
 
     void delete(UUID id);
 }

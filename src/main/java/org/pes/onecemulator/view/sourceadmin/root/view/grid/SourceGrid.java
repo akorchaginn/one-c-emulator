@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SourceGrid extends Grid<SourceModel> {
 
-    private static final String ID = "InvoiceGrid";
+    private static final String ID = "SourceGrid";
 
     private static final ValueProvider<SourceModel, String> payerNameValueProvider = SourceModel::getName;
 

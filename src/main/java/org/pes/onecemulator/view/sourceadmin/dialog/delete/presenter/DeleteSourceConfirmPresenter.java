@@ -27,8 +27,8 @@ public class DeleteSourceConfirmPresenter implements IDeleteSourceConfirmPresent
     }
 
     @Override
-    public void onClickOkButton(List<SourceModel> payerModelList) {
-        payerModelList.forEach(sourceModel -> sourceService.delete(sourceModel.getId()));
+    public void onClickOkButton(List<SourceModel> sourceModelList) {
+        sourceModelList.forEach(sourceModel -> sourceService.delete(sourceModel.getId()));
         view.returnSourceAdminView();
     }
 

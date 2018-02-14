@@ -1,7 +1,7 @@
 package org.pes.onecemulator.view.invoiceadmin.dialog.add.view;
 
 import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.fundamentals.dialog.form.FormDialog;
@@ -33,7 +33,7 @@ public class InvoiceAddDialog extends FormDialog implements View, IInvoiceAddDia
     }
 
     @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
+    public void enter(ViewChangeEvent event) {
         this.form = new InvoiceAddForm(presenter.getSources(), presenter.getPayers());
         setForm(form);
 

@@ -22,7 +22,7 @@ public class SourceAdminView extends BaseViewLayout implements View, ISourceAdmi
 
     public static final String VIEW_NAME = "SourceAdminView";
 
-    public static final String CAPTION = "Управление базами 1С";
+    public static final String CAPTION = "Базы 1С";
 
     public static final String TITLE = "1C-emulator: " + CAPTION;
 
@@ -95,17 +95,17 @@ public class SourceAdminView extends BaseViewLayout implements View, ISourceAdmi
     }
 
     @Override
-    public void launchPayerAddDialog() {
+    public void launchSourceAddDialog() {
         getUI().getNavigator().navigateTo(SourceAddDialog.VIEW_NAME);
     }
 
     @Override
-    public void launchPayerEditDialog() {
+    public void launchSourceEditDialog() {
         getUI().getNavigator().navigateTo(SourceEditDialog.VIEW_NAME);
     }
 
     @Override
-    public void launchDeleteConfirmDialog() {
+    public void launchDeleteSourceConfirmDialog() {
         getUI().getNavigator().navigateTo(DeleteSourceConfirmDialog.VIEW_NAME);
     }
 }

@@ -16,9 +16,20 @@ public class SideMenu extends CssLayout {
 
     private final ToInvoiceAdminViewButton toInvoiceAdminViewButton = new ToInvoiceAdminViewButton();
 
+    private final ToExpenseRequestAdminViewButton toExpenseRequestAdminViewButton = new ToExpenseRequestAdminViewButton();
+
+    private final ToAccountingEntryAdminViewButton toAccountingEntryAdminViewButton = new ToAccountingEntryAdminViewButton();
+
     public SideMenu() {
         setPrimaryStyleName(ValoTheme.MENU_ROOT);
-        addComponents(title, toTopViewButton, toSourceAdminViewButton, toPayerAdminViewButton, toInvoiceAdminViewButton);
+        addComponents(
+                title,
+                toTopViewButton,
+                toSourceAdminViewButton,
+                toPayerAdminViewButton,
+                toInvoiceAdminViewButton,
+                toExpenseRequestAdminViewButton,
+                toAccountingEntryAdminViewButton);
     }
 
     public void selectedItemRelatedTo(View activeView) {
@@ -31,6 +42,8 @@ public class SideMenu extends CssLayout {
         toSourceAdminViewButton.unselected();
         toPayerAdminViewButton.unselected();
         toInvoiceAdminViewButton.unselected();
+        toExpenseRequestAdminViewButton.unselected();
+        toAccountingEntryAdminViewButton.unselected();
     }
 
     private void selectedBy(String activeViewCaption) {
@@ -38,5 +51,7 @@ public class SideMenu extends CssLayout {
         if (activeViewCaption.equals(toSourceAdminViewButton.getCaption())) toSourceAdminViewButton.selected();
         if (activeViewCaption.equals(toPayerAdminViewButton.getCaption())) toPayerAdminViewButton.selected();
         if (activeViewCaption.equals(toInvoiceAdminViewButton.getCaption())) toInvoiceAdminViewButton.selected();
+        if (activeViewCaption.equals(toExpenseRequestAdminViewButton.getCaption())) toExpenseRequestAdminViewButton.selected();
+        if (activeViewCaption.equals(toAccountingEntryAdminViewButton.getCaption())) toAccountingEntryAdminViewButton.selected();
     }
 }

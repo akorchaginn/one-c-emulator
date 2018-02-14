@@ -39,7 +39,7 @@ public class DeleteInvoiceConfirmDialog extends ConfirmDialog implements View, I
     }
 
     @Override
-    public void returnSourceAdminView() {
+    public void returnInvoiceAdminView() {
         close();
         UI.getCurrent().getNavigator().navigateTo(InvoiceAdminView.VIEW_NAME);
     }

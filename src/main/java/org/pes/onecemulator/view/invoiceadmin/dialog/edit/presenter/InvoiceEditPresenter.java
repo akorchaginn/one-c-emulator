@@ -64,11 +64,11 @@ public class InvoiceEditPresenter implements IInvoiceEditPresenter {
         if (model != null && model.getError() != null && !model.getError().isEmpty()) {
             Notification.show(model.getError(), Notification.Type.ERROR_MESSAGE);
         }
-        view.returnSourceAdminView();
+        view.returnInvoiceAdminView();
     }
 
     @Override
     public void onClickCancelButton() {
-        view.returnSourceAdminView();
+        view.returnInvoiceAdminView();
     }
 }

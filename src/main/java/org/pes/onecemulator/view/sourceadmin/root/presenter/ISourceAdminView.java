@@ -16,11 +16,11 @@ public interface ISourceAdminView {
 
     void toStateOfCanAddAndDelete();
 
-    void launchPayerAddDialog();
+    void launchSourceAddDialog();
 
-    void launchPayerEditDialog();
+    void launchSourceEditDialog();
 
-    void launchDeleteConfirmDialog();
+    void launchDeleteSourceConfirmDialog();
 
     List<SourceModel> allGridSelections();
 

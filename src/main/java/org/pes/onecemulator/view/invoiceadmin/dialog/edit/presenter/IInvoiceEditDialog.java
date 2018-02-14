@@ -12,5 +12,5 @@ public interface IInvoiceEditDialog {
 
     void hideErrorMessages();
 
-    void returnSourceAdminView();
+    void returnInvoiceAdminView();
 }

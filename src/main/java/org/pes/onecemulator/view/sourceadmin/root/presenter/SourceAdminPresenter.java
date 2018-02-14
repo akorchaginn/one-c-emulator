@@ -38,17 +38,17 @@ public class SourceAdminPresenter implements ISourceAdminPresenter {
 
     @Override
     public void onClickAddButton() {
-        view.launchPayerAddDialog();
+        view.launchSourceAddDialog();
     }
 
     @Override
     public void onClickEditButton() {
-        view.launchPayerEditDialog();
+        view.launchSourceEditDialog();
     }
 
     @Override
     public void onClickDeleteButton() {
-        view.launchDeleteConfirmDialog();
+        view.launchDeleteSourceConfirmDialog();
     }
 
     @Override

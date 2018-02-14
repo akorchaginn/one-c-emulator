@@ -1,7 +1,7 @@
 package org.pes.onecemulator.view.invoiceadmin.dialog.edit.view;
 
 import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -35,10 +35,10 @@ public class InvoiceEditDialog extends FormDialog implements View, IInvoiceEditD
     }
 
     @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
+    public void enter(ViewChangeEvent event) {
         // initialize from data of transition source view
-        IInvoiceAdminView sourceView = (IInvoiceAdminView) event.getOldView();
-        this.form = new InvoiceEditForm(sourceView.gridSelection(), presenter.getSources(), presenter.getPayers());
+        IInvoiceAdminView invoiceView = (IInvoiceAdminView) event.getOldView();
+        this.form = new InvoiceEditForm(invoiceView.gridSelection(), presenter.getSources(), presenter.getPayers());
         setForm(form);
 
         addClickEvenListenerToSaveButton(e -> presenter.onClickSaveButton(form.valueAsObject()));
@@ -73,7 +73,7 @@ public class InvoiceEditDialog extends FormDialog implements View, IInvoiceEditD
     }
 
     @Override
-    public void returnSourceAdminView() {
+    public void returnInvoiceAdminView() {
         // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(InvoiceAdminView.VIEW_NAME);

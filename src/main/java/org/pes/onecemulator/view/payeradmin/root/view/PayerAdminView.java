@@ -22,7 +22,7 @@ public class PayerAdminView extends BaseViewLayout implements View, IPayerAdminV
 
     public static final String VIEW_NAME = "PayerAdminView";
 
-    public static final String CAPTION = "Управление плательщиками";
+    public static final String CAPTION = "Плательщики";
 
     public static final String TITLE = "1C-emulator: " + CAPTION;
 

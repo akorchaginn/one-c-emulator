@@ -22,7 +22,7 @@ public class InvoiceAdminView extends BaseViewLayout implements View, IInvoiceAd
 
     public static final String VIEW_NAME = "InvoiceAdminView";
 
-    public static final String CAPTION = "Управление счетами";
+    public static final String CAPTION = "Счета";
 
     public static final String TITLE = "1C-emulator: " + CAPTION;
 

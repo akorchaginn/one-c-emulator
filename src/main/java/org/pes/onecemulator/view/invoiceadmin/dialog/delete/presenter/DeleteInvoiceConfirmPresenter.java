@@ -29,11 +29,11 @@ public class DeleteInvoiceConfirmPresenter implements IDeleteInvoiceConfirmPrese
     @Override
     public void onClickOkButton(List<InvoiceModel> invoiceModelList) {
         invoiceModelList.forEach(sourceModel -> invoiceService.delete(sourceModel.getId()));
-        view.returnSourceAdminView();
+        view.returnInvoiceAdminView();
     }
 
     @Override
     public void onClickCancelButton() {
-        view.returnSourceAdminView();
+        view.returnInvoiceAdminView();
     }
 }

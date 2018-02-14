@@ -1,7 +1,7 @@
 package org.pes.onecemulator.view.sourceadmin.dialog.edit.view;
 
 import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -35,7 +35,7 @@ public class SourceEditDialog extends FormDialog implements View, ISourceEditDia
     }
 
     @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
+    public void enter(ViewChangeEvent event) {
         // initialize from data of transition source view
         ISourceAdminView sourceView = (ISourceAdminView) event.getOldView();
         this.form = new SourceEditForm(sourceView.gridSelection());
