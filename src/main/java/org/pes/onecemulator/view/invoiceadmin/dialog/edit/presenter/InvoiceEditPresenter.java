@@ -7,7 +7,6 @@ import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.model.SourceModel;
 import org.pes.onecemulator.service.InvoiceService;
-import org.pes.onecemulator.service.PayerService;
 import org.pes.onecemulator.service.SourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,13 +23,10 @@ public class InvoiceEditPresenter implements IInvoiceEditPresenter {
 
     private final SourceService sourceService;
 
-    private final PayerService payerService;
-
     @Autowired
-    public InvoiceEditPresenter(InvoiceService invoiceService, SourceService sourceService, PayerService payerService) {
+    public InvoiceEditPresenter(InvoiceService invoiceService, SourceService sourceService) {
         this.invoiceService = invoiceService;
         this.sourceService = sourceService;
-        this.payerService = payerService;
     }
 
     @Override
@@ -39,13 +35,13 @@ public class InvoiceEditPresenter implements IInvoiceEditPresenter {
     }
 
     @Override
-    public List<String> getSources() {
+    public List<String> getSourceList() {
         return sourceService.list().stream().map(SourceModel::getName).collect(Collectors.toList());
     }
 
     @Override
-    public List<String> getPayers() {
-        return payerService.list().stream().map(PayerModel::getCode).collect(Collectors.toList());
+    public List<String> getPayerListBySource(String source) {
+        return sourceService.getPayerList(source).stream().map(PayerModel::getCode).collect(Collectors.toList());
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class InvoiceAddForm extends FormLayout {
 
-    private final InvoiceSourceInputField invoiceSource;
+    final InvoiceSourceInputField invoiceSource;
 
     private final InvoiceDateInputField invoiceDate;
 
@@ -16,7 +16,7 @@ public class InvoiceAddForm extends FormLayout {
 
     private final InvoiceNumberOqInputField invoiceNumberOq;
 
-    private final InvoicePayerInputField invoicePayer;
+    final InvoicePayerInputField invoicePayer;
 
     private final InvoicePaymentDateInputField invoicePaymentDate;
 
@@ -30,17 +30,18 @@ public class InvoiceAddForm extends FormLayout {
 
     //Version originalVersion;
 
-    InvoiceAddForm(List<String> sources, List<String> payers) {
+    InvoiceAddForm(List<String> sources) {
         this.invoiceSource = new InvoiceSourceInputField(sources);
         this.invoiceDate = new InvoiceDateInputField();
         this.invoiceNumber = new InvoiceNumberInputField();
         this.invoiceNumberOq = new InvoiceNumberOqInputField();
-        this.invoicePayer = new InvoicePayerInputField(payers);
+        this.invoicePayer = new InvoicePayerInputField();
         this.invoicePaymentDate = new InvoicePaymentDateInputField();
         this.invoicePaymentSum = new InvoicePaymentSumInputField();
         this.invoiceStatus = new InvoiceStatusInputField();
         this.invoiceSum = new InvoiceSumInputField();
         this.invoiceExternalId = new InvoiceExternalIdInputField();
+
         addComponents(
                 invoiceSource,
                 invoiceDate,

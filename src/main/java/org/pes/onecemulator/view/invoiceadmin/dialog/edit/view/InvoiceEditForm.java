@@ -10,7 +10,7 @@ public class InvoiceEditForm extends FormLayout {
 
     private final InvoiceIdReadOnlyField invoiceId;
 
-    private final InvoiceSourceEditField invoiceSource;
+    final InvoiceSourceEditField invoiceSource;
 
     private final InvoiceDateEditField invoiceDate;
 
@@ -18,7 +18,7 @@ public class InvoiceEditForm extends FormLayout {
 
     private final InvoiceNumberOqEditField invoiceNumberOq;
 
-    private final InvoicePayerEditField invoicePayer;
+    final InvoicePayerEditField invoicePayer;
 
     private final InvoicePaymentDateEditField invoicePaymentDate;
 
@@ -32,13 +32,13 @@ public class InvoiceEditForm extends FormLayout {
 
     //Version originalVersion;
 
-    InvoiceEditForm(InvoiceModel target, List<String> sources, List<String> payers) {
+    InvoiceEditForm(InvoiceModel target, List<String> sources) {
         this.invoiceId = new InvoiceIdReadOnlyField(target.getId());
         this.invoiceSource = new InvoiceSourceEditField(target.getSource(), sources);
         this.invoiceDate = new InvoiceDateEditField(target.getDate());
         this.invoiceNumber = new InvoiceNumberEditField(target.getNumber());
         this.invoiceNumberOq = new InvoiceNumberOqEditField(target.getNumberOq());
-        this.invoicePayer = new InvoicePayerEditField(target.getPayerCode(), payers);
+        this.invoicePayer = new InvoicePayerEditField(target.getPayerCode());
         this.invoicePaymentDate = new InvoicePaymentDateEditField(target.getPaymentDate());
         this.invoicePaymentSum = new InvoicePaymentSumEditField(target.getPaymentSum());
         this.invoiceStatus = new InvoiceStatusEditField(target.getStatus());

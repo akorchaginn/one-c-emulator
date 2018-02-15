@@ -2,7 +2,9 @@ package org.pes.onecemulator.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,23 +14,33 @@ public class ExpenseRequestModel extends ApiError {
     private UUID id;
 
     @JsonProperty("source")
+    @NotNull
+    @NotEmpty
     private String source;
 
     @JsonProperty("currency")
+    @NotNull
+    @NotEmpty
     private String currency;
 
     @JsonProperty("isConfirm")
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
+    @NotNull
     private Boolean isConfirm;
 
     @JsonProperty("isPaid")
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
+    @NotNull
     private Boolean isPaid;
 
     @JsonProperty("number")
+    @NotNull
+    @NotEmpty
     private String number;
 
     @JsonProperty("sum")
+    @NotNull
+    @NotEmpty
     private String sum;
 
     public ExpenseRequestModel() {

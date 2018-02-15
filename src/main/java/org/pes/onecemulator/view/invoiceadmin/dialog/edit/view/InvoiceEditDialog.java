@@ -38,9 +38,17 @@ public class InvoiceEditDialog extends FormDialog implements View, IInvoiceEditD
     public void enter(ViewChangeEvent event) {
         // initialize from data of transition source view
         IInvoiceAdminView invoiceView = (IInvoiceAdminView) event.getOldView();
-        this.form = new InvoiceEditForm(invoiceView.gridSelection(), presenter.getSources(), presenter.getPayers());
+        this.form = new InvoiceEditForm(invoiceView.gridSelection(), presenter.getSourceList());
         setForm(form);
-
+        form.invoiceSource.addValueChangeListener(e -> {
+            if (e.getValue() != null && !e.getValue().isEmpty()) {
+                form.invoicePayer.setItems(presenter.getPayerListBySource(e.getValue()));
+                form.invoicePayer.setReadOnly(false);
+            } else {
+                form.invoicePayer.clear();
+                form.invoicePayer.setReadOnly(true);
+            }
+        });
         addClickEvenListenerToSaveButton(e -> presenter.onClickSaveButton(form.valueAsObject()));
         addClickEventListenerToCancelButton(e -> presenter.onClickCancelButton());
     }

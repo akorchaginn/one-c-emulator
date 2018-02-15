@@ -12,15 +12,12 @@ public class InvoicePayerEditField extends ComboBox<String> {
 
     private final String origin;
 
-    private final List<String> payers;
-
-    InvoicePayerEditField(String payer, List<String> payers) {
+    InvoicePayerEditField(String payer) {
         this.origin = payer;
-        this.payers = payers;
-        setItems(payers);
         setValue(origin);
         setCaption("Плательщик");
         setSizeFull();
+        setReadOnly(true);
         binder.bind(this, "payerCode");
     }
 

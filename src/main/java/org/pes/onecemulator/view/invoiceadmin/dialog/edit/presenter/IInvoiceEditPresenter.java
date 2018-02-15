@@ -8,9 +8,9 @@ public interface IInvoiceEditPresenter {
 
     void attachView(IInvoiceEditDialog view);
 
-    List<String> getSources();
+    List<String> getSourceList();
 
-    List<String> getPayers();
+    List<String> getPayerListBySource(String source);
 
     void onClickSaveButton(InvoiceModel invoiceModel);
 

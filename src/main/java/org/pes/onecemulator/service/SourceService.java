@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service;
 
+import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.model.SourceModel;
 
 import java.util.List;
@@ -9,7 +10,11 @@ public interface SourceService {
 
     SourceModel getById(UUID id);
 
+    SourceModel getByName(String name);
+
     List<SourceModel> list();
+
+    List<PayerModel> getPayerList(String name);
 
     SourceModel create(SourceModel model);
 
