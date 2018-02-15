@@ -92,11 +92,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Invoice invoice = new Invoice();
         invoice.setSource(source);
-        invoice.setDate(GregorianCalendar.from(model.getDate().atStartOfDay(ZoneId.systemDefault())));
+        invoice.setDate(toCalendar(model.getDate()));
         invoice.setNumber(model.getNumber());
         invoice.setNumberOq(model.getNumberOq());
         invoice.setPayer(payer);
-        invoice.setPaymentDate(GregorianCalendar.from(model.getPaymentDate().atStartOfDay(ZoneId.systemDefault())));
+        invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
         invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
         invoice.setStatus(model.getStatus());
         invoice.setSum(new BigDecimal(model.getSum()));

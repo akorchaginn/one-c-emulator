@@ -10,6 +10,8 @@ public class InvoicePayerInputField extends ComboBox<String> {
 
     InvoicePayerInputField() {
         setCaption("Плательщик");
+        setEmptySelectionAllowed(false);
+        setPlaceholder("Начните вводить значение...");
         setSizeFull();
         setReadOnly(true);
         binder.bind(this, "payerCode");

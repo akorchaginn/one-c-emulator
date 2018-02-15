@@ -26,7 +26,6 @@ public class AccountingEntryModel extends ApiError {
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @NotNull
-    @NotEmpty
     private LocalDate date;
 
     @JsonProperty("docName")

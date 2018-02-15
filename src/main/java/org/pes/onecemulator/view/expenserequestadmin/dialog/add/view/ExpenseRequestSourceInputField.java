@@ -12,7 +12,9 @@ public class ExpenseRequestSourceInputField extends ComboBox<String> {
 
     ExpenseRequestSourceInputField(List<String> sources) {
         setCaption("БД 1С");
+        setEmptySelectionAllowed(false);
         setItems(sources);
+        setPlaceholder("Начните вводить значение...");
         setSizeFull();
         binder.bind(this, "source");
     }

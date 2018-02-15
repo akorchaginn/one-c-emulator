@@ -12,7 +12,9 @@ public class InvoiceSourceInputField extends ComboBox<String> {
 
     InvoiceSourceInputField(List<String> sources) {
         setCaption("БД 1С");
+        setEmptySelectionAllowed(false);
         setItems(sources);
+        setPlaceholder("Начните вводить значение...");
         setSizeFull();
         binder.bind(this, "source");
     }

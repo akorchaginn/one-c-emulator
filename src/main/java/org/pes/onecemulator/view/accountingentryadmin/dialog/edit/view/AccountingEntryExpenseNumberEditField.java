@@ -15,8 +15,10 @@ public class AccountingEntryExpenseNumberEditField extends ComboBox<String> {
     AccountingEntryExpenseNumberEditField(String origin, List<String> expenseRequests) {
         this.origin = origin;
         setCaption("Номер заявки на расход");
+        setEmptySelectionAllowed(false);
         setItems(expenseRequests);
         setValue(origin);
+        setPlaceholder("Начните вводить значение...");
         setSizeFull();
         binder.bind(this, "expenseNumber");
     }

@@ -14,8 +14,10 @@ public class ExpenseRequestSourceEditField extends ComboBox<String> {
 
     ExpenseRequestSourceEditField(String origin, List<String> sources) {
         this.origin = origin;
+        setEmptySelectionAllowed(false);
         setItems(sources);
         setValue(origin);
+        setPlaceholder("Начните вводить значение...");
         setCaption("БД 1С");
         setSizeFull();
         binder.bind(this, "source");

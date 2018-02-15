@@ -14,8 +14,10 @@ public class InvoicePayerEditField extends ComboBox<String> {
 
     InvoicePayerEditField(String payer) {
         this.origin = payer;
+        setEmptySelectionAllowed(false);
         setValue(origin);
         setCaption("Плательщик");
+        setPlaceholder("Начните вводить значение...");
         setSizeFull();
         setReadOnly(true);
         binder.bind(this, "payerCode");

@@ -25,6 +25,7 @@ public class InvoiceModel extends ApiError {
     @JsonProperty("date")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull
     private LocalDate date;
 
     @JsonProperty("nom")
@@ -43,6 +44,7 @@ public class InvoiceModel extends ApiError {
     @JsonProperty("dataOplat")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull
     private LocalDate paymentDate;
 
     @JsonProperty("sumOplat")
