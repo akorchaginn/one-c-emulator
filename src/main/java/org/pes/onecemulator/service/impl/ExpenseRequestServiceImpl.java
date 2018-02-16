@@ -22,9 +22,9 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseRequestServiceImpl.class);
 
-    private ExpenseRequestRepository expenseRequestRepository;
+    private final ExpenseRequestRepository expenseRequestRepository;
 
-    private SourceRepository sourceRepository;
+    private final SourceRepository sourceRepository;
 
     @Autowired
     ExpenseRequestServiceImpl(ExpenseRequestRepository expenseRequestRepository, SourceRepository sourceRepository) {

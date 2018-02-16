@@ -7,11 +7,10 @@ import com.vaadin.ui.UI;
 import org.pes.onecemulator.model.SourceModel;
 import org.pes.onecemulator.view.fundamentals.fragment.header.ViewHeader;
 import org.pes.onecemulator.view.fundamentals.layout.BaseViewLayout;
-import org.pes.onecemulator.view.sourceadmin.dialog.delete.view.DeleteSourceConfirmDialog;
-import org.pes.onecemulator.view.sourceadmin.dialog.add.view.SourceAddDialog;
-import org.pes.onecemulator.view.sourceadmin.dialog.edit.view.SourceEditDialog;
+import org.pes.onecemulator.view.sourceadmin.dialog.delete.DeleteSourceConfirmDialog;
+import org.pes.onecemulator.view.sourceadmin.dialog.add.SourceAddDialog;
+import org.pes.onecemulator.view.sourceadmin.dialog.edit.SourceEditDialog;
 import org.pes.onecemulator.view.sourceadmin.root.presenter.ISourceAdminPresenter;
-import org.pes.onecemulator.view.sourceadmin.root.presenter.ISourceAdminView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;

@@ -7,11 +7,10 @@ import com.vaadin.ui.UI;
 import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.view.fundamentals.fragment.header.ViewHeader;
 import org.pes.onecemulator.view.fundamentals.layout.BaseViewLayout;
-import org.pes.onecemulator.view.invoiceadmin.dialog.add.view.InvoiceAddDialog;
-import org.pes.onecemulator.view.invoiceadmin.dialog.delete.view.DeleteInvoiceConfirmDialog;
-import org.pes.onecemulator.view.invoiceadmin.dialog.edit.view.InvoiceEditDialog;
+import org.pes.onecemulator.view.invoiceadmin.dialog.add.InvoiceAddDialog;
+import org.pes.onecemulator.view.invoiceadmin.dialog.delete.DeleteInvoiceConfirmDialog;
+import org.pes.onecemulator.view.invoiceadmin.dialog.edit.InvoiceEditDialog;
 import org.pes.onecemulator.view.invoiceadmin.root.presenter.IInvoiceAdminPresenter;
-import org.pes.onecemulator.view.invoiceadmin.root.presenter.IInvoiceAdminView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -46,7 +45,7 @@ public class InvoiceAdminView extends BaseViewLayout implements View, IInvoiceAd
     void init() {
         // 2nd construction
         presenter.attachView(this);
-        presenter.loadSources();
+        presenter.loadSourceList();
     }
 
     @Override

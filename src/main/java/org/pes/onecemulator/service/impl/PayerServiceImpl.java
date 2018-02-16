@@ -23,9 +23,9 @@ public class PayerServiceImpl implements PayerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PayerServiceImpl.class);
 
-    private PayerRepository payerRepository;
+    private final PayerRepository payerRepository;
 
-    private SourceRepository sourceRepository;
+    private final SourceRepository sourceRepository;
 
     @Autowired
     PayerServiceImpl(PayerRepository payerRepository, SourceRepository sourceRepository) {

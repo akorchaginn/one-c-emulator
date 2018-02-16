@@ -39,9 +39,9 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Value("${crm.interaction.token:#{null}}")
     private String crmToken;
 
-    private InvoiceRepository invoiceRepository;
+    private final InvoiceRepository invoiceRepository;
 
-    private SourceRepository sourceRepository;
+    private final SourceRepository sourceRepository;
 
     @Autowired
     CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository) {

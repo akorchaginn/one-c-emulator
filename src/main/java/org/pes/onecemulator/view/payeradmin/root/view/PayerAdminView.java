@@ -7,11 +7,10 @@ import com.vaadin.ui.UI;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.view.fundamentals.fragment.header.ViewHeader;
 import org.pes.onecemulator.view.fundamentals.layout.BaseViewLayout;
-import org.pes.onecemulator.view.payeradmin.dialog.add.view.PayerAddDialog;
-import org.pes.onecemulator.view.payeradmin.dialog.delete.view.DeletePayerConfirmDialog;
-import org.pes.onecemulator.view.payeradmin.dialog.edit.view.PayerEditDialog;
+import org.pes.onecemulator.view.payeradmin.dialog.add.PayerAddDialog;
+import org.pes.onecemulator.view.payeradmin.dialog.delete.DeletePayerConfirmDialog;
+import org.pes.onecemulator.view.payeradmin.dialog.edit.PayerEditDialog;
 import org.pes.onecemulator.view.payeradmin.root.presenter.IPayerAdminPresenter;
-import org.pes.onecemulator.view.payeradmin.root.presenter.IPayerAdminView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -46,7 +45,7 @@ public class PayerAdminView extends BaseViewLayout implements View, IPayerAdminV
     void init() {
         // 2nd construction
         presenter.attachView(this);
-        presenter.loadPayers();
+        presenter.loadPayerList();
     }
 
     @Override

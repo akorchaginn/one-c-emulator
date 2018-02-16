@@ -23,7 +23,7 @@ public class SourceServiceImpl implements SourceService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SourceServiceImpl.class);
 
-    private SourceRepository sourceRepository;
+    private final SourceRepository sourceRepository;
 
     @Autowired
     SourceServiceImpl(SourceRepository sourceRepository) {
