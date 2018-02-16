@@ -11,7 +11,4 @@ public interface ExpenseRequestRepository extends JpaRepository<ExpenseRequest, 
 
     @Query("select e from ExpenseRequest e where e.number = :number")
     ExpenseRequest findByNumber(@Param(value = "number") String number);
-
-    @Query("select count(e) > 0 from ExpenseRequest e where e.number = :number")
-    Boolean exists(@Param(value = "number") String number);
 }

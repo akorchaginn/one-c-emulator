@@ -46,7 +46,7 @@ public class SourceAdminView extends BaseViewLayout implements View, ISourceAdmi
     void init() {
         // 2nd construction
         presenter.attachView(this);
-        presenter.loadSources();
+        presenter.loadSourceList();
     }
 
     @Override

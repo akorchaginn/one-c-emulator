@@ -27,7 +27,7 @@ public class SourceAdminPresenter implements ISourceAdminPresenter {
     }
 
     @Override
-    public void loadSources() {
+    public void loadSourceList() {
         view.bindingGridData(sourceService.list());
     }
 

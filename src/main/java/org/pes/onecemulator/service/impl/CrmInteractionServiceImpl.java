@@ -8,7 +8,6 @@ import org.pes.onecemulator.httpclient.CrmClient;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
-import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
 import org.pes.onecemulator.service.utils.ValidationUtils;
@@ -16,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -32,18 +30,6 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CrmInteractionServiceImpl.class);
 
-    @Autowired
-    private Environment environment;
-
-    @Autowired
-    private PayerRepository payerRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private SourceRepository sourceRepository;
-
     @Value("${crm.interaction.host:#{null}}")
     private String crmHost;
 
@@ -52,6 +38,16 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     @Value("${crm.interaction.token:#{null}}")
     private String crmToken;
+
+    private InvoiceRepository invoiceRepository;
+
+    private SourceRepository sourceRepository;
+
+    @Autowired
+    CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository) {
+        this.invoiceRepository = invoiceRepository;
+        this.sourceRepository = sourceRepository;
+    }
 
     public DocumentCrm getDocumentsCrmById(UUID id, String sourceName) {
         Invoice invoice = invoiceRepository.findByIdAndSource(id, sourceName);

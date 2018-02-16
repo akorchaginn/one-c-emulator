@@ -4,7 +4,7 @@ public interface ISourceAdminPresenter {
 
     void attachView(ISourceAdminView view);
 
-    void loadSources();
+    void loadSourceList();
 
     void onClickSearchButton();
 

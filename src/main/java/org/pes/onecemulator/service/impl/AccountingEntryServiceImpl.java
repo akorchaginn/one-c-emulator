@@ -27,14 +27,18 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountingEntryServiceImpl.class);
 
-    @Autowired
     private ExpenseRequestRepository expenseRequestRepository;
 
-    @Autowired
     private AccountingEntryRepository accountingEntryRepository;
 
-    @Autowired
     private CrmInteractionService crmInteractionService;
+
+    @Autowired
+    AccountingEntryServiceImpl(AccountingEntryRepository accountingEntryRepository, ExpenseRequestRepository expenseRequestRepository, CrmInteractionService crmInteractionService) {
+        this.accountingEntryRepository = accountingEntryRepository;
+        this.expenseRequestRepository = expenseRequestRepository;
+        this.crmInteractionService = crmInteractionService;
+    }
 
     @Transactional
     @Override

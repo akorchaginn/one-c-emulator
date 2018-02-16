@@ -28,14 +28,18 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceServiceImpl.class);
 
-    @Autowired
     private InvoiceRepository invoiceRepository;
 
-    @Autowired
     private PayerRepository payerRepository;
 
-    @Autowired
     private SourceRepository sourceRepository;
+
+    @Autowired
+    InvoiceServiceImpl(InvoiceRepository invoiceRepository, PayerRepository payerRepository, SourceRepository sourceRepository) {
+        this.invoiceRepository = invoiceRepository;
+        this.payerRepository = payerRepository;
+        this.sourceRepository = sourceRepository;
+    }
 
     @Transactional
     @Override

@@ -3,7 +3,6 @@ package org.pes.onecemulator.service.impl;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.model.ExpenseRequestModel;
-import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.ExpenseRequestService;
@@ -23,14 +22,15 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseRequestServiceImpl.class);
 
-    @Autowired
     private ExpenseRequestRepository expenseRequestRepository;
 
-    @Autowired
-    private AccountingEntryRepository accountingEntryRepository;
+    private SourceRepository sourceRepository;
 
     @Autowired
-    private SourceRepository sourceRepository;
+    ExpenseRequestServiceImpl(ExpenseRequestRepository expenseRequestRepository, SourceRepository sourceRepository) {
+        this.expenseRequestRepository = expenseRequestRepository;
+        this.sourceRepository = sourceRepository;
+    }
 
     @Transactional
     @Override

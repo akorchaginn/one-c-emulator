@@ -3,7 +3,6 @@ package org.pes.onecemulator.service.impl;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.model.PayerModel;
-import org.pes.onecemulator.model.SourceModel;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.PayerService;
@@ -24,11 +23,15 @@ public class PayerServiceImpl implements PayerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PayerServiceImpl.class);
 
-    @Autowired
     private PayerRepository payerRepository;
 
-    @Autowired
     private SourceRepository sourceRepository;
+
+    @Autowired
+    PayerServiceImpl(PayerRepository payerRepository, SourceRepository sourceRepository) {
+        this.payerRepository = payerRepository;
+        this.sourceRepository = sourceRepository;
+    }
 
     @Transactional
     @Override
@@ -167,14 +170,6 @@ public class PayerServiceImpl implements PayerService {
         model.setAddress(entity.getAddress());
         Set<String> sources = entity.getSources().stream().map(Source::getName).collect(Collectors.toSet());
         model.setSources(sources);
-
-        return model;
-    }
-
-    private SourceModel getModel(Source entity) {
-        SourceModel model = new SourceModel();
-        model.setId(entity.getId());
-        model.setName(entity.getName());
 
         return model;
     }
