@@ -2,7 +2,6 @@ package org.pes.onecemulator.view.accountingentryadmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.Notification;
 import org.pes.onecemulator.model.AccountingEntryModel;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 import org.pes.onecemulator.service.AccountingEntryService;
@@ -11,6 +10,7 @@ import org.pes.onecemulator.view.accountingentryadmin.dialog.add.IAccountingEntr
 import org.pes.onecemulator.view.accountingentryadmin.dialog.delete.IDeleteAccountingEntryConfirmDialog;
 import org.pes.onecemulator.view.accountingentryadmin.dialog.edit.IAccountingEntryEditDialog;
 import org.pes.onecemulator.view.accountingentryadmin.root.view.IAccountingEntryAdminView;
+import org.pes.onecemulator.view.fundamentals.notification.ErrorNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public class AccountingEntryAdminPresenter implements IAccountingEntryAdminPrese
 
             AccountingEntryModel model = accountingEntryService.update(accountingEntryModel);
             if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                Notification.show(model.getError(), Notification.Type.ERROR_MESSAGE);
+                ErrorNotification.show(model.getError());
             }
             editView.returnAccountingEntryAdminView();
         } else {
@@ -80,7 +80,7 @@ public class AccountingEntryAdminPresenter implements IAccountingEntryAdminPrese
 
             AccountingEntryModel model = accountingEntryService.create(accountingEntryModel);
             if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                Notification.show(model.getError(), Notification.Type.ERROR_MESSAGE);
+                ErrorNotification.show(model.getError());
             }
             addView.returnAccountingEntryAdminView();
         }

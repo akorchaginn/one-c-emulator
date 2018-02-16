@@ -88,11 +88,16 @@ public class SourceServiceImpl implements SourceService {
             return new SourceModel("Model name is empty.");
         }
 
-        Source source = new Source();
-        source.setName(model.getName());
-        source = sourceRepository.save(source);
+        try {
+            Source source = new Source();
+            source.setName(model.getName());
+            source = sourceRepository.save(source);
 
-        return getModel(source);
+            return getModel(source);
+
+        } catch (Exception e) {
+            return new SourceModel(e.getMessage());
+        }
     }
 
     @Transactional
@@ -121,10 +126,15 @@ public class SourceServiceImpl implements SourceService {
             return new SourceModel("Source with id: " + model.getId() + " not found at database.");
         }
 
-        source.setName(model.getName());
-        source = sourceRepository.save(source);
+        try {
+            source.setName(model.getName());
+            source = sourceRepository.save(source);
 
-        return getModel(source);
+            return getModel(source);
+
+        } catch (Exception e) {
+            return new SourceModel(e.getMessage());
+        }
     }
 
     @Transactional

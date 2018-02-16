@@ -2,7 +2,6 @@ package org.pes.onecemulator.view.expenserequestadmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.Notification;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 import org.pes.onecemulator.model.SourceModel;
 import org.pes.onecemulator.service.ExpenseRequestService;
@@ -11,6 +10,7 @@ import org.pes.onecemulator.view.expenserequestadmin.dialog.add.IExpenseRequestA
 import org.pes.onecemulator.view.expenserequestadmin.dialog.delete.IDeleteExpenseRequestConfirmDialog;
 import org.pes.onecemulator.view.expenserequestadmin.dialog.edit.IExpenseRequestEditDialog;
 import org.pes.onecemulator.view.expenserequestadmin.root.view.IExpenseRequestAdminView;
+import org.pes.onecemulator.view.fundamentals.notification.ErrorNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public class ExpenseRequestAdminPresenter implements IExpenseRequestAdminPresent
 
             ExpenseRequestModel model = expenseRequestService.update(expenseRequestModel);
             if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                Notification.show(model.getError(), Notification.Type.ERROR_MESSAGE);
+                ErrorNotification.show(model.getError());
             }
             editView.returnExpenseRequestAdminView();
         } else {
@@ -80,7 +80,7 @@ public class ExpenseRequestAdminPresenter implements IExpenseRequestAdminPresent
 
             ExpenseRequestModel model = expenseRequestService.create(expenseRequestModel);
             if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                Notification.show(model.getError(), Notification.Type.ERROR_MESSAGE);
+                ErrorNotification.show(model.getError());
             }
             addView.returnExpenseRequestAdminView();
         }

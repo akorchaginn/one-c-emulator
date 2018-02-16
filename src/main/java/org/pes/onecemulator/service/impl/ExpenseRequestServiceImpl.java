@@ -75,16 +75,20 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
             return new ExpenseRequestModel("Source with name: " + model.getSource() + " not found at database.");
         }
 
-        ExpenseRequest expenseRequest = new ExpenseRequest();
-        expenseRequest.setSource(source);
-        expenseRequest.setCurrency(model.getCurrency());
-        expenseRequest.setConfirm(model.getConfirm());
-        expenseRequest.setPaid(model.getPaid());
-        expenseRequest.setNumber(model.getNumber());
-        expenseRequest.setSum(new BigDecimal(model.getSum()));
-        expenseRequest = expenseRequestRepository.save(expenseRequest);
+        try {
+            ExpenseRequest expenseRequest = new ExpenseRequest();
+            expenseRequest.setSource(source);
+            expenseRequest.setCurrency(model.getCurrency());
+            expenseRequest.setConfirm(model.getConfirm());
+            expenseRequest.setPaid(model.getPaid());
+            expenseRequest.setNumber(model.getNumber());
+            expenseRequest.setSum(new BigDecimal(model.getSum()));
+            expenseRequest = expenseRequestRepository.save(expenseRequest);
 
-        return getModel(expenseRequest);
+            return getModel(expenseRequest);
+        } catch (Exception e) {
+            return new ExpenseRequestModel(e.getMessage());
+        }
     }
 
     @Transactional
@@ -119,15 +123,19 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
             return new ExpenseRequestModel("Source with name: " + model.getSource() + " not found at database.");
         }
 
-        expenseRequest.setSource(source);
-        expenseRequest.setCurrency(model.getCurrency());
-        expenseRequest.setConfirm(model.getConfirm());
-        expenseRequest.setPaid(model.getPaid());
-        expenseRequest.setNumber(model.getNumber());
-        expenseRequest.setSum(new BigDecimal(model.getSum()));
-        expenseRequest = expenseRequestRepository.save(expenseRequest);
+        try {
+            expenseRequest.setSource(source);
+            expenseRequest.setCurrency(model.getCurrency());
+            expenseRequest.setConfirm(model.getConfirm());
+            expenseRequest.setPaid(model.getPaid());
+            expenseRequest.setNumber(model.getNumber());
+            expenseRequest.setSum(new BigDecimal(model.getSum()));
+            expenseRequest = expenseRequestRepository.save(expenseRequest);
 
-        return getModel(expenseRequest);
+            return getModel(expenseRequest);
+        } catch (Exception e) {
+            return new ExpenseRequestModel(e.getMessage());
+        }
     }
 
     @Transactional

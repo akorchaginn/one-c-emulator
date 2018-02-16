@@ -3,12 +3,12 @@ package org.pes.onecemulator.view.expenserequestadmin.dialog.edit;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.expenserequestadmin.root.presenter.IExpenseRequestAdminPresenter;
 import org.pes.onecemulator.view.expenserequestadmin.root.view.IExpenseRequestAdminView;
 import org.pes.onecemulator.view.expenserequestadmin.root.view.ExpenseRequestAdminView;
 import org.pes.onecemulator.view.fundamentals.dialog.form.FormDialog;
+import org.pes.onecemulator.view.fundamentals.notification.WarningNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -51,7 +51,7 @@ public class ExpenseRequestEditDialog extends FormDialog implements View, IExpen
 
     @Override
     public void showNoChangeErrorMessage() {
-        Notification.show("Нет изменений.", Notification.Type.ERROR_MESSAGE);
+        WarningNotification.show("Нет изменений.");
     }
 
     @Override

@@ -64,7 +64,6 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Transactional
     @Override
     public AccountingEntryModel create(AccountingEntryModel model) {
-
         if (model == null) {
             return new AccountingEntryModel("Model is null.");
         }
@@ -83,19 +82,21 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
             return new AccountingEntryModel(
                     "Expense request with number: " + model.getExpenseNumber() + " not found at database.");
         }
+        try {
+            AccountingEntry accountingEntry = new AccountingEntry();
+            accountingEntry.setCode(model.getCode());
+            accountingEntry.setDate(toCalendar(model.getDate()));
+            accountingEntry.setDocumentName(model.getDocumentName());
+            accountingEntry.setExpenseRequest(expenseRequest);
+            accountingEntry.setSum(new BigDecimal(model.getSum()));
+            accountingEntry = accountingEntryRepository.save(accountingEntry);
+            // Запрос в CRM
+            crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
-        AccountingEntry accountingEntry = new AccountingEntry();
-        accountingEntry.setCode(model.getCode());
-        accountingEntry.setDate(toCalendar(model.getDate()));
-        accountingEntry.setDocumentName(model.getDocumentName());
-        accountingEntry.setExpenseRequest(expenseRequest);
-        accountingEntry.setSum(new BigDecimal(model.getSum()));
-        accountingEntry = accountingEntryRepository.save(accountingEntry);
-
-        // Запрос в CRM
-        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
-
-        return getModel(accountingEntry);
+            return getModel(accountingEntry);
+        } catch (Exception e) {
+            return new AccountingEntryModel(e.getMessage());
+        }
     }
 
     @Transactional
@@ -125,18 +126,20 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         if (accountingEntry == null) {
             return new AccountingEntryModel("Accounting entry with id: " + model.getId() + "not found at database.");
         }
+        try {
+            accountingEntry.setCode(model.getCode());
+            accountingEntry.setDate(toCalendar(model.getDate()));
+            accountingEntry.setDocumentName(model.getDocumentName());
+            accountingEntry.setExpenseRequest(expenseRequest);
+            accountingEntry.setSum(new BigDecimal(model.getSum()));
+            accountingEntry = accountingEntryRepository.save(accountingEntry);
+            // Запрос в CRM
+            crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
-        accountingEntry.setCode(model.getCode());
-        accountingEntry.setDate(toCalendar(model.getDate()));
-        accountingEntry.setDocumentName(model.getDocumentName());
-        accountingEntry.setExpenseRequest(expenseRequest);
-        accountingEntry.setSum(new BigDecimal(model.getSum()));
-        accountingEntry = accountingEntryRepository.save(accountingEntry);
-
-        // Запрос в CRM
-        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
-
-        return getModel(accountingEntry);
+            return getModel(accountingEntry);
+        } catch (Exception e) {
+            return new AccountingEntryModel(e.getMessage());
+        }
     }
 
     @Transactional

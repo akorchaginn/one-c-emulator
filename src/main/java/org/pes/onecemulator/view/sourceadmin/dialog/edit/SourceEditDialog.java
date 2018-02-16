@@ -3,9 +3,9 @@ package org.pes.onecemulator.view.sourceadmin.dialog.edit;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.fundamentals.dialog.form.FormDialog;
+import org.pes.onecemulator.view.fundamentals.notification.WarningNotification;
 import org.pes.onecemulator.view.sourceadmin.root.presenter.ISourceAdminPresenter;
 import org.pes.onecemulator.view.sourceadmin.root.view.ISourceAdminView;
 import org.pes.onecemulator.view.sourceadmin.root.view.SourceAdminView;
@@ -51,8 +51,8 @@ public class SourceEditDialog extends FormDialog implements View, ISourceEditDia
 
     @Override
     public void showNoChangeErrorMessage() {
-        Notification.show("Нет изменений.", Notification.Type.ERROR_MESSAGE);
-    }
+        WarningNotification.show("Нет изменений.");
+}
 
     @Override
     public boolean hasValidationErrors() {

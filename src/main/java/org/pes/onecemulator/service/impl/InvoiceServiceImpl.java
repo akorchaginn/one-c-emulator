@@ -94,20 +94,24 @@ public class InvoiceServiceImpl implements InvoiceService {
             return new InvoiceModel("Invoice source not equal payer source.");
         }
 
-        Invoice invoice = new Invoice();
-        invoice.setSource(source);
-        invoice.setDate(toCalendar(model.getDate()));
-        invoice.setNumber(model.getNumber());
-        invoice.setNumberOq(model.getNumberOq());
-        invoice.setPayer(payer);
-        invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
-        invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
-        invoice.setStatus(model.getStatus());
-        invoice.setSum(new BigDecimal(model.getSum()));
-        invoice.setExternalId(model.getExternalId());
-        invoice = invoiceRepository.save(invoice);
+        try {
+            Invoice invoice = new Invoice();
+            invoice.setSource(source);
+            invoice.setDate(toCalendar(model.getDate()));
+            invoice.setNumber(model.getNumber());
+            invoice.setNumberOq(model.getNumberOq());
+            invoice.setPayer(payer);
+            invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
+            invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
+            invoice.setStatus(model.getStatus());
+            invoice.setSum(new BigDecimal(model.getSum()));
+            invoice.setExternalId(model.getExternalId());
+            invoice = invoiceRepository.save(invoice);
 
-        return getModel(invoice);
+            return getModel(invoice);
+        } catch (Exception e) {
+            return new InvoiceModel(e.getMessage());
+        }
     }
 
     @Transactional
@@ -152,23 +156,23 @@ public class InvoiceServiceImpl implements InvoiceService {
             return new InvoiceModel("Invoice source not equal payer source.");
         }
 
-        if (invoice.getSource() != source) {
+        try {
             invoice.setSource(source);
-        }
-        invoice.setDate(toCalendar(model.getDate()));
-        invoice.setNumber(model.getNumber());
-        invoice.setNumberOq(model.getNumberOq());
-        if (invoice.getPayer() != payer) {
+            invoice.setDate(toCalendar(model.getDate()));
+            invoice.setNumber(model.getNumber());
+            invoice.setNumberOq(model.getNumberOq());
             invoice.setPayer(payer);
-        }
-        invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
-        invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
-        invoice.setStatus(model.getStatus());
-        invoice.setSum(new BigDecimal(model.getSum()));
-        invoice.setExternalId(model.getExternalId());
-        invoice = invoiceRepository.save(invoice);
+            invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
+            invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
+            invoice.setStatus(model.getStatus());
+            invoice.setSum(new BigDecimal(model.getSum()));
+            invoice.setExternalId(model.getExternalId());
+            invoice = invoiceRepository.save(invoice);
 
-        return getModel(invoice);
+            return getModel(invoice);
+        } catch (Exception e) {
+            return new InvoiceModel(e.getMessage());
+        }
     }
 
     @Transactional

@@ -86,17 +86,21 @@ public class PayerServiceImpl implements PayerService {
             return new PayerModel("New source list is empty.");
         }
 
-        Payer payer = new Payer();
-        payer.setCode(model.getCode());
-        payer.setName(model.getName());
-        payer.setFullName(model.getFullName());
-        payer.setInn(model.getInn());
-        payer.setKpp(model.getKpp());
-        payer.setAddress(model.getAddress());
-        payer.setSources(newSources);
-        payer = payerRepository.save(payer);
+        try {
+            Payer payer = new Payer();
+            payer.setCode(model.getCode());
+            payer.setName(model.getName());
+            payer.setFullName(model.getFullName());
+            payer.setInn(model.getInn());
+            payer.setKpp(model.getKpp());
+            payer.setAddress(model.getAddress());
+            payer.setSources(newSources);
+            payer = payerRepository.save(payer);
 
-        return getModel(payer);
+            return getModel(payer);
+        } catch (Exception e) {
+            return new PayerModel(e.getMessage());
+        }
     }
 
     @Transactional
@@ -141,16 +145,20 @@ public class PayerServiceImpl implements PayerService {
             return new PayerModel("New source list is empty.");
         }
 
-        payer.setCode(model.getCode());
-        payer.setName(model.getName());
-        payer.setFullName(model.getFullName());
-        payer.setInn(model.getInn());
-        payer.setKpp(model.getKpp());
-        payer.setAddress(model.getAddress());
-        payer.setSources(newSources);
-        payer = payerRepository.save(payer);
+        try {
+            payer.setCode(model.getCode());
+            payer.setName(model.getName());
+            payer.setFullName(model.getFullName());
+            payer.setInn(model.getInn());
+            payer.setKpp(model.getKpp());
+            payer.setAddress(model.getAddress());
+            payer.setSources(newSources);
+            payer = payerRepository.save(payer);
 
-        return getModel(payer);
+            return getModel(payer);
+        } catch (Exception e) {
+            return new PayerModel(e.getMessage());
+        }
     }
 
     @Transactional

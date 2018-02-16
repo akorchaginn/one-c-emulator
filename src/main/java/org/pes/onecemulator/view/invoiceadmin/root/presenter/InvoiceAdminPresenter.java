@@ -2,12 +2,12 @@ package org.pes.onecemulator.view.invoiceadmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.Notification;
 import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.model.SourceModel;
 import org.pes.onecemulator.service.InvoiceService;
 import org.pes.onecemulator.service.SourceService;
+import org.pes.onecemulator.view.fundamentals.notification.ErrorNotification;
 import org.pes.onecemulator.view.invoiceadmin.dialog.add.IInvoiceAddDialog;
 import org.pes.onecemulator.view.invoiceadmin.dialog.delete.IDeleteInvoiceConfirmDialog;
 import org.pes.onecemulator.view.invoiceadmin.dialog.edit.IInvoiceEditDialog;
@@ -69,7 +69,7 @@ public class InvoiceAdminPresenter implements IInvoiceAdminPresenter {
 
             InvoiceModel model = invoiceService.update(invoiceModel);
             if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                Notification.show(model.getError(), Notification.Type.ERROR_MESSAGE);
+                ErrorNotification.show(model.getError());
             }
             editView.returnInvoiceAdminView();
         } else {
@@ -81,7 +81,7 @@ public class InvoiceAdminPresenter implements IInvoiceAdminPresenter {
 
             InvoiceModel model = invoiceService.create(invoiceModel);
             if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                Notification.show(model.getError(), Notification.Type.ERROR_MESSAGE);
+                ErrorNotification.show(model.getError());
             }
             addView.returnInvoiceAdminView();
         }

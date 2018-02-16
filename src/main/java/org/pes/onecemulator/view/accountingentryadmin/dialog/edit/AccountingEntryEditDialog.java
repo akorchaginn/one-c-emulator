@@ -3,12 +3,12 @@ package org.pes.onecemulator.view.accountingentryadmin.dialog.edit;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.accountingentryadmin.root.presenter.IAccountingEntryAdminPresenter;
 import org.pes.onecemulator.view.accountingentryadmin.root.view.IAccountingEntryAdminView;
 import org.pes.onecemulator.view.accountingentryadmin.root.view.AccountingEntryAdminView;
 import org.pes.onecemulator.view.fundamentals.dialog.form.FormDialog;
+import org.pes.onecemulator.view.fundamentals.notification.WarningNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -50,7 +50,7 @@ public class AccountingEntryEditDialog extends FormDialog implements View, IAcco
 
     @Override
     public void showNoChangeErrorMessage() {
-        Notification.show("Нет изменений.", Notification.Type.ERROR_MESSAGE);
+        WarningNotification.show("Нет изменений.");
     }
 
     @Override

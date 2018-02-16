@@ -3,9 +3,9 @@ package org.pes.onecemulator.view.invoiceadmin.dialog.edit;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.fundamentals.dialog.form.FormDialog;
+import org.pes.onecemulator.view.fundamentals.notification.WarningNotification;
 import org.pes.onecemulator.view.invoiceadmin.root.presenter.IInvoiceAdminPresenter;
 import org.pes.onecemulator.view.invoiceadmin.root.view.IInvoiceAdminView;
 import org.pes.onecemulator.view.invoiceadmin.root.view.InvoiceAdminView;
@@ -59,7 +59,7 @@ public class InvoiceEditDialog extends FormDialog implements View, IInvoiceEditD
 
     @Override
     public void showNoChangeErrorMessage() {
-        Notification.show("Нет изменений.", Notification.Type.ERROR_MESSAGE);
+        WarningNotification.show("Нет изменений.");
     }
 
     @Override

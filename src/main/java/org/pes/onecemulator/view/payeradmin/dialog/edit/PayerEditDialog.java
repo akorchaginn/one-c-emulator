@@ -3,9 +3,9 @@ package org.pes.onecemulator.view.payeradmin.dialog.edit;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.fundamentals.dialog.form.FormDialog;
+import org.pes.onecemulator.view.fundamentals.notification.WarningNotification;
 import org.pes.onecemulator.view.payeradmin.root.presenter.IPayerAdminPresenter;
 import org.pes.onecemulator.view.payeradmin.root.view.IPayerAdminView;
 import org.pes.onecemulator.view.payeradmin.root.view.PayerAdminView;
@@ -51,7 +51,7 @@ public class PayerEditDialog extends FormDialog implements View, IPayerEditDialo
 
     @Override
     public void showNoChangeErrorMessage() {
-        Notification.show("Нет изменений.", Notification.Type.ERROR_MESSAGE);
+        WarningNotification.show("Нет изменений.");
     }
 
     @Override
