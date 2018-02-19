@@ -2,6 +2,8 @@ package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.repository.SourceRepository;
@@ -34,13 +36,13 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
 
     @Transactional
     @Override
-    public ExpenseRequestModel getById(UUID id) {
+    public ExpenseRequestModel getById(UUID id) throws NotFoundException {
         ExpenseRequest expenseRequest = expenseRequestRepository.findOne(id);
         if (expenseRequest != null) {
             return getModel(expenseRequest);
         }
 
-        return new ExpenseRequestModel("Expense request with id: " + id + " not found at database.");
+        throw new NotFoundException(ExpenseRequest.class, id);
     }
 
     @Transactional
@@ -55,87 +57,76 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
 
     @Transactional
     @Override
-    public ExpenseRequestModel create(ExpenseRequestModel model) {
+    public ExpenseRequestModel create(ExpenseRequestModel model) throws Exception {
 
         if (model == null) {
-            return new ExpenseRequestModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getNumber() == null) {
-            return new ExpenseRequestModel("Number is null.");
+            throw new ValidationException("Number is null.");
         }
 
         if (model.getSource() == null) {
-            return new ExpenseRequestModel("Source is null.");
+            throw new ValidationException("Source is null.");
         }
 
         Source source = sourceRepository.findByName(model.getSource());
-
         if (source == null) {
-            return new ExpenseRequestModel("Source with name: " + model.getSource() + " not found at database.");
+            throw new NotFoundException(Source.class, "name: " + model.getSource());
         }
 
-        try {
-            ExpenseRequest expenseRequest = new ExpenseRequest();
-            expenseRequest.setSource(source);
-            expenseRequest.setCurrency(model.getCurrency());
-            expenseRequest.setConfirm(model.getConfirm());
-            expenseRequest.setPaid(model.getPaid());
-            expenseRequest.setNumber(model.getNumber());
-            expenseRequest.setSum(new BigDecimal(model.getSum()));
-            expenseRequest = expenseRequestRepository.save(expenseRequest);
+        ExpenseRequest expenseRequest = new ExpenseRequest();
+        expenseRequest.setSource(source);
+        expenseRequest.setCurrency(model.getCurrency());
+        expenseRequest.setConfirm(model.getConfirm());
+        expenseRequest.setPaid(model.getPaid());
+        expenseRequest.setNumber(model.getNumber());
+        expenseRequest.setSum(new BigDecimal(model.getSum()));
+        expenseRequest = expenseRequestRepository.save(expenseRequest);
 
-            return getModel(expenseRequest);
-        } catch (Exception e) {
-            return new ExpenseRequestModel(e.getMessage());
-        }
+        return getModel(expenseRequest);
     }
 
     @Transactional
     @Override
-    public ExpenseRequestModel update(ExpenseRequestModel model) {
+    public ExpenseRequestModel update(ExpenseRequestModel model) throws Exception {
 
         if (model == null) {
-            return new ExpenseRequestModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getId() == null) {
-            return new ExpenseRequestModel("Id is null.");
+            throw new ValidationException("Id is null.");
         }
 
         if (model.getNumber() == null) {
-            return new ExpenseRequestModel("Number is null.");
+            throw new ValidationException("Number is null.");
         }
 
         if (model.getSource() == null) {
-            return new ExpenseRequestModel("Source is null.");
+            throw new ValidationException("Source is null.");
         }
 
         ExpenseRequest expenseRequest = expenseRequestRepository.findOne(model.getId());
-
         if (expenseRequest == null) {
-            return new ExpenseRequestModel("Expense request with id: " + model.getId() + " not found at database.");
+            throw new NotFoundException(ExpenseRequest.class, model.getId());
         }
 
         Source source = sourceRepository.findByName(model.getSource());
-
         if (source == null) {
-            return new ExpenseRequestModel("Source with name: " + model.getSource() + " not found at database.");
+            throw new NotFoundException(Source.class, "name: " + model.getSource());
         }
 
-        try {
-            expenseRequest.setSource(source);
-            expenseRequest.setCurrency(model.getCurrency());
-            expenseRequest.setConfirm(model.getConfirm());
-            expenseRequest.setPaid(model.getPaid());
-            expenseRequest.setNumber(model.getNumber());
-            expenseRequest.setSum(new BigDecimal(model.getSum()));
-            expenseRequest = expenseRequestRepository.save(expenseRequest);
+        expenseRequest.setSource(source);
+        expenseRequest.setCurrency(model.getCurrency());
+        expenseRequest.setConfirm(model.getConfirm());
+        expenseRequest.setPaid(model.getPaid());
+        expenseRequest.setNumber(model.getNumber());
+        expenseRequest.setSum(new BigDecimal(model.getSum()));
+        expenseRequest = expenseRequestRepository.save(expenseRequest);
 
-            return getModel(expenseRequest);
-        } catch (Exception e) {
-            return new ExpenseRequestModel(e.getMessage());
-        }
+        return getModel(expenseRequest);
     }
 
     @Transactional

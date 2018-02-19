@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AccountingEntryModel extends ApiError {
+public class AccountingEntryModel {
 
     @JsonProperty("id")
     private UUID id;
@@ -40,14 +40,6 @@ public class AccountingEntryModel extends ApiError {
     @NotNull
     @NotEmpty
     private String sum;
-
-    public AccountingEntryModel() {
-        super();
-    }
-
-    public AccountingEntryModel(String error) {
-        super(error);
-    }
 
     public UUID getId() {
         return id;
@@ -106,7 +98,6 @@ public class AccountingEntryModel extends ApiError {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AccountingEntryModel)) return false;
-        if (!super.equals(o)) return false;
         AccountingEntryModel that = (AccountingEntryModel) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(code, that.code) &&
@@ -118,7 +109,6 @@ public class AccountingEntryModel extends ApiError {
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(super.hashCode(), id, code, date, documentName, expenseNumber, sum);
+        return Objects.hash(id, code, date, documentName, expenseNumber, sum);
     }
 }

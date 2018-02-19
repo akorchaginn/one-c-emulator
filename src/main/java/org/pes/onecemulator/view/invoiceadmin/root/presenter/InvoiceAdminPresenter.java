@@ -2,6 +2,7 @@ package org.pes.onecemulator.view.invoiceadmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
+import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.model.SourceModel;
@@ -14,6 +15,7 @@ import org.pes.onecemulator.view.invoiceadmin.dialog.edit.IInvoiceEditDialog;
 import org.pes.onecemulator.view.invoiceadmin.root.view.IInvoiceAdminView;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,9 +69,10 @@ public class InvoiceAdminPresenter implements IInvoiceAdminPresenter {
             }
             editView.hideErrorMessages();
 
-            InvoiceModel model = invoiceService.update(invoiceModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                invoiceService.update(invoiceModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             editView.returnInvoiceAdminView();
         } else {
@@ -78,10 +81,10 @@ public class InvoiceAdminPresenter implements IInvoiceAdminPresenter {
                 return;
             }
             addView.hideErrorMessages();
-
-            InvoiceModel model = invoiceService.create(invoiceModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                invoiceService.create(invoiceModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             addView.returnInvoiceAdminView();
         }
@@ -105,7 +108,12 @@ public class InvoiceAdminPresenter implements IInvoiceAdminPresenter {
 
     @Override
     public List<String> getPayerListBySource(String source) {
-        return sourceService.getPayerList(source).stream().map(PayerModel::getCode).collect(Collectors.toList());
+        try {
+            return sourceService.getPayerList(source).stream().map(PayerModel::getCode).collect(Collectors.toList());
+        } catch (NotFoundException e) {
+            ErrorNotification.show(e);
+        }
+        return new ArrayList<>();
     }
 
     @Override

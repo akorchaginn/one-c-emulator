@@ -11,7 +11,6 @@ import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
-import org.pes.onecemulator.service.utils.ValidationUtils;
 import org.pes.onecemulator.bus.event.UINotificationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +87,6 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Async
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
         try {
-            ValidationUtils.validateAccountingEntryForCrmRequest(accountingEntry);
             final String host = Objects.requireNonNull(crmHost);
             final String uri =  Objects.requireNonNull(crmUri);
             final String token = Objects.requireNonNull(crmToken);
@@ -101,7 +99,6 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
             } catch (Exception e) {
                 errorExpenseRequestInfo(e);
             }
-
         } catch (Exception e) {
             errorExpenseRequestInfo(e);
         }

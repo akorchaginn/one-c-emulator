@@ -24,7 +24,7 @@ public final class CrmClient {
         httpGet.setHeader("crm-1c-database-source", sourceName);
         CloseableHttpResponse response = client.execute(httpGet);
         if (response.getStatusLine().getStatusCode() != 200) {
-            throw new Exception("Status code not equal 200");
+            throw new Exception("Status code not equal 200.");
         }
     }
 }

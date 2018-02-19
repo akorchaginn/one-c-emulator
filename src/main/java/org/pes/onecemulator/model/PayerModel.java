@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class PayerModel extends ApiError {
+public class PayerModel {
 
     @JsonProperty("id")
     private UUID id;
@@ -38,14 +38,6 @@ public class PayerModel extends ApiError {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @NotEmpty
     private Set<String> sources = new HashSet<>();
-
-    public PayerModel() {
-        super();
-   }
-
-    public PayerModel(String error) {
-        super(error);
-   }
 
     public UUID getId() {
         return id;
@@ -121,7 +113,6 @@ public class PayerModel extends ApiError {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PayerModel)) return false;
-        if (!super.equals(o)) return false;
         PayerModel model = (PayerModel) o;
         return Objects.equals(id, model.id) &&
                 Objects.equals(code, model.code) &&
@@ -135,6 +126,6 @@ public class PayerModel extends ApiError {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, code, name, fullName, inn, kpp, address, sources);
+        return Objects.hash(id, code, name, fullName, inn, kpp, address, sources);
     }
 }

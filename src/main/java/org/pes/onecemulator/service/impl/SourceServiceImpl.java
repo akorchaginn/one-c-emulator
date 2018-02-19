@@ -2,6 +2,8 @@ package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.model.SourceModel;
 import org.pes.onecemulator.repository.SourceRepository;
@@ -12,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -32,24 +33,24 @@ public class SourceServiceImpl implements SourceService {
 
     @Transactional
     @Override
-    public SourceModel getById(UUID id) {
+    public SourceModel getById(UUID id) throws NotFoundException {
         Source source = sourceRepository.findOne(id);
         if (source != null) {
             return getModel(source);
         }
 
-        return new SourceModel("Source with id:" + id + " not found at database.");
+        throw new NotFoundException(Source.class, id);
     }
 
     @Transactional
     @Override
-    public SourceModel getByName(String name) {
+    public SourceModel getByName(String name) throws NotFoundException {
         Source source = sourceRepository.findByName(name);
         if (source != null) {
             return getModel(source);
         }
 
-        return new SourceModel("Source with name:" + name + " not found at database.");
+        throw new NotFoundException(Source.class, "name:" + name);
     }
 
     @Transactional
@@ -63,78 +64,67 @@ public class SourceServiceImpl implements SourceService {
 
     @Transactional
     @Override
-    public List<PayerModel> getPayerList(String name) {
+    public List<PayerModel> getPayerList(String name) throws NotFoundException {
         Source source = sourceRepository.findByName(name);
         if (source != null) {
             return source.getPayers().stream().map(this::getModel).collect(Collectors.toList());
         }
 
-        return new ArrayList<>();
+        throw new NotFoundException(Source.class, "name:" + name);
     }
 
     @Transactional
     @Override
-    public SourceModel create(SourceModel model) {
+    public SourceModel create(SourceModel model) throws Exception {
 
         if (model == null) {
-            return new SourceModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getName() == null) {
-            return new SourceModel("Model name is null.");
+            throw new ValidationException("Name is null.");
         }
 
         if (model.getName().isEmpty()) {
-            return new SourceModel("Model name is empty.");
+            throw new ValidationException("Name is empty.");
         }
 
-        try {
-            Source source = new Source();
-            source.setName(model.getName());
-            source = sourceRepository.save(source);
+        Source source = new Source();
+        source.setName(model.getName());
+        source = sourceRepository.save(source);
 
-            return getModel(source);
-
-        } catch (Exception e) {
-            return new SourceModel(e.getMessage());
-        }
+        return getModel(source);
     }
 
     @Transactional
     @Override
-    public SourceModel update(SourceModel model) {
+    public SourceModel update(SourceModel model) throws Exception {
 
         if (model == null) {
-            return new SourceModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getId() == null) {
-            return new SourceModel("Id is null.");
+            throw new ValidationException("Id is null.");
         }
 
         if (model.getName() == null) {
-            return new SourceModel("Model name is null.");
+            throw new ValidationException("Name is null.");
         }
 
         if (model.getName().isEmpty()) {
-            return new SourceModel("Model name is empty.");
+            throw new ValidationException("Name is empty.");
         }
 
         Source source = sourceRepository.findOne(model.getId());
-
         if (source == null) {
-            return new SourceModel("Source with id: " + model.getId() + " not found at database.");
+            throw new NotFoundException(Source.class, model.getId());
         }
 
-        try {
-            source.setName(model.getName());
-            source = sourceRepository.save(source);
+        source.setName(model.getName());
+        source = sourceRepository.save(source);
 
-            return getModel(source);
-
-        } catch (Exception e) {
-            return new SourceModel(e.getMessage());
-        }
+        return getModel(source);
     }
 
     @Transactional

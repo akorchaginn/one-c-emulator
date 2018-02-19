@@ -2,6 +2,8 @@ package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
@@ -35,13 +37,13 @@ public class PayerServiceImpl implements PayerService {
 
     @Transactional
     @Override
-    public PayerModel getById(UUID id) {
+    public PayerModel getById(UUID id) throws NotFoundException {
         Payer payer = payerRepository.findOne(id);
         if (payer != null) {
             return getModel(payer);
         }
 
-        return new PayerModel("Payer with id: " + id + " not found at database.");
+        throw new NotFoundException(Payer.class, id);
     }
 
     @Transactional
@@ -56,18 +58,18 @@ public class PayerServiceImpl implements PayerService {
 
     @Transactional
     @Override
-    public PayerModel create(PayerModel model) {
+    public PayerModel create(PayerModel model) throws Exception {
 
         if (model == null) {
-            return new PayerModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getSources() == null) {
-            return new PayerModel("Sources list is null.");
+            throw new ValidationException("Sources list is null.");
         }
 
         if (model.getSources().isEmpty()) {
-            return new PayerModel("Source list is empty.");
+            throw new ValidationException("Source list is empty.");
         }
 
         Set<Source> newSources = new HashSet<>();
@@ -83,50 +85,45 @@ public class PayerServiceImpl implements PayerService {
         });
 
         if (newSources.isEmpty()) {
-            return new PayerModel("New source list is empty.");
+            throw new ValidationException("New source list is empty.");
         }
 
-        try {
-            Payer payer = new Payer();
-            payer.setCode(model.getCode());
-            payer.setName(model.getName());
-            payer.setFullName(model.getFullName());
-            payer.setInn(model.getInn());
-            payer.setKpp(model.getKpp());
-            payer.setAddress(model.getAddress());
-            payer.setSources(newSources);
-            payer = payerRepository.save(payer);
+        Payer payer = new Payer();
+        payer.setCode(model.getCode());
+        payer.setName(model.getName());
+        payer.setFullName(model.getFullName());
+        payer.setInn(model.getInn());
+        payer.setKpp(model.getKpp());
+        payer.setAddress(model.getAddress());
+        payer.setSources(newSources);
+        payer = payerRepository.save(payer);
 
-            return getModel(payer);
-        } catch (Exception e) {
-            return new PayerModel(e.getMessage());
-        }
+        return getModel(payer);
     }
 
     @Transactional
     @Override
-    public PayerModel update(PayerModel model) {
+    public PayerModel update(PayerModel model) throws Exception {
 
         if (model == null) {
-            return new PayerModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getId() == null) {
-            return new PayerModel("Id is null.");
+            throw new ValidationException("Id is null.");
         }
 
         if (model.getSources() == null) {
-            return new PayerModel("Sources list is null.");
+            throw new ValidationException("Source list is null.");
         }
 
         if (model.getSources().isEmpty()) {
-            return new PayerModel("Source list is empty.");
+            throw new ValidationException("Source list is empty.");
         }
 
         Payer payer = payerRepository.findOne(model.getId());
-
         if (payer == null) {
-            return new PayerModel("Payer with id: " + model.getId() + " not found at database.");
+            throw new NotFoundException(Payer.class, model.getId());
         }
 
         Set<Source> newSources = new HashSet<>();
@@ -142,23 +139,19 @@ public class PayerServiceImpl implements PayerService {
         });
 
         if (newSources.isEmpty()) {
-            return new PayerModel("New source list is empty.");
+            throw new ValidationException("New source list is empty.");
         }
 
-        try {
-            payer.setCode(model.getCode());
-            payer.setName(model.getName());
-            payer.setFullName(model.getFullName());
-            payer.setInn(model.getInn());
-            payer.setKpp(model.getKpp());
-            payer.setAddress(model.getAddress());
-            payer.setSources(newSources);
-            payer = payerRepository.save(payer);
+        payer.setCode(model.getCode());
+        payer.setName(model.getName());
+        payer.setFullName(model.getFullName());
+        payer.setInn(model.getInn());
+        payer.setKpp(model.getKpp());
+        payer.setAddress(model.getAddress());
+        payer.setSources(newSources);
+        payer = payerRepository.save(payer);
 
-            return getModel(payer);
-        } catch (Exception e) {
-            return new PayerModel(e.getMessage());
-        }
+        return getModel(payer);
     }
 
     @Transactional

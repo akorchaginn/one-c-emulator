@@ -65,10 +65,10 @@ public class PayerAdminPresenter implements IPayerAdminPresenter {
                 return;
             }
             editView.hideErrorMessages();
-
-            PayerModel model = payerService.update(payerModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                payerService.update(payerModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             editView.returnPayerAdminView();
         } else {
@@ -77,10 +77,10 @@ public class PayerAdminPresenter implements IPayerAdminPresenter {
                 return;
             }
             addView.hideErrorMessages();
-
-            PayerModel model = payerService.create(payerModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                payerService.create(payerModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             addView.returnPayerAdminView();
         }

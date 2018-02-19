@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ExpenseRequestModel extends ApiError {
+public class ExpenseRequestModel {
 
     @JsonProperty("id")
     private UUID id;
@@ -42,14 +42,6 @@ public class ExpenseRequestModel extends ApiError {
     @NotNull
     @NotEmpty
     private String sum;
-
-    public ExpenseRequestModel() {
-        super();
-    }
-
-    public ExpenseRequestModel(String error) {
-        super(error);
-    }
 
     public UUID getId() {
         return id;
@@ -116,19 +108,18 @@ public class ExpenseRequestModel extends ApiError {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ExpenseRequestModel)) return false;
-        if (!super.equals(o)) return false;
-        ExpenseRequestModel model = (ExpenseRequestModel) o;
-        return Objects.equals(id, model.id) &&
-                Objects.equals(source, model.source) &&
-                Objects.equals(currency, model.currency) &&
-                Objects.equals(isConfirm, model.isConfirm) &&
-                Objects.equals(isPaid, model.isPaid) &&
-                Objects.equals(number, model.number) &&
-                Objects.equals(sum, model.sum);
+        ExpenseRequestModel that = (ExpenseRequestModel) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(source, that.source) &&
+                Objects.equals(currency, that.currency) &&
+                Objects.equals(isConfirm, that.isConfirm) &&
+                Objects.equals(isPaid, that.isPaid) &&
+                Objects.equals(number, that.number) &&
+                Objects.equals(sum, that.sum);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, source, currency, isConfirm, isPaid, number, sum);
+        return Objects.hash(id, source, currency, isConfirm, isPaid, number, sum);
     }
 }

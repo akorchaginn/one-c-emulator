@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-public class InvoiceModel extends ApiError {
+public class InvoiceModel {
 
     @JsonProperty("id")
     private UUID id;
@@ -60,14 +60,6 @@ public class InvoiceModel extends ApiError {
     @NotEmpty
     @NotNull
     private String externalId;
-
-    public InvoiceModel() {
-        super();
-    }
-
-    public InvoiceModel(String error) {
-        super(error);
-    }
 
     public UUID getId() {
         return id;
@@ -166,7 +158,6 @@ public class InvoiceModel extends ApiError {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof InvoiceModel)) return false;
-        if (!super.equals(o)) return false;
         InvoiceModel model = (InvoiceModel) o;
         return Objects.equals(id, model.id) &&
                 Objects.equals(source, model.source) &&
@@ -183,6 +174,6 @@ public class InvoiceModel extends ApiError {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, source, date, number, numberOq, payerCode, paymentDate, paymentSum, status, sum, externalId);
+        return Objects.hash(id, source, date, number, numberOq, payerCode, paymentDate, paymentSum, status, sum, externalId);
     }
 }

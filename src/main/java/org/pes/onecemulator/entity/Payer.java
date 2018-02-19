@@ -19,7 +19,7 @@ public class Payer extends AbstractEntity {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "code")
+    @Column(name = "code", unique = true, nullable = false)
     private String code;
 
     @Column(name = "full_name")

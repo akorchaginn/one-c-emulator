@@ -65,10 +65,10 @@ public class ExpenseRequestAdminPresenter implements IExpenseRequestAdminPresent
                 return;
             }
             editView.hideErrorMessages();
-
-            ExpenseRequestModel model = expenseRequestService.update(expenseRequestModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                expenseRequestService.update(expenseRequestModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             editView.returnExpenseRequestAdminView();
         } else {
@@ -77,10 +77,10 @@ public class ExpenseRequestAdminPresenter implements IExpenseRequestAdminPresent
                 return;
             }
             addView.hideErrorMessages();
-
-            ExpenseRequestModel model = expenseRequestService.create(expenseRequestModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                expenseRequestService.create(expenseRequestModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             addView.returnExpenseRequestAdminView();
         }

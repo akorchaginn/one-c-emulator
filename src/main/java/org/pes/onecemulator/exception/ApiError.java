@@ -1,4 +1,4 @@
-package org.pes.onecemulator.model;
+package org.pes.onecemulator.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,8 +10,6 @@ public class ApiError {
 
     @JsonProperty("error")
     private String error;
-
-    ApiError() {}
 
     ApiError(String error) {
         this.error = error;
@@ -35,7 +33,6 @@ public class ApiError {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(error);
     }
 }

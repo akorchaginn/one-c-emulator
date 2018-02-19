@@ -3,6 +3,8 @@ package org.pes.onecemulator.service.impl;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.PayerRepository;
@@ -43,13 +45,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional
     @Override
-    public InvoiceModel getById(UUID id) {
+    public InvoiceModel getById(UUID id) throws NotFoundException {
         Invoice invoice = invoiceRepository.findOne(id);
         if (invoice != null) {
             return getModel(invoice);
         }
 
-        return new InvoiceModel("Invoice with id: " + id + " not found at database.");
+        throw new NotFoundException(Invoice.class, id);
     }
 
     @Transactional
@@ -64,115 +66,102 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional
     @Override
-    public InvoiceModel create(InvoiceModel model) {
+    public InvoiceModel create(InvoiceModel model) throws Exception {
 
         if (model == null) {
-            return new InvoiceModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getSource() == null) {
-            return new InvoiceModel("Source is null.");
+            throw new ValidationException("Source is null.");
         }
 
         if (model.getPayerCode() == null) {
-            return new InvoiceModel("Payer code is null.");
+            throw new ValidationException("Payer code is null.");
         }
 
         Source source = sourceRepository.findByName(model.getSource());
-
         if (source == null) {
-            return new InvoiceModel("Source with name: " + model.getSource() + " not found at database.");
+            throw new NotFoundException(Source.class, "name: " + model.getSource());
         }
 
         Payer payer = payerRepository.findByCode(model.getPayerCode());
-
         if (payer == null) {
-            return new InvoiceModel("Payer with code: " + model.getPayerCode() + " not found at database.");
+            throw new NotFoundException(Payer.class, "code: " + model.getPayerCode());
         }
 
         if (!payer.getSources().contains(source)) {
-            return new InvoiceModel("Invoice source not equal payer source.");
+            throw new ValidationException("Invoice source not equal payer source.");
         }
 
-        try {
-            Invoice invoice = new Invoice();
-            invoice.setSource(source);
-            invoice.setDate(toCalendar(model.getDate()));
-            invoice.setNumber(model.getNumber());
-            invoice.setNumberOq(model.getNumberOq());
-            invoice.setPayer(payer);
-            invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
-            invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
-            invoice.setStatus(model.getStatus());
-            invoice.setSum(new BigDecimal(model.getSum()));
-            invoice.setExternalId(model.getExternalId());
-            invoice = invoiceRepository.save(invoice);
+        Invoice invoice = new Invoice();
+        invoice.setSource(source);
+        invoice.setDate(toCalendar(model.getDate()));
+        invoice.setNumber(model.getNumber());
+        invoice.setNumberOq(model.getNumberOq());
+        invoice.setPayer(payer);
+        invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
+        invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
+        invoice.setStatus(model.getStatus());
+        invoice.setSum(new BigDecimal(model.getSum()));
+        invoice.setExternalId(model.getExternalId());
+        invoice = invoiceRepository.save(invoice);
 
-            return getModel(invoice);
-        } catch (Exception e) {
-            return new InvoiceModel(e.getMessage());
-        }
+        return getModel(invoice);
     }
 
     @Transactional
     @Override
-    public InvoiceModel update(InvoiceModel model) {
+    public InvoiceModel update(InvoiceModel model) throws Exception {
 
         if (model == null) {
-            return new InvoiceModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getId() == null) {
-            return new InvoiceModel("Id is null.");
+            throw new ValidationException("Id is null.");
         }
 
         if (model.getSource() == null) {
-            return new InvoiceModel("Source is null.");
+            throw new ValidationException("Source is null.");
         }
 
         if (model.getPayerCode() == null) {
-            return new InvoiceModel("Payer code is null.");
+            throw new ValidationException("Payer code is null.");
         }
 
         Invoice invoice = invoiceRepository.findOne(model.getId());
-
         if (invoice == null) {
-            return new InvoiceModel("Invoice with id: " + model.getId() + "not found at database.");
+            throw new NotFoundException(Invoice.class, model.getId());
         }
 
         Source source = sourceRepository.findByName(model.getSource());
-
         if (source == null) {
-            return new InvoiceModel("Source with name: " + model.getSource() + "not found at database.");
+            throw new NotFoundException(Source.class, "name: " + model.getSource());
         }
 
         Payer payer = payerRepository.findByCode(model.getPayerCode());
-
         if (payer == null) {
-            return new InvoiceModel("Payer with code: " + model.getPayerCode() + "not found at database.");
+            throw new NotFoundException(Payer.class, "code: " + model.getPayerCode());
         }
 
         if (!payer.getSources().contains(source)) {
-            return new InvoiceModel("Invoice source not equal payer source.");
+            throw new ValidationException("Invoice source not equal payer source.");
         }
 
-        try {
-            invoice.setSource(source);
-            invoice.setDate(toCalendar(model.getDate()));
-            invoice.setNumber(model.getNumber());
-            invoice.setNumberOq(model.getNumberOq());
-            invoice.setPayer(payer);
-            invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
-            invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
-            invoice.setStatus(model.getStatus());
-            invoice.setSum(new BigDecimal(model.getSum()));
-            invoice.setExternalId(model.getExternalId());
-            invoice = invoiceRepository.save(invoice);
+        invoice.setSource(source);
+        invoice.setDate(toCalendar(model.getDate()));
+        invoice.setNumber(model.getNumber());
+        invoice.setNumberOq(model.getNumberOq());
+        invoice.setPayer(payer);
+        invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
+        invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
+        invoice.setStatus(model.getStatus());
+        invoice.setSum(new BigDecimal(model.getSum()));
+        invoice.setExternalId(model.getExternalId());
+        invoice = invoiceRepository.save(invoice);
 
-            return getModel(invoice);
-        } catch (Exception e) {
-            return new InvoiceModel(e.getMessage());
-        }
+        return getModel(invoice);
     }
 
     @Transactional

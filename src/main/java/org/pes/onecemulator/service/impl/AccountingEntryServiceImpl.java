@@ -2,6 +2,8 @@ package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.ExpenseRequest;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.AccountingEntryModel;
 import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
@@ -42,13 +44,13 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
 
     @Transactional
     @Override
-    public AccountingEntryModel getById(UUID id) {
+    public AccountingEntryModel getById(UUID id) throws NotFoundException {
         AccountingEntry accountingEntry = accountingEntryRepository.findOne(id);
         if (accountingEntry != null) {
             return getModel(accountingEntry);
         }
 
-        return new AccountingEntryModel("Accounting entry with id: " + id + " not found at database.");
+        throw new NotFoundException(AccountingEntryModel.class, id);
     }
 
     @Transactional
@@ -63,83 +65,68 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
 
     @Transactional
     @Override
-    public AccountingEntryModel create(AccountingEntryModel model) {
+    public AccountingEntryModel create(AccountingEntryModel model) throws Exception {
         if (model == null) {
-            return new AccountingEntryModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getExpenseNumber() == null) {
-            return new AccountingEntryModel("Expense number is null.");
+            throw new ValidationException("Expense number is null.");
         }
 
         if (model.getDate() == null) {
-            return new AccountingEntryModel("Date is null.");
+            throw new ValidationException("Date is null.");
         }
 
         ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
-
         if (expenseRequest == null) {
-            return new AccountingEntryModel(
-                    "Expense request with number: " + model.getExpenseNumber() + " not found at database.");
+            throw new NotFoundException(ExpenseRequest.class, "number:" + model.getExpenseNumber());
         }
-        try {
-            AccountingEntry accountingEntry = new AccountingEntry();
-            accountingEntry.setCode(model.getCode());
-            accountingEntry.setDate(toCalendar(model.getDate()));
-            accountingEntry.setDocumentName(model.getDocumentName());
-            accountingEntry.setExpenseRequest(expenseRequest);
-            accountingEntry.setSum(new BigDecimal(model.getSum()));
-            accountingEntry = accountingEntryRepository.save(accountingEntry);
-            // Запрос в CRM
-            crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
+        AccountingEntry accountingEntry = new AccountingEntry();
+        accountingEntry.setCode(model.getCode());
+        accountingEntry.setDate(toCalendar(model.getDate()));
+        accountingEntry.setDocumentName(model.getDocumentName());
+        accountingEntry.setExpenseRequest(expenseRequest);
+        accountingEntry.setSum(new BigDecimal(model.getSum()));
+        accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
+        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
-            return getModel(accountingEntry);
-        } catch (Exception e) {
-            return new AccountingEntryModel(e.getMessage());
-        }
+        return getModel(accountingEntry);
     }
 
     @Transactional
     @Override
-    public AccountingEntryModel update(AccountingEntryModel model) {
+    public AccountingEntryModel update(AccountingEntryModel model) throws Exception {
         if (model == null) {
-            return new AccountingEntryModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getExpenseNumber() == null) {
-            return new AccountingEntryModel("Expense number is null.");
+            throw new ValidationException("Expense number is null.");
         }
 
         if (model.getDate() == null) {
-            return new AccountingEntryModel("Date is null.");
+            throw new ValidationException("Date is null.");
         }
 
         ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
-
         if (expenseRequest == null) {
-            return new AccountingEntryModel(
-                    "Expense request with number: " + model.getExpenseNumber() + " not found at database.");
+            throw new NotFoundException(ExpenseRequest.class, "number: " + model.getExpenseNumber());
         }
 
         AccountingEntry accountingEntry = accountingEntryRepository.findOne(model.getId());
-
         if (accountingEntry == null) {
-            return new AccountingEntryModel("Accounting entry with id: " + model.getId() + "not found at database.");
+            throw new NotFoundException(AccountingEntry.class, model.getId());
         }
-        try {
-            accountingEntry.setCode(model.getCode());
-            accountingEntry.setDate(toCalendar(model.getDate()));
-            accountingEntry.setDocumentName(model.getDocumentName());
-            accountingEntry.setExpenseRequest(expenseRequest);
-            accountingEntry.setSum(new BigDecimal(model.getSum()));
-            accountingEntry = accountingEntryRepository.save(accountingEntry);
-            // Запрос в CRM
-            crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
+        accountingEntry.setCode(model.getCode());
+        accountingEntry.setDate(toCalendar(model.getDate()));
+        accountingEntry.setDocumentName(model.getDocumentName());
+        accountingEntry.setExpenseRequest(expenseRequest);
+        accountingEntry.setSum(new BigDecimal(model.getSum()));
+        accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
+        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
-            return getModel(accountingEntry);
-        } catch (Exception e) {
-            return new AccountingEntryModel(e.getMessage());
-        }
+        return getModel(accountingEntry);
     }
 
     @Transactional

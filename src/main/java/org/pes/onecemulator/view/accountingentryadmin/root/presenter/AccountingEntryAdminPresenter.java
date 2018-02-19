@@ -65,10 +65,10 @@ public class AccountingEntryAdminPresenter implements IAccountingEntryAdminPrese
                 return;
             }
             editView.hideErrorMessages();
-
-            AccountingEntryModel model = accountingEntryService.update(accountingEntryModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                accountingEntryService.update(accountingEntryModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             editView.returnAccountingEntryAdminView();
         } else {
@@ -77,10 +77,10 @@ public class AccountingEntryAdminPresenter implements IAccountingEntryAdminPrese
                 return;
             }
             addView.hideErrorMessages();
-
-            AccountingEntryModel model = accountingEntryService.create(accountingEntryModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                accountingEntryService.create(accountingEntryModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             addView.returnAccountingEntryAdminView();
         }

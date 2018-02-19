@@ -59,10 +59,10 @@ public class SourceAdminPresenter implements ISourceAdminPresenter {
                 return;
             }
             editView.hideErrorMessages();
-
-            SourceModel model = sourceService.update(sourceModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                sourceService.update(sourceModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             editView.returnSourceAdminView();
         } else {
@@ -71,10 +71,10 @@ public class SourceAdminPresenter implements ISourceAdminPresenter {
                 return;
             }
             addView.hideErrorMessages();
-
-            SourceModel model = sourceService.create(sourceModel);
-            if (model != null && model.getError() != null && !model.getError().isEmpty()) {
-                ErrorNotification.show(model.getError());
+            try {
+                sourceService.create(sourceModel);
+            } catch (Exception e) {
+                ErrorNotification.show(e);
             }
             addView.returnSourceAdminView();
         }

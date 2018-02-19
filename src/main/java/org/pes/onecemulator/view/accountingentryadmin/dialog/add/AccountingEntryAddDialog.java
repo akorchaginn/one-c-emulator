@@ -35,7 +35,6 @@ public class AccountingEntryAddDialog extends FormDialog implements View, IAccou
     public void enter(ViewChangeEvent event) {
         this.form = new AccountingEntryAddForm(presenter.getExpenseRequestList());
         setForm(form);
-
         addClickEvenListenerToSaveButton(e -> presenter.onClickSaveButton(form.valueAsObject()));
         addClickEventListenerToCancelButton(e -> returnAccountingEntryAdminView());
     }

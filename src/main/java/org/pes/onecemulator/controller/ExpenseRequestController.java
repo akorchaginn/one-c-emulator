@@ -1,5 +1,6 @@
 package org.pes.onecemulator.controller;
 
+import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 import org.pes.onecemulator.service.ExpenseRequestService;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class ExpenseRequestController {
 
     @GetMapping(value = "/get-by-id/{id}")
     public @ResponseBody
-    ExpenseRequestModel getById(@PathVariable UUID id) {
+    ExpenseRequestModel getById(@PathVariable UUID id) throws NotFoundException {
         return expenseRequestService.getById(id);
     }
 
@@ -32,13 +33,13 @@ public class ExpenseRequestController {
 
     @PostMapping(value = "/create")
     public @ResponseBody
-    ExpenseRequestModel create(@RequestBody ExpenseRequestModel model) {
+    ExpenseRequestModel create(@RequestBody ExpenseRequestModel model) throws Exception {
         return expenseRequestService.create(model);
     }
 
     @PostMapping(value = "/update")
     public @ResponseBody
-    ExpenseRequestModel update(@RequestBody ExpenseRequestModel model) {
+    ExpenseRequestModel update(@RequestBody ExpenseRequestModel model) throws Exception {
         return expenseRequestService.update(model);
     }
 

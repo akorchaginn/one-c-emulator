@@ -1,5 +1,6 @@
 package org.pes.onecemulator.controller;
 
+import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.service.InvoiceService;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class InvoiceController {
     private InvoiceService invoiceService;
 
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody InvoiceModel getById(@PathVariable UUID id) {
+    public @ResponseBody InvoiceModel getById(@PathVariable UUID id) throws NotFoundException {
         return invoiceService.getById(id);
     }
 
@@ -30,12 +31,12 @@ public class InvoiceController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody InvoiceModel create(@RequestBody InvoiceModel model) {
+    public @ResponseBody InvoiceModel create(@RequestBody InvoiceModel model) throws Exception {
         return invoiceService.create(model);
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody InvoiceModel update(@RequestBody InvoiceModel model) {
+    public @ResponseBody InvoiceModel update(@RequestBody InvoiceModel model) throws Exception {
         return invoiceService.update(model);
     }
 

@@ -5,18 +5,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Objects;
 import java.util.UUID;
 
-public class SourceModel extends ApiError {
+public class SourceModel {
 
     private UUID id;
 
     @NotEmpty
     private String name;
-
-    public SourceModel() {}
-
-    public SourceModel(String error) {
-        super(error);
-    }
 
     public UUID getId() {
         return id;
@@ -42,14 +36,13 @@ public class SourceModel extends ApiError {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SourceModel)) return false;
-        if (!super.equals(o)) return false;
-        SourceModel that = (SourceModel) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name);
+        SourceModel model = (SourceModel) o;
+        return Objects.equals(id, model.id) &&
+                Objects.equals(name, model.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, name);
+        return Objects.hash(id, name);
     }
 }

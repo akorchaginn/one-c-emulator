@@ -16,7 +16,7 @@ import java.util.Set;
 @Table(name = "expense_request")
 public class ExpenseRequest extends AbstractEntity {
 
-    @Column(name = "currency")
+    @Column(name = "currency", nullable = false)
     private String currency;
 
     @Column(name = "is_confirm")
@@ -25,13 +25,13 @@ public class ExpenseRequest extends AbstractEntity {
     @Column(name = "is_paid")
     private Boolean isPaid;
 
-    @Column(name = "number", unique = true)
+    @Column(name = "number", unique = true, nullable = false)
     private String number;
 
-    @Column(name = "sum")
+    @Column(name = "sum", nullable = false)
     private BigDecimal sum;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "source_id")
     private Source source;
 
