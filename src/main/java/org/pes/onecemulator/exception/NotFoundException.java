@@ -9,10 +9,10 @@ import java.util.UUID;
 public class NotFoundException extends Exception {
 
     public NotFoundException(Class clazz, UUID id) {
-        super(clazz.getName() + " with id: " + id + " not found at database.");
+        super(clazz.getSimpleName() + " with id: " + id + " not found at database.");
     }
 
     public NotFoundException(Class clazz, String str) {
-        super(clazz.getName() + " with " + str + " not found at database.");
+        super(clazz.getSimpleName() + " with " + str + " not found at database.");
     }
 }
