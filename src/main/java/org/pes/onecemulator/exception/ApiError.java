@@ -15,7 +15,10 @@ public class ApiError {
 
     ApiError(Exception e) {
         this.error = ExceptionUtils.getMessage(e);
-        this.cause = ExceptionUtils.getRootCauseMessage(e);
+        this.cause =
+                !ExceptionUtils.getMessage(e).equals(ExceptionUtils.getRootCauseMessage(e))
+                        ? ExceptionUtils.getRootCauseMessage(e)
+                        : null;
     }
 
     public String getError() {
