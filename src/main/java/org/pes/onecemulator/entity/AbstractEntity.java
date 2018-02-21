@@ -22,10 +22,9 @@ import java.util.UUID;
 public abstract class AbstractEntity implements Serializable {
 
     @Id
-    @Type(type = "pg-uuid")
-    @GeneratedValue(generator = "custom-uuid")
+    @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-            name = "custom-uuid",
+            name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator",
             parameters = {
                     @Parameter(
