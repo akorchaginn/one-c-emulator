@@ -2,7 +2,9 @@ package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.ExpenseRequest;
-import org.pes.onecemulator.model.AEntryModel;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
+import org.pes.onecemulator.model.AccountingEntryModel;
 import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.service.AccountingEntryService;
@@ -12,6 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,25 +29,33 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountingEntryServiceImpl.class);
 
-    @Autowired
-    private ExpenseRequestRepository expenseRequestRepository;
+    private final ExpenseRequestRepository expenseRequestRepository;
+
+    private final AccountingEntryRepository accountingEntryRepository;
+
+    private final CrmInteractionService crmInteractionService;
 
     @Autowired
-    private AccountingEntryRepository accountingEntryRepository;
+    AccountingEntryServiceImpl(AccountingEntryRepository accountingEntryRepository, ExpenseRequestRepository expenseRequestRepository, CrmInteractionService crmInteractionService) {
+        this.accountingEntryRepository = accountingEntryRepository;
+        this.expenseRequestRepository = expenseRequestRepository;
+        this.crmInteractionService = crmInteractionService;
+    }
 
-    @Autowired
-    private CrmInteractionService crmInteractionService;
-
-    public AEntryModel getById(UUID id) {
+    @Transactional
+    @Override
+    public AccountingEntryModel getById(UUID id) throws NotFoundException {
         AccountingEntry accountingEntry = accountingEntryRepository.findOne(id);
         if (accountingEntry != null) {
             return getModel(accountingEntry);
         }
 
-        return new AEntryModel("Accounting entry with id: " + id + " not found at database.");
+        throw new NotFoundException(AccountingEntryModel.class, id);
     }
 
-    public List<AEntryModel> list() {
+    @Transactional
+    @Override
+    public List<AccountingEntryModel> list() {
         List<AccountingEntry> accountingEntries = accountingEntryRepository.findAll();
         return accountingEntries
                 .stream()
@@ -47,96 +63,98 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
                 .collect(Collectors.toList());
     }
 
-    public AEntryModel create(AEntryModel model) {
-
+    @Transactional
+    @Override
+    public AccountingEntryModel create(AccountingEntryModel model) throws Exception {
         if (model == null) {
-            return new AEntryModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getExpenseNumber() == null) {
-            return new AEntryModel("Expense number is null.");
+            throw new ValidationException("Expense number is null.");
         }
 
         if (model.getDate() == null) {
-            return new AEntryModel("Date is null.");
+            throw new ValidationException("Date is null.");
         }
 
         ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
-
         if (expenseRequest == null) {
-            return new AEntryModel(
-                    "Expense request with number: " + model.getExpenseNumber() + " not found at database.");
+            throw new NotFoundException(ExpenseRequest.class, "number:" + model.getExpenseNumber());
         }
-
         AccountingEntry accountingEntry = new AccountingEntry();
         accountingEntry.setCode(model.getCode());
-        accountingEntry.setDate(model.getDate());
+        accountingEntry.setDate(toCalendar(model.getDate()));
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
-        accountingEntry.setSum(model.getSum());
-        accountingEntry = accountingEntryRepository.save(accountingEntry);
-
-        // Запрос в CRM
+        accountingEntry.setSum(new BigDecimal(model.getSum()));
+        accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
         crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
         return getModel(accountingEntry);
     }
 
-    public AEntryModel update(AEntryModel model) {
+    @Transactional
+    @Override
+    public AccountingEntryModel update(AccountingEntryModel model) throws Exception {
         if (model == null) {
-            return new AEntryModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getExpenseNumber() == null) {
-            return new AEntryModel("Expense number is null.");
+            throw new ValidationException("Expense number is null.");
         }
 
         if (model.getDate() == null) {
-            return new AEntryModel("Date is null.");
+            throw new ValidationException("Date is null.");
         }
 
         ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
-
         if (expenseRequest == null) {
-            return new AEntryModel(
-                    "Expense request with number: " + model.getExpenseNumber() + " not found at database.");
+            throw new NotFoundException(ExpenseRequest.class, "number: " + model.getExpenseNumber());
         }
 
         AccountingEntry accountingEntry = accountingEntryRepository.findOne(model.getId());
-
         if (accountingEntry == null) {
-            return new AEntryModel("Accounting entry with id: " + model.getId() + "not found at database.");
+            throw new NotFoundException(AccountingEntry.class, model.getId());
         }
-
         accountingEntry.setCode(model.getCode());
-        accountingEntry.setDate(model.getDate());
+        accountingEntry.setDate(toCalendar(model.getDate()));
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
-        accountingEntry.setSum(model.getSum());
-        accountingEntry = accountingEntryRepository.save(accountingEntry);
-
-        // Запрос в CRM
+        accountingEntry.setSum(new BigDecimal(model.getSum()));
+        accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
         crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
         return getModel(accountingEntry);
     }
 
+    @Transactional
+    @Override
     public void delete(UUID id) {
        accountingEntryRepository.delete(id);
     }
 
-    private AEntryModel getModel(AccountingEntry entity) {
-        AEntryModel model = new AEntryModel();
+    private AccountingEntryModel getModel(AccountingEntry entity) {
+        AccountingEntryModel model = new AccountingEntryModel();
         model.setId(entity.getId());
         model.setCode(entity.getCode());
-        model.setDate(entity.getDate());
+        model.setDate(toLocalDate(entity.getDate()));
         model.setDocumentName(entity.getDocumentName());
         model.setExpenseNumber(entity.getExpenseRequest() != null
                 ? entity.getExpenseRequest().getNumber()
                 : null
         );
-        model.setSum(entity.getSum());
+        model.setSum(entity.getSum().toString());
 
         return model;
+    }
+
+    private LocalDate toLocalDate(Calendar calendar) {
+        return calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private Calendar toCalendar(LocalDate localDate) {
+        return GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
     }
 }

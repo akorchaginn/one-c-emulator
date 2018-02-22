@@ -1,5 +1,6 @@
 package org.pes.onecemulator.controller;
 
+import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.service.PayerService;
 import org.slf4j.Logger;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/payer")
@@ -27,7 +27,7 @@ public class PayerController {
     private PayerService payerService;
 
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody PayerModel getById(@PathVariable UUID id) {
+    public @ResponseBody PayerModel getById(@PathVariable UUID id) throws NotFoundException {
         return payerService.getById(id);
     }
 
@@ -37,12 +37,15 @@ public class PayerController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody List<PayerModel> create(@RequestBody List<PayerModel> modelList) {
-        return modelList.stream().map(p -> payerService.create(p)).collect(Collectors.toList());
+    public @ResponseBody List<PayerModel> create(@RequestBody List<PayerModel> modelList) throws Exception {
+        for (PayerModel model: modelList) {
+            payerService.create(model);
+        }
+        return payerService.list();
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody PayerModel update(@RequestBody PayerModel model) {
+    public @ResponseBody PayerModel update(@RequestBody PayerModel model) throws Exception {
         return payerService.update(model);
     }
 

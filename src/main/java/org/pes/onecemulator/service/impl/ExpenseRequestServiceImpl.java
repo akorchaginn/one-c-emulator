@@ -2,8 +2,9 @@ package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Source;
-import org.pes.onecemulator.model.ERequestModel;
-import org.pes.onecemulator.repository.AccountingEntryRepository;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
+import org.pes.onecemulator.model.ExpenseRequestModel;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.ExpenseRequestService;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,25 +24,30 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseRequestServiceImpl.class);
 
-    @Autowired
-    private ExpenseRequestRepository expenseRequestRepository;
+    private final ExpenseRequestRepository expenseRequestRepository;
+
+    private final SourceRepository sourceRepository;
 
     @Autowired
-    private AccountingEntryRepository accountingEntryRepository;
+    ExpenseRequestServiceImpl(ExpenseRequestRepository expenseRequestRepository, SourceRepository sourceRepository) {
+        this.expenseRequestRepository = expenseRequestRepository;
+        this.sourceRepository = sourceRepository;
+    }
 
-    @Autowired
-    private SourceRepository sourceRepository;
-
-    public ERequestModel getById(UUID id) {
+    @Transactional
+    @Override
+    public ExpenseRequestModel getById(UUID id) throws NotFoundException {
         ExpenseRequest expenseRequest = expenseRequestRepository.findOne(id);
         if (expenseRequest != null) {
             return getModel(expenseRequest);
         }
 
-        return new ERequestModel("Expense request with id: " + id + " not found at database.");
+        throw new NotFoundException(ExpenseRequest.class, id);
     }
 
-    public List<ERequestModel> list() {
+    @Transactional
+    @Override
+    public List<ExpenseRequestModel> list() {
         List<ExpenseRequest> expenseRequests = expenseRequestRepository.findAll();
         return expenseRequests
                 .stream()
@@ -47,24 +55,25 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
                 .collect(Collectors.toList());
     }
 
-    public ERequestModel create(ERequestModel model) {
+    @Transactional
+    @Override
+    public ExpenseRequestModel create(ExpenseRequestModel model) throws Exception {
 
         if (model == null) {
-            return new ERequestModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getNumber() == null) {
-            return new ERequestModel("Number is null.");
+            throw new ValidationException("Number is null.");
         }
 
         if (model.getSource() == null) {
-            return new ERequestModel("Source is null.");
+            throw new ValidationException("Source is null.");
         }
 
         Source source = sourceRepository.findByName(model.getSource());
-
         if (source == null) {
-            return new ERequestModel("Source with name: " + model.getSource() + " not found at database.");
+            throw new NotFoundException(Source.class, "name: " + model.getSource());
         }
 
         ExpenseRequest expenseRequest = new ExpenseRequest();
@@ -73,40 +82,40 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         expenseRequest.setConfirm(model.getConfirm());
         expenseRequest.setPaid(model.getPaid());
         expenseRequest.setNumber(model.getNumber());
-        expenseRequest.setSum(model.getSum());
+        expenseRequest.setSum(new BigDecimal(model.getSum()));
         expenseRequest = expenseRequestRepository.save(expenseRequest);
 
         return getModel(expenseRequest);
     }
 
-    public ERequestModel update(ERequestModel model) {
+    @Transactional
+    @Override
+    public ExpenseRequestModel update(ExpenseRequestModel model) throws Exception {
 
         if (model == null) {
-            return new ERequestModel("Model is null.");
+            throw new ValidationException("Model is null.");
         }
 
         if (model.getId() == null) {
-            return new ERequestModel("Id is null.");
+            throw new ValidationException("Id is null.");
         }
 
         if (model.getNumber() == null) {
-            return new ERequestModel("Number is null.");
+            throw new ValidationException("Number is null.");
         }
 
         if (model.getSource() == null) {
-            return new ERequestModel("Source is null.");
+            throw new ValidationException("Source is null.");
         }
 
         ExpenseRequest expenseRequest = expenseRequestRepository.findOne(model.getId());
-
         if (expenseRequest == null) {
-            return new ERequestModel("Expense request with id: " + model.getId() + " not found at database.");
+            throw new NotFoundException(ExpenseRequest.class, model.getId());
         }
 
         Source source = sourceRepository.findByName(model.getSource());
-
         if (source == null) {
-            return new ERequestModel("Source with name: " + model.getSource() + " not found at database.");
+            throw new NotFoundException(Source.class, "name: " + model.getSource());
         }
 
         expenseRequest.setSource(source);
@@ -114,25 +123,27 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         expenseRequest.setConfirm(model.getConfirm());
         expenseRequest.setPaid(model.getPaid());
         expenseRequest.setNumber(model.getNumber());
-        expenseRequest.setSum(model.getSum());
+        expenseRequest.setSum(new BigDecimal(model.getSum()));
         expenseRequest = expenseRequestRepository.save(expenseRequest);
 
         return getModel(expenseRequest);
     }
 
+    @Transactional
+    @Override
     public void delete(UUID id) {
         expenseRequestRepository.delete(id);
     }
 
-    private ERequestModel getModel(ExpenseRequest entity) {
-        ERequestModel model = new ERequestModel();
+    private ExpenseRequestModel getModel(ExpenseRequest entity) {
+        ExpenseRequestModel model = new ExpenseRequestModel();
         model.setId(entity.getId());
         model.setSource(entity.getSource().getName());
         model.setCurrency(entity.getCurrency());
         model.setConfirm(entity.getConfirm());
         model.setPaid(entity.getPaid());
         model.setNumber(entity.getNumber());
-        model.setSum(entity.getSum());
+        model.setSum(entity.getSum().toString());
 
         return model;
     }

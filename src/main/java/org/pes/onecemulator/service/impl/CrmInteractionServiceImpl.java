@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
+import com.google.common.eventbus.AsyncEventBus;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
@@ -8,15 +9,14 @@ import org.pes.onecemulator.httpclient.CrmClient;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
-import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
-import org.pes.onecemulator.service.utils.ValidationUtils;
+import org.pes.onecemulator.bus.event.UINotificationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -32,18 +32,6 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CrmInteractionServiceImpl.class);
 
-    @Autowired
-    private Environment environment;
-
-    @Autowired
-    private PayerRepository payerRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private SourceRepository sourceRepository;
-
     @Value("${crm.interaction.host:#{null}}")
     private String crmHost;
 
@@ -52,6 +40,19 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     @Value("${crm.interaction.token:#{null}}")
     private String crmToken;
+
+    private final InvoiceRepository invoiceRepository;
+
+    private final SourceRepository sourceRepository;
+
+    private final AsyncEventBus asyncEventBus;
+
+    @Autowired
+    CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository, AsyncEventBus asyncEventBus) {
+        this.invoiceRepository = invoiceRepository;
+        this.sourceRepository = sourceRepository;
+        this.asyncEventBus = asyncEventBus;
+    }
 
     public DocumentCrm getDocumentsCrmById(UUID id, String sourceName) {
         Invoice invoice = invoiceRepository.findByIdAndSource(id, sourceName);
@@ -83,18 +84,23 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         return new ArrayList<>();
     }
 
+    @Async
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
         try {
-            ValidationUtils.validateAccountingEntryForCrmRequest(accountingEntry);
             final String host = Objects.requireNonNull(crmHost);
             final String uri =  Objects.requireNonNull(crmUri);
             final String token = Objects.requireNonNull(crmToken);
             final String dataUrl = createDataUrl(host + uri, accountingEntry);
             final String sourceName = accountingEntry.getExpenseRequest().getSource().getName();
-            final UUID id = accountingEntry.getId();
-            CrmClient.expenseRequest(dataUrl, token, sourceName, id);
+            try {
+                preExpenseRequestInfo(dataUrl, token, sourceName);
+                CrmClient.expenseRequest(dataUrl, token, sourceName);
+                postExpenseRequestInfo();
+            } catch (Exception e) {
+                errorExpenseRequestInfo(e);
+            }
         } catch (Exception e) {
-            LOGGER.error("Send accounting entry error: ", e);
+            errorExpenseRequestInfo(e);
         }
     }
 
@@ -118,6 +124,24 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .add(parameterData)
                 .add(parameterDate)
                 .toString();
+    }
+
+    private void preExpenseRequestInfo(String dataUrl, String token, String sourceName) {
+        LOGGER.info("Start request to CRM: " + dataUrl + " : " + token + " : " + sourceName);
+        asyncEventBus.post(
+                new UINotificationEvent(this, "Запрос: " + dataUrl + " отправлен в CRM."));
+    }
+
+    private void postExpenseRequestInfo() {
+        LOGGER.info("End request to CRM.");
+        asyncEventBus.post(
+                new UINotificationEvent(this, "Запрос в CRM отправлен."));
+    }
+
+    private void errorExpenseRequestInfo(Exception e) {
+        LOGGER.error("Error request to CRM: ", e);
+        asyncEventBus.post(
+                new UINotificationEvent(this, "Ошибка отправки запроса в CRM: " + e.getMessage()));
     }
 
     private DocumentCrm getDocumentCrm(Invoice entity) {

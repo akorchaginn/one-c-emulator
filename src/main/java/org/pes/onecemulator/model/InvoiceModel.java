@@ -1,56 +1,65 @@
 package org.pes.onecemulator.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.pes.onecemulator.model.api.LocalDateDeserializer;
+import org.pes.onecemulator.model.api.LocalDateSerializer;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
-public class InvoiceModel extends ApiError {
+public class InvoiceModel {
 
     @JsonProperty("id")
     private UUID id;
 
     @JsonProperty("source")
+    @NotEmpty
+    @NotNull
     private String source;
 
     @JsonProperty("date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Calendar date;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull
+    private LocalDate date;
 
     @JsonProperty("nom")
+    @NotEmpty
+    @NotNull
     private String number;
 
     @JsonProperty("NomOQ")
     private String numberOq;
 
     @JsonProperty("payerCode")
+    @NotEmpty
+    @NotNull
     private String payerCode;
 
     @JsonProperty("dataOplat")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Calendar paymentDate;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull
+    private LocalDate paymentDate;
 
     @JsonProperty("sumOplat")
-    private BigDecimal paymentSum;
+    private String paymentSum;
 
     @JsonProperty("status")
     private String status;
 
     @JsonProperty("sum")
-    private BigDecimal sum;
+    private String sum;
 
     @JsonProperty("externalId")
+    @NotEmpty
+    @NotNull
     private String externalId;
-
-    public InvoiceModel() {
-        super();
-    }
-
-    public InvoiceModel(String error) {
-        super(error);
-    }
 
     public UUID getId() {
         return id;
@@ -68,11 +77,11 @@ public class InvoiceModel extends ApiError {
         this.source = source;
     }
 
-    public Calendar getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -100,19 +109,19 @@ public class InvoiceModel extends ApiError {
         this.payerCode = payerCode;
     }
 
-    public Calendar getPaymentDate() {
+    public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(Calendar paymentDate) {
+    public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 
-    public BigDecimal getPaymentSum() {
+    public String getPaymentSum() {
         return paymentSum;
     }
 
-    public void setPaymentSum(BigDecimal paymentSum) {
+    public void setPaymentSum(String paymentSum) {
         this.paymentSum = paymentSum;
     }
 
@@ -124,11 +133,11 @@ public class InvoiceModel extends ApiError {
         this.status = status;
     }
 
-    public BigDecimal getSum() {
+    public String getSum() {
         return sum;
     }
 
-    public void setSum(BigDecimal sum) {
+    public void setSum(String sum) {
         this.sum = sum;
     }
 
@@ -138,5 +147,33 @@ public class InvoiceModel extends ApiError {
 
     public void setExternalId(String externalId) {
         this.externalId = externalId;
+    }
+
+    public boolean containsWithIgnoreCase(String text) {
+        return number.toLowerCase().contains(text)
+                || externalId.toLowerCase().contains(text);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InvoiceModel)) return false;
+        InvoiceModel model = (InvoiceModel) o;
+        return Objects.equals(id, model.id) &&
+                Objects.equals(source, model.source) &&
+                Objects.equals(date, model.date) &&
+                Objects.equals(number, model.number) &&
+                Objects.equals(numberOq, model.numberOq) &&
+                Objects.equals(payerCode, model.payerCode) &&
+                Objects.equals(paymentDate, model.paymentDate) &&
+                Objects.equals(paymentSum, model.paymentSum) &&
+                Objects.equals(status, model.status) &&
+                Objects.equals(sum, model.sum) &&
+                Objects.equals(externalId, model.externalId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, source, date, number, numberOq, payerCode, paymentDate, paymentSum, status, sum, externalId);
     }
 }

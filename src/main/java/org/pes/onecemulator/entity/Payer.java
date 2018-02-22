@@ -19,7 +19,7 @@ public class Payer extends AbstractEntity {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "code")
+    @Column(name = "code", unique = true, nullable = false)
     private String code;
 
     @Column(name = "full_name")
@@ -37,7 +37,7 @@ public class Payer extends AbstractEntity {
     @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Invoice> invoices = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(
             name = "payer_source",
             joinColumns = { @JoinColumn(name = "payer_id") },

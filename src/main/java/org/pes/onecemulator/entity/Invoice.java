@@ -16,7 +16,7 @@ public class Invoice extends AbstractEntity {
     @Column(name = "date")
     private Calendar date;
 
-    @Column(name = "number")
+    @Column(name = "number", unique = true, nullable = false)
     private String number;
 
     @Column(name = "number_oq")
@@ -34,14 +34,14 @@ public class Invoice extends AbstractEntity {
     @Column(name = "sum")
     private BigDecimal sum;
 
-    @Column(name = "external_id")
+    @Column(name = "external_id", unique = true, nullable = false)
     private String externalId;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "payer_id")
     private Payer payer;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "source_id")
     private Source source;
 

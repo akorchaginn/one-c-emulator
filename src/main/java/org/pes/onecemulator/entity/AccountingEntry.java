@@ -2,7 +2,6 @@ package org.pes.onecemulator.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -13,19 +12,19 @@ import java.util.Calendar;
 @Table(name = "accounting_entry")
 public class AccountingEntry extends AbstractEntity {
 
-    @Column(name = "code", unique = true)
+    @Column(name = "code", unique = true, nullable = false)
     private String code;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private Calendar date;
 
-    @Column(name = "document_name")
+    @Column(name = "document_name", nullable = false)
     private String documentName;
 
-    @Column(name = "sum")
+    @Column(name = "sum", nullable = false)
     private BigDecimal sum;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "expense_request_id")
     private ExpenseRequest expenseRequest;
 

@@ -1,19 +1,20 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.model.ERequestModel;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.model.ExpenseRequestModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ExpenseRequestService {
 
-    ERequestModel getById(UUID id);
+    ExpenseRequestModel getById(UUID id) throws NotFoundException;
 
-    List<ERequestModel> list();
+    List<ExpenseRequestModel> list();
 
-    ERequestModel create(ERequestModel model);
+    ExpenseRequestModel create(ExpenseRequestModel model) throws Exception;
 
-    ERequestModel update(ERequestModel model);
+    ExpenseRequestModel update(ExpenseRequestModel model) throws Exception;
 
     void delete(UUID id);
 }

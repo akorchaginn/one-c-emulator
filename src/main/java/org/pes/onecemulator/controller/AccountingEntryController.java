@@ -1,6 +1,7 @@
 package org.pes.onecemulator.controller;
 
-import org.pes.onecemulator.model.AEntryModel;
+import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.model.AccountingEntryModel;
 import org.pes.onecemulator.service.AccountingEntryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,22 +21,25 @@ public class AccountingEntryController {
     private AccountingEntryService accountingEntryService;
 
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody AEntryModel getById(@PathVariable UUID id) {
+    public @ResponseBody
+    AccountingEntryModel getById(@PathVariable UUID id) throws NotFoundException {
         return accountingEntryService.getById(id);
     }
 
     @GetMapping(value = "/list")
-    public @ResponseBody List<AEntryModel> list() {
+    public @ResponseBody List<AccountingEntryModel> list() {
         return accountingEntryService.list();
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody AEntryModel create(@RequestBody AEntryModel model) {
+    public @ResponseBody
+    AccountingEntryModel create(@RequestBody AccountingEntryModel model) throws Exception {
         return accountingEntryService.create(model);
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody AEntryModel update(@RequestBody AEntryModel model) {
+    public @ResponseBody
+    AccountingEntryModel update(@RequestBody AccountingEntryModel model) throws Exception {
         return accountingEntryService.update(model);
     }
 
