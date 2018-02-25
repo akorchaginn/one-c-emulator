@@ -17,10 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -96,11 +92,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Invoice invoice = new Invoice();
         invoice.setSource(source);
-        invoice.setDate(toCalendar(model.getDate()));
+        invoice.setDate(model.getDate());
         invoice.setNumber(model.getNumber());
         invoice.setNumberOq(model.getNumberOq());
         invoice.setPayer(payer);
-        invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
+        invoice.setPaymentDate(model.getPaymentDate());
         invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
         invoice.setStatus(model.getStatus());
         invoice.setSum(new BigDecimal(model.getSum()));
@@ -150,11 +146,11 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
 
         invoice.setSource(source);
-        invoice.setDate(toCalendar(model.getDate()));
+        invoice.setDate(model.getDate());
         invoice.setNumber(model.getNumber());
         invoice.setNumberOq(model.getNumberOq());
         invoice.setPayer(payer);
-        invoice.setPaymentDate(toCalendar(model.getPaymentDate()));
+        invoice.setPaymentDate(model.getPaymentDate());
         invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
         invoice.setStatus(model.getStatus());
         invoice.setSum(new BigDecimal(model.getSum()));
@@ -174,24 +170,16 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceModel model = new InvoiceModel();
         model.setId(entity.getId());
         model.setSource(entity.getSource().getName());
-        model.setDate(toLocalDate(entity.getDate()));
+        model.setDate(entity.getDate());
         model.setNumber(entity.getNumber());
         model.setNumberOq(entity.getNumberOq());
         model.setPayerCode(entity.getPayer().getCode());
-        model.setPaymentDate(toLocalDate(entity.getPaymentDate()));
+        model.setPaymentDate(entity.getPaymentDate());
         model.setPaymentSum(entity.getPaymentSum().toString());
         model.setStatus(entity.getStatus());
         model.setSum(entity.getSum().toString());
         model.setExternalId(entity.getExternalId());
 
         return model;
-    }
-
-    private LocalDate toLocalDate(Calendar calendar) {
-        return calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
-    private Calendar toCalendar(LocalDate localDate) {
-        return GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
     }
 }

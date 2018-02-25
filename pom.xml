@@ -168,7 +168,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<jvmArguments>
-						-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
+						-server -Xms128m -Xmx256m -XX:-UseParallelGC
 					</jvmArguments>
 				</configuration>
 			</plugin>

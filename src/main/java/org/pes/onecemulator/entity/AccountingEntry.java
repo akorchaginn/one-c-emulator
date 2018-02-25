@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 @Entity
 @Table(
@@ -24,7 +24,7 @@ public class AccountingEntry extends AbstractEntity {
     private String code;
 
     @Column(name = "date", nullable = false)
-    private Calendar date;
+    private LocalDate date;
 
     @Column(name = "document_name", nullable = false)
     private String documentName;
@@ -46,11 +46,11 @@ public class AccountingEntry extends AbstractEntity {
         this.code = code;
     }
 
-    public Calendar getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

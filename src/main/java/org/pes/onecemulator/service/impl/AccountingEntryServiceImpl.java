@@ -16,10 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -84,7 +80,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         }
         AccountingEntry accountingEntry = new AccountingEntry();
         accountingEntry.setCode(model.getCode());
-        accountingEntry.setDate(toCalendar(model.getDate()));
+        accountingEntry.setDate(model.getDate());
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(new BigDecimal(model.getSum()));
@@ -119,7 +115,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
             throw new NotFoundException(AccountingEntry.class, model.getId());
         }
         accountingEntry.setCode(model.getCode());
-        accountingEntry.setDate(toCalendar(model.getDate()));
+        accountingEntry.setDate(model.getDate());
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(new BigDecimal(model.getSum()));
@@ -139,7 +135,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         AccountingEntryModel model = new AccountingEntryModel();
         model.setId(entity.getId());
         model.setCode(entity.getCode());
-        model.setDate(toLocalDate(entity.getDate()));
+        model.setDate(entity.getDate());
         model.setDocumentName(entity.getDocumentName());
         model.setExpenseNumber(entity.getExpenseRequest() != null
                 ? entity.getExpenseRequest().getNumber()
@@ -148,13 +144,5 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         model.setSum(entity.getSum().toString());
 
         return model;
-    }
-
-    private LocalDate toLocalDate(Calendar calendar) {
-        return calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
-    private Calendar toCalendar(LocalDate localDate) {
-        return GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
     }
 }

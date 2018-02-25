@@ -9,7 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 @Entity
 @Table(
@@ -27,7 +27,7 @@ import java.util.Calendar;
 public class Invoice extends AbstractEntity {
 
     @Column(name = "date")
-    private Calendar date;
+    private LocalDate date;
 
     @Column(name = "number", nullable = false)
     private String number;
@@ -36,7 +36,7 @@ public class Invoice extends AbstractEntity {
     private String numberOq;
 
     @Column(name = "payment_date")
-    private Calendar paymentDate;
+    private LocalDate paymentDate;
 
     @Column(name = "payment_sum")
     private BigDecimal paymentSum;
@@ -58,11 +58,11 @@ public class Invoice extends AbstractEntity {
     @JoinColumn(name = "source_id", foreignKey = @ForeignKey(name = "fk_invoice_source_id"))
     private Source source;
 
-    public Calendar getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -82,11 +82,11 @@ public class Invoice extends AbstractEntity {
         this.numberOq = numberOq;
     }
 
-    public Calendar getPaymentDate() {
+    public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(Calendar paymentDate) {
+    public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 

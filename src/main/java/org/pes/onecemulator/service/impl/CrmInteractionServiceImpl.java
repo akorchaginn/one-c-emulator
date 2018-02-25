@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -116,8 +116,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .add(accountingEntry.getExpenseRequest().getConfirm().toString())
                 .toString();
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String parameterDate = simpleDateFormat.format(accountingEntry.getDate().getTime());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String parameterDate = accountingEntry.getDate().format(formatter);
 
         return new StringJoiner("/")
                 .add(endpointUrl)
