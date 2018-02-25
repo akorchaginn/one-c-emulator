@@ -168,7 +168,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<jvmArguments>
-						-server -Xms128m -Xmx256m -XX:-UseParallelGC
+						-server -Xms64m -Xmx128m -XX:+UseParallelGC
 					</jvmArguments>
 				</configuration>
 			</plugin>
