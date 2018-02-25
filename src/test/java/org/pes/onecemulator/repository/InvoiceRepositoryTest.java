@@ -1,6 +1,5 @@
 package org.pes.onecemulator.repository;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pes.onecemulator.entity.Invoice;
@@ -13,6 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -51,9 +52,7 @@ public class InvoiceRepositoryTest {
         Invoice foundByIdAndSourceInvoice =
                 repository.findByIdAndSource(newInvoice.getId(), newInvoice.getSource().getName());
 
-        Assert.assertNotNull(foundByIdAndSourceInvoice);
-        Assert.assertTrue(foundByIdAndSourceInvoice.getId() == newInvoice.getId());
-        Assert.assertTrue(foundByIdAndSourceInvoice.getSource().getName().equals(newInvoice.getSource().getName()));
+        assertNotNull(foundByIdAndSourceInvoice);
     }
 
     @Test
@@ -83,9 +82,6 @@ public class InvoiceRepositoryTest {
         Invoice foundByExternalIdAndSourceInvoice =
                 repository.findByExternalIdAndSource(newInvoice.getExternalId(), newInvoice.getSource().getName());
 
-        Assert.assertNotNull(foundByExternalIdAndSourceInvoice);
-        Assert.assertTrue(foundByExternalIdAndSourceInvoice.getExternalId().equals(newInvoice.getExternalId()));
-        Assert.assertTrue(
-                foundByExternalIdAndSourceInvoice.getSource().getName().equals(newInvoice.getSource().getName()));
+        assertNotNull(foundByExternalIdAndSourceInvoice);
     }
 }

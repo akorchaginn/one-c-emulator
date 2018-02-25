@@ -7,15 +7,23 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "source")
+@Table(
+        name = "source",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = "name",
+                        name = "uk_source_name"
+                )
+        }
+)
 public class Source extends AbstractEntity {
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "sources")
@@ -57,22 +65,5 @@ public class Source extends AbstractEntity {
 
     public void setInvoices(Set<Invoice> invoices) {
         this.invoices = invoices;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Source)) return false;
-        if (!super.equals(o)) return false;
-        Source source = (Source) o;
-        return Objects.equals(name, source.name) &&
-                Objects.equals(payers, source.payers) &&
-                Objects.equals(expenseRequests, source.expenseRequests) &&
-                Objects.equals(invoices, source.invoices);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), name, payers, expenseRequests, invoices);
     }
 }

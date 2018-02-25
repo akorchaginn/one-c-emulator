@@ -1,22 +1,35 @@
 package org.pes.onecemulator.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
 @Entity
-@Table(name = "invoice")
+@Table(
+        name = "invoice",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = "number",
+                        name = "uk_invoice_number"),
+                @UniqueConstraint(
+                        columnNames = "external_id",
+                        name = "uk_invoice_external_id"
+                )
+        }
+)
 public class Invoice extends AbstractEntity {
 
     @Column(name = "date")
     private Calendar date;
 
-    @Column(name = "number", unique = true, nullable = false)
+    @Column(name = "number", nullable = false)
     private String number;
 
     @Column(name = "number_oq")
@@ -34,15 +47,15 @@ public class Invoice extends AbstractEntity {
     @Column(name = "sum")
     private BigDecimal sum;
 
-    @Column(name = "external_id", unique = true, nullable = false)
+    @Column(name = "external_id", nullable = false)
     private String externalId;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "payer_id")
+    @JoinColumn(name = "payer_id", foreignKey = @ForeignKey(name = "fk_invoice_payer_id"))
     private Payer payer;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "source_id")
+    @JoinColumn(name = "source_id", foreignKey = @ForeignKey(name = "fk_invoice_source_id"))
     private Source source;
 
     public Calendar getDate() {

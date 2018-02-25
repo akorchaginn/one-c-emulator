@@ -1,6 +1,5 @@
 package org.pes.onecemulator.repository;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pes.onecemulator.entity.Payer;
@@ -12,6 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -40,7 +41,7 @@ public class PayerRepositoryTest {
 
         Payer foundByCode = repository.findByCode(newPayer.getCode());
 
-        Assert.assertNotNull(foundByCode);
-        Assert.assertFalse(foundByCode.getSources().isEmpty());
+        assertNotNull(foundByCode);
+        assertFalse(foundByCode.getSources().isEmpty());
     }
 }

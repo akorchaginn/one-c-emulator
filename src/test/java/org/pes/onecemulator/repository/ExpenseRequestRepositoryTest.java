@@ -1,6 +1,5 @@
 package org.pes.onecemulator.repository;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pes.onecemulator.entity.ExpenseRequest;
@@ -11,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -41,7 +42,6 @@ public class ExpenseRequestRepositoryTest {
 
         ExpenseRequest foundByNumber = repository.findByNumber(newExpenseRequest.getNumber());
 
-        Assert.assertNotNull(foundByNumber);
-        Assert.assertTrue(foundByNumber.getNumber().equals(newExpenseRequest.getNumber()));
+        assertNotNull(foundByNumber);
     }
 }
