@@ -40,7 +40,7 @@ public class InvoiceController {
         return invoiceService.update(model);
     }
 
-    @GetMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public void delete(@PathVariable UUID id) {
         invoiceService.delete(id);
     }

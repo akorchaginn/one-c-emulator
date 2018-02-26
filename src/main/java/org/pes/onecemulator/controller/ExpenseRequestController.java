@@ -43,7 +43,7 @@ public class ExpenseRequestController {
         return expenseRequestService.update(model);
     }
 
-    @GetMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public void delete(@PathVariable(value = "id") UUID id) {
         expenseRequestService.delete(id);
     }

@@ -43,7 +43,7 @@ public class AccountingEntryController {
         return accountingEntryService.update(model);
     }
 
-    @GetMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public void delete(@PathVariable UUID id) {
         accountingEntryService.delete(id);
     }
