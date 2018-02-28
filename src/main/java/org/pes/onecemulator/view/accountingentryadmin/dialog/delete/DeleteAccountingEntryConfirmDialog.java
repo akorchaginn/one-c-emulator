@@ -5,8 +5,8 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.accountingentryadmin.root.presenter.IAccountingEntryAdminPresenter;
-import org.pes.onecemulator.view.accountingentryadmin.root.view.IAccountingEntryAdminView;
 import org.pes.onecemulator.view.accountingentryadmin.root.view.AccountingEntryAdminView;
+import org.pes.onecemulator.view.accountingentryadmin.root.view.IAccountingEntryAdminView;
 import org.pes.onecemulator.view.fundamentals.dialog.confirm.ConfirmDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -5,8 +5,8 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.expenserequestadmin.root.presenter.IExpenseRequestAdminPresenter;
-import org.pes.onecemulator.view.expenserequestadmin.root.view.IExpenseRequestAdminView;
 import org.pes.onecemulator.view.expenserequestadmin.root.view.ExpenseRequestAdminView;
+import org.pes.onecemulator.view.expenserequestadmin.root.view.IExpenseRequestAdminView;
 import org.pes.onecemulator.view.fundamentals.dialog.confirm.ConfirmDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 

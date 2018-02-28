@@ -2,9 +2,9 @@ package org.pes.onecemulator.view.top.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.UI;
 import org.pes.onecemulator.view.fundamentals.fragment.header.ViewHeader;
 import org.pes.onecemulator.view.fundamentals.layout.BaseViewLayout;
-import com.vaadin.ui.UI;
 
 @SpringView(name = TopView.VIEW_NAME)
 public class TopView extends BaseViewLayout implements View {

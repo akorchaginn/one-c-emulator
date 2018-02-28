@@ -1,6 +1,7 @@
 package org.pes.onecemulator.service.impl;
 
 import com.google.common.eventbus.AsyncEventBus;
+import org.pes.onecemulator.bus.event.UINotificationEvent;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
@@ -11,7 +12,6 @@ import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
-import org.pes.onecemulator.bus.event.UINotificationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
