@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,12 +43,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     @Override
     public InvoiceModel getById(UUID id) throws NotFoundException {
-        Invoice invoice = invoiceRepository.findOne(id);
-        if (invoice != null) {
-            return getModel(invoice);
-        }
-
-        throw new NotFoundException(Invoice.class, id);
+        Optional<Invoice> invoice = invoiceRepository.findById(id);
+        return getModel(invoice.orElseThrow(() -> new NotFoundException(Invoice.class, id)));
     }
 
     @Transactional
@@ -126,8 +123,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ValidationException("Payer code is null.");
         }
 
-        Invoice invoice = invoiceRepository.findOne(model.getId());
-        if (invoice == null) {
+        Optional<Invoice> optionalInvoice = invoiceRepository.findById(model.getId());
+        if (!optionalInvoice.isPresent()) {
             throw new NotFoundException(Invoice.class, model.getId());
         }
 
@@ -144,6 +141,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (!payer.getSources().contains(source)) {
             throw new ValidationException("Invoice source not equal payer source.");
         }
+
+        Invoice invoice = optionalInvoice.get();
 
         invoice.setSource(source);
         invoice.setDate(model.getDate());
@@ -163,7 +162,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     @Override
     public void delete(UUID id) {
-        invoiceRepository.delete(id);
+        invoiceRepository.deleteById(id);
     }
 
     private InvoiceModel getModel(Invoice entity) {

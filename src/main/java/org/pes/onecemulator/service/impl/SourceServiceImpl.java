@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,12 +35,8 @@ public class SourceServiceImpl implements SourceService {
     @Transactional
     @Override
     public SourceModel getById(UUID id) throws NotFoundException {
-        Source source = sourceRepository.findOne(id);
-        if (source != null) {
-            return getModel(source);
-        }
-
-        throw new NotFoundException(Source.class, id);
+        Optional<Source> optionalSource = sourceRepository.findById(id);
+        return getModel(optionalSource.orElseThrow(() -> new NotFoundException(Source.class, id)));
     }
 
     @Transactional
@@ -116,11 +113,8 @@ public class SourceServiceImpl implements SourceService {
             throw new ValidationException("Name is empty.");
         }
 
-        Source source = sourceRepository.findOne(model.getId());
-        if (source == null) {
-            throw new NotFoundException(Source.class, model.getId());
-        }
-
+        Optional<Source> optionalSource = sourceRepository.findById(model.getId());
+        Source source = optionalSource.orElseThrow(() -> new NotFoundException(Source.class, model.getId()));
         source.setName(model.getName());
         source = sourceRepository.save(source);
 
@@ -130,7 +124,7 @@ public class SourceServiceImpl implements SourceService {
     @Transactional
     @Override
     public void delete(UUID id) {
-        sourceRepository.delete(id);
+        sourceRepository.deleteById(id);
     }
 
     private SourceModel getModel(Source entity) {

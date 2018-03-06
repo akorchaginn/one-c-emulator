@@ -3,7 +3,6 @@ package org.pes.onecemulator.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.pes.onecemulator.model.api.LocalDateDeserializer;
 import org.pes.onecemulator.model.api.LocalDateSerializer;
 
@@ -18,7 +17,6 @@ public class InvoiceModel {
     private UUID id;
 
     @JsonProperty("source")
-    @NotEmpty
     @NotNull
     private String source;
 
@@ -29,7 +27,6 @@ public class InvoiceModel {
     private LocalDate date;
 
     @JsonProperty("nom")
-    @NotEmpty
     @NotNull
     private String number;
 
@@ -37,7 +34,6 @@ public class InvoiceModel {
     private String numberOq;
 
     @JsonProperty("payerCode")
-    @NotEmpty
     @NotNull
     private String payerCode;
 
@@ -57,7 +53,6 @@ public class InvoiceModel {
     private String sum;
 
     @JsonProperty("externalId")
-    @NotEmpty
     @NotNull
     private String externalId;
 

@@ -2,7 +2,6 @@ package org.pes.onecemulator.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
@@ -15,12 +14,10 @@ public class ExpenseRequestModel {
 
     @JsonProperty("source")
     @NotNull
-    @NotEmpty
     private String source;
 
     @JsonProperty("currency")
     @NotNull
-    @NotEmpty
     private String currency;
 
     @JsonProperty("isConfirm")
@@ -35,12 +32,10 @@ public class ExpenseRequestModel {
 
     @JsonProperty("number")
     @NotNull
-    @NotEmpty
     private String number;
 
     @JsonProperty("sum")
     @NotNull
-    @NotEmpty
     private String sum;
 
     public UUID getId() {

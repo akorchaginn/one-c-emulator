@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,12 +42,8 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Transactional
     @Override
     public AccountingEntryModel getById(UUID id) throws NotFoundException {
-        AccountingEntry accountingEntry = accountingEntryRepository.findOne(id);
-        if (accountingEntry != null) {
-            return getModel(accountingEntry);
-        }
-
-        throw new NotFoundException(AccountingEntryModel.class, id);
+        Optional<AccountingEntry> optionalAccountingEntry = accountingEntryRepository.findById(id);
+        return getModel(optionalAccountingEntry.orElseThrow(() -> new NotFoundException(AccountingEntryModel.class, id)));
     }
 
     @Transactional
@@ -110,10 +107,12 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
             throw new NotFoundException(ExpenseRequest.class, "number: " + model.getExpenseNumber());
         }
 
-        AccountingEntry accountingEntry = accountingEntryRepository.findOne(model.getId());
-        if (accountingEntry == null) {
+        Optional<AccountingEntry> optionalAccountingEntry = accountingEntryRepository.findById(model.getId());
+        if (!optionalAccountingEntry.isPresent()) {
             throw new NotFoundException(AccountingEntry.class, model.getId());
         }
+
+        AccountingEntry accountingEntry = optionalAccountingEntry.get();
         accountingEntry.setCode(model.getCode());
         accountingEntry.setDate(model.getDate());
         accountingEntry.setDocumentName(model.getDocumentName());
@@ -128,7 +127,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Transactional
     @Override
     public void delete(UUID id) {
-       accountingEntryRepository.delete(id);
+       accountingEntryRepository.deleteById(id);
     }
 
     private AccountingEntryModel getModel(AccountingEntry entity) {

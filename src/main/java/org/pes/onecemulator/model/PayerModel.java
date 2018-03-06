@@ -2,7 +2,6 @@ package org.pes.onecemulator.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,11 +14,9 @@ public class PayerModel {
     private UUID id;
 
     @JsonProperty("code")
-    @NotEmpty
     private String code;
 
     @JsonProperty("name")
-    @NotEmpty
     private String name;
 
     @JsonProperty("fullName")
@@ -36,7 +33,6 @@ public class PayerModel {
 
     @JsonProperty("source")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    @NotEmpty
     private Set<String> sources = new HashSet<>();
 
     public UUID getId() {

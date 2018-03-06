@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.9.RELEASE</version>
+		<version>2.0.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -22,10 +22,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<hibernate.version>5.2.12.Final</hibernate.version>
-		<HikariCP.version>2.7.6</HikariCP.version>
+		<hibernate.version>5.2.14.Final</hibernate.version>
+		<HikariCP.version>2.7.8</HikariCP.version>
 		<springfox.version>2.8.0</springfox.version>
-		<swagger-ui.version>2.8.0</swagger-ui.version>
 		<common-lang3.version>3.7</common-lang3.version>
 		<async-http-client.version>2.2.1</async-http-client.version>
 		<httpclient.version>4.5.5</httpclient.version>
@@ -84,7 +83,7 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${swagger-ui.version}</version>
+			<version>${springfox.version}</version>
 		</dependency>
 
 		<dependency>
@@ -166,11 +165,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!--
 				<configuration>
-					<jvmArguments>
-						-server -Xms64m -Xmx128m -XX:+UseParallelGC
-					</jvmArguments>
-				</configuration>
+          			<jvmArguments>
+            			-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
+          			</jvmArguments>
+        		</configuration>
+				-->
 			</plugin>
 		</plugins>
 	</build>

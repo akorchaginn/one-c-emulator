@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -37,12 +38,8 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     @Transactional
     @Override
     public ExpenseRequestModel getById(UUID id) throws NotFoundException {
-        ExpenseRequest expenseRequest = expenseRequestRepository.findOne(id);
-        if (expenseRequest != null) {
-            return getModel(expenseRequest);
-        }
-
-        throw new NotFoundException(ExpenseRequest.class, id);
+        Optional<ExpenseRequest> optionalExpenseRequest = expenseRequestRepository.findById(id);
+        return getModel(optionalExpenseRequest.orElseThrow(() -> new NotFoundException(ExpenseRequest.class, id)));
     }
 
     @Transactional
@@ -108,8 +105,8 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
             throw new ValidationException("Source is null.");
         }
 
-        ExpenseRequest expenseRequest = expenseRequestRepository.findOne(model.getId());
-        if (expenseRequest == null) {
+        Optional<ExpenseRequest> optionalExpenseRequest = expenseRequestRepository.findById(model.getId());
+        if (!optionalExpenseRequest.isPresent()) {
             throw new NotFoundException(ExpenseRequest.class, model.getId());
         }
 
@@ -118,6 +115,7 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
             throw new NotFoundException(Source.class, "name: " + model.getSource());
         }
 
+        ExpenseRequest expenseRequest = optionalExpenseRequest.get();
         expenseRequest.setSource(source);
         expenseRequest.setCurrency(model.getCurrency());
         expenseRequest.setConfirm(model.getConfirm());
@@ -132,7 +130,7 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     @Transactional
     @Override
     public void delete(UUID id) {
-        expenseRequestRepository.delete(id);
+        expenseRequestRepository.deleteById(id);
     }
 
     private ExpenseRequestModel getModel(ExpenseRequest entity) {

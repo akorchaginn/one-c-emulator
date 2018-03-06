@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,12 +39,8 @@ public class PayerServiceImpl implements PayerService {
     @Transactional
     @Override
     public PayerModel getById(UUID id) throws NotFoundException {
-        Payer payer = payerRepository.findOne(id);
-        if (payer != null) {
-            return getModel(payer);
-        }
-
-        throw new NotFoundException(Payer.class, id);
+        Optional<Payer> optionalPayer = payerRepository.findById(id);
+        return getModel(optionalPayer.orElseThrow(() -> new NotFoundException(Payer.class, id)));
     }
 
     @Transactional
@@ -121,8 +118,8 @@ public class PayerServiceImpl implements PayerService {
             throw new ValidationException("Source list is empty.");
         }
 
-        Payer payer = payerRepository.findOne(model.getId());
-        if (payer == null) {
+        Optional<Payer> payerOptional = payerRepository.findById(model.getId());
+        if (!payerOptional.isPresent()) {
             throw new NotFoundException(Payer.class, model.getId());
         }
 
@@ -142,6 +139,7 @@ public class PayerServiceImpl implements PayerService {
             throw new ValidationException("New source list is empty.");
         }
 
+        Payer payer = payerOptional.get();
         payer.setCode(model.getCode());
         payer.setName(model.getName());
         payer.setFullName(model.getFullName());
@@ -157,7 +155,7 @@ public class PayerServiceImpl implements PayerService {
     @Transactional
     @Override
     public void delete(UUID id) {
-        payerRepository.delete(id);
+        payerRepository.deleteById(id);
     }
 
     private PayerModel getModel(Payer entity) {

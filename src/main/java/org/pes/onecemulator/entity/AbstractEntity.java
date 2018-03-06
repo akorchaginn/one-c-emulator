@@ -12,12 +12,11 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.UUID;
 
 @MappedSuperclass
-public abstract class AbstractEntity implements Serializable {
+public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")

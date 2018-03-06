@@ -1,7 +1,5 @@
 package org.pes.onecemulator.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,7 +7,6 @@ public class SourceModel {
 
     private UUID id;
 
-    @NotEmpty
     private String name;
 
     public UUID getId() {

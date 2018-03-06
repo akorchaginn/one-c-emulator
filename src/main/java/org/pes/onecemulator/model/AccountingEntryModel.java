@@ -3,7 +3,6 @@ package org.pes.onecemulator.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.pes.onecemulator.model.api.LocalDateDeserializer;
 import org.pes.onecemulator.model.api.LocalDateSerializer;
 
@@ -19,7 +18,6 @@ public class AccountingEntryModel {
 
     @JsonProperty("operationCode")
     @NotNull
-    @NotEmpty
     private String code;
 
     @JsonProperty("date")
@@ -33,12 +31,10 @@ public class AccountingEntryModel {
 
     @JsonProperty("expenseNumber")
     @NotNull
-    @NotEmpty
     private String expenseNumber;
 
     @JsonProperty("sum")
     @NotNull
-    @NotEmpty
     private String sum;
 
     public UUID getId() {
