@@ -40,18 +40,14 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Value("${crm.interaction.token:#{null}}")
     private String crmToken;
 
-    private final InvoiceRepository invoiceRepository;
-
-    private final SourceRepository sourceRepository;
-
-    private final AsyncEventBus asyncEventBus;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
-    CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository, AsyncEventBus asyncEventBus) {
-        this.invoiceRepository = invoiceRepository;
-        this.sourceRepository = sourceRepository;
-        this.asyncEventBus = asyncEventBus;
-    }
+    private SourceRepository sourceRepository;
+
+    @Autowired
+    private AsyncEventBus asyncEventBus;
 
     public DocumentCrm getDocumentsCrmById(UUID id, String sourceName) {
         Invoice invoice = invoiceRepository.findByIdAndSource(id, sourceName).orElseGet(Invoice::new);

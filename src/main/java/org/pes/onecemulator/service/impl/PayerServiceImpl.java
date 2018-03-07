@@ -25,15 +25,11 @@ public class PayerServiceImpl implements PayerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PayerServiceImpl.class);
 
-    private final PayerRepository payerRepository;
-
-    private final SourceRepository sourceRepository;
+    @Autowired
+    private PayerRepository payerRepository;
 
     @Autowired
-    PayerServiceImpl(PayerRepository payerRepository, SourceRepository sourceRepository) {
-        this.payerRepository = payerRepository;
-        this.sourceRepository = sourceRepository;
-    }
+    private SourceRepository sourceRepository;
 
     @Transactional
     @Override

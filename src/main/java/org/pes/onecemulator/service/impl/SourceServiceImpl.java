@@ -24,12 +24,8 @@ public class SourceServiceImpl implements SourceService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SourceServiceImpl.class);
 
-    private final SourceRepository sourceRepository;
-
     @Autowired
-    SourceServiceImpl(SourceRepository sourceRepository) {
-        this.sourceRepository = sourceRepository;
-    }
+    private SourceRepository sourceRepository;
 
     @Transactional
     @Override
