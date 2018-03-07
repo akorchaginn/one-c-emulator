@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,8 +37,9 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     @Transactional
     @Override
     public ExpenseRequestModel getById(UUID id) throws NotFoundException {
-        Optional<ExpenseRequest> optionalExpenseRequest = expenseRequestRepository.findById(id);
-        return getModel(optionalExpenseRequest.orElseThrow(() -> new NotFoundException(ExpenseRequest.class, id)));
+        ExpenseRequest expenseRequest = expenseRequestRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, id));
+        return getModel(expenseRequest);
     }
 
     @Transactional
@@ -68,10 +68,8 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
             throw new ValidationException("Source is null.");
         }
 
-        Source source = sourceRepository.findByName(model.getSource());
-        if (source == null) {
-            throw new NotFoundException(Source.class, "name: " + model.getSource());
-        }
+        Source source = sourceRepository.findByName(model.getSource())
+                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
 
         ExpenseRequest expenseRequest = new ExpenseRequest();
         expenseRequest.setSource(source);
@@ -105,17 +103,12 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
             throw new ValidationException("Source is null.");
         }
 
-        Optional<ExpenseRequest> optionalExpenseRequest = expenseRequestRepository.findById(model.getId());
-        if (!optionalExpenseRequest.isPresent()) {
-            throw new NotFoundException(ExpenseRequest.class, model.getId());
-        }
+        ExpenseRequest expenseRequest = expenseRequestRepository.findById(model.getId())
+                .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, model.getId()));
 
-        Source source = sourceRepository.findByName(model.getSource());
-        if (source == null) {
-            throw new NotFoundException(Source.class, "name: " + model.getSource());
-        }
+        Source source = sourceRepository.findByName(model.getSource())
+                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
 
-        ExpenseRequest expenseRequest = optionalExpenseRequest.get();
         expenseRequest.setSource(source);
         expenseRequest.setCurrency(model.getCurrency());
         expenseRequest.setConfirm(model.getConfirm());

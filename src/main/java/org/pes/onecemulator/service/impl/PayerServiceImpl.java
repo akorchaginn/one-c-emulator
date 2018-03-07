@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,8 +38,8 @@ public class PayerServiceImpl implements PayerService {
     @Transactional
     @Override
     public PayerModel getById(UUID id) throws NotFoundException {
-        Optional<Payer> optionalPayer = payerRepository.findById(id);
-        return getModel(optionalPayer.orElseThrow(() -> new NotFoundException(Payer.class, id)));
+        Payer payer = payerRepository.findById(id).orElseThrow(() -> new NotFoundException(Payer.class, id));
+        return getModel(payer);
     }
 
     @Transactional
@@ -71,14 +70,13 @@ public class PayerServiceImpl implements PayerService {
 
         Set<Source> newSources = new HashSet<>();
         model.getSources().forEach(s -> {
-            Source source = sourceRepository.findByName(s);
-            if (source != null) {
-                newSources.add(source);
-            } else {
+            Source source = sourceRepository.findByName(s).orElseGet(() ->
+            {
                 Source newSource = new Source();
                 newSource.setName(s);
-                newSources.add(newSource);
-            }
+                return newSource;
+            });
+            newSources.add(source);
         });
 
         if (newSources.isEmpty()) {
@@ -118,28 +116,24 @@ public class PayerServiceImpl implements PayerService {
             throw new ValidationException("Source list is empty.");
         }
 
-        Optional<Payer> payerOptional = payerRepository.findById(model.getId());
-        if (!payerOptional.isPresent()) {
-            throw new NotFoundException(Payer.class, model.getId());
-        }
+        Payer payer = payerRepository.findById(model.getId())
+                .orElseThrow(() -> new NotFoundException(Payer.class, model.getId()));
 
         Set<Source> newSources = new HashSet<>();
         model.getSources().forEach(s -> {
-            Source source = sourceRepository.findByName(s);
-            if (source != null) {
-                newSources.add(source);
-            } else {
+            Source source = sourceRepository.findByName(s).orElseGet(() ->
+            {
                 Source newSource = new Source();
                 newSource.setName(s);
-                newSources.add(newSource);
-            }
+                return newSource;
+            });
+            newSources.add(source);
         });
 
         if (newSources.isEmpty()) {
             throw new ValidationException("New source list is empty.");
         }
 
-        Payer payer = payerOptional.get();
         payer.setCode(model.getCode());
         payer.setName(model.getName());
         payer.setFullName(model.getFullName());

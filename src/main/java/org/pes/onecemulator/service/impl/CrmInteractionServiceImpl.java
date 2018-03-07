@@ -20,7 +20,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -55,33 +54,21 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     public DocumentCrm getDocumentsCrmById(UUID id, String sourceName) {
-        Invoice invoice = invoiceRepository.findByIdAndSource(id, sourceName);
-        if (invoice != null) {
-            return getDocumentCrm(invoice);
-        }
-
-        return new DocumentCrm();
+        Invoice invoice = invoiceRepository.findByIdAndSource(id, sourceName).orElseGet(Invoice::new);
+        return getDocumentCrm(invoice);
     }
 
     public DocumentCrm getDocumentCrmByExternalId(String externalId, String sourceName) {
-        Invoice invoice = invoiceRepository.findByExternalIdAndSource(externalId, sourceName);
-        if (invoice != null) {
-            return getDocumentCrm(invoice);
-        }
-
-        return new DocumentCrm();
+        Invoice invoice = invoiceRepository.findByExternalIdAndSource(externalId, sourceName).orElseGet(Invoice::new);
+        return getDocumentCrm(invoice);
     }
 
     public List<PayerCrm> getAllPayersCrmBySource(String sourceName) {
-        Source source = sourceRepository.findByName(sourceName);
-        if (source != null) {
-            return source.getPayers()
-                    .stream()
-                    .map(this::getPayerCrm)
-                    .collect(Collectors.toList());
-        }
-
-        return new ArrayList<>();
+        Source source = sourceRepository.findByName(sourceName).orElseGet(Source::new);
+        return source.getPayers()
+                .stream()
+                .map(this::getPayerCrm)
+                .collect(Collectors.toList());
     }
 
     @Async

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -43,8 +42,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     @Override
     public InvoiceModel getById(UUID id) throws NotFoundException {
-        Optional<Invoice> invoice = invoiceRepository.findById(id);
-        return getModel(invoice.orElseThrow(() -> new NotFoundException(Invoice.class, id)));
+        Invoice invoice = invoiceRepository.findById(id).orElseThrow(() -> new NotFoundException(Invoice.class, id));
+        return getModel(invoice);
     }
 
     @Transactional
@@ -73,15 +72,11 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ValidationException("Payer code is null.");
         }
 
-        Source source = sourceRepository.findByName(model.getSource());
-        if (source == null) {
-            throw new NotFoundException(Source.class, "name: " + model.getSource());
-        }
+        Source source = sourceRepository.findByName(model.getSource())
+                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
 
-        Payer payer = payerRepository.findByCode(model.getPayerCode());
-        if (payer == null) {
-            throw new NotFoundException(Payer.class, "code: " + model.getPayerCode());
-        }
+        Payer payer = payerRepository.findByCode(model.getPayerCode())
+                .orElseThrow(() -> new NotFoundException(Payer.class, "code: " + model.getPayerCode()));
 
         if (!payer.getSources().contains(source)) {
             throw new ValidationException("Invoice source not equal payer source.");
@@ -123,26 +118,18 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ValidationException("Payer code is null.");
         }
 
-        Optional<Invoice> optionalInvoice = invoiceRepository.findById(model.getId());
-        if (!optionalInvoice.isPresent()) {
-            throw new NotFoundException(Invoice.class, model.getId());
-        }
+        Invoice invoice = invoiceRepository.findById(model.getId())
+                .orElseThrow(() -> new NotFoundException(Invoice.class, model.getId()));
 
-        Source source = sourceRepository.findByName(model.getSource());
-        if (source == null) {
-            throw new NotFoundException(Source.class, "name: " + model.getSource());
-        }
+        Source source = sourceRepository.findByName(model.getSource())
+                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
 
-        Payer payer = payerRepository.findByCode(model.getPayerCode());
-        if (payer == null) {
-            throw new NotFoundException(Payer.class, "code: " + model.getPayerCode());
-        }
+        Payer payer = payerRepository.findByCode(model.getPayerCode())
+                .orElseThrow(() -> new NotFoundException(Payer.class, "code: " + model.getPayerCode()));
 
         if (!payer.getSources().contains(source)) {
             throw new ValidationException("Invoice source not equal payer source.");
         }
-
-        Invoice invoice = optionalInvoice.get();
 
         invoice.setSource(source);
         invoice.setDate(model.getDate());

@@ -40,7 +40,7 @@ public class PayerRepositoryTest {
         entityManager.persist(newPayer);
         entityManager.flush();
 
-        Payer foundByCode = repository.findByCode(newPayer.getCode());
+        Payer foundByCode = repository.findByCode(newPayer.getCode()).orElse(null);
 
         assertNotNull(foundByCode);
         assertFalse(foundByCode.getSources().isEmpty());

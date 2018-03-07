@@ -40,7 +40,7 @@ public class ExpenseRequestRepositoryTest {
         entityManager.persist(newExpenseRequest);
         entityManager.flush();
 
-        ExpenseRequest foundByNumber = repository.findByNumber(newExpenseRequest.getNumber());
+        ExpenseRequest foundByNumber = repository.findByNumber(newExpenseRequest.getNumber()).orElse(null);
 
         assertNotNull(foundByNumber);
     }

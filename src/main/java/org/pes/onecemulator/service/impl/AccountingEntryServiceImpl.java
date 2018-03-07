@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,8 +41,9 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Transactional
     @Override
     public AccountingEntryModel getById(UUID id) throws NotFoundException {
-        Optional<AccountingEntry> optionalAccountingEntry = accountingEntryRepository.findById(id);
-        return getModel(optionalAccountingEntry.orElseThrow(() -> new NotFoundException(AccountingEntryModel.class, id)));
+        AccountingEntry accountingEntry = accountingEntryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(AccountingEntryModel.class, id));
+        return getModel(accountingEntry);
     }
 
     @Transactional
@@ -71,10 +71,9 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
             throw new ValidationException("Date is null.");
         }
 
-        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
-        if (expenseRequest == null) {
-            throw new NotFoundException(ExpenseRequest.class, "number:" + model.getExpenseNumber());
-        }
+        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
+                .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, "number:" + model.getExpenseNumber()));
+
         AccountingEntry accountingEntry = new AccountingEntry();
         accountingEntry.setCode(model.getCode());
         accountingEntry.setDate(model.getDate());
@@ -102,23 +101,18 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
             throw new ValidationException("Date is null.");
         }
 
-        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber());
-        if (expenseRequest == null) {
-            throw new NotFoundException(ExpenseRequest.class, "number: " + model.getExpenseNumber());
-        }
+        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
+                .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, "number: " + model.getExpenseNumber()));
 
-        Optional<AccountingEntry> optionalAccountingEntry = accountingEntryRepository.findById(model.getId());
-        if (!optionalAccountingEntry.isPresent()) {
-            throw new NotFoundException(AccountingEntry.class, model.getId());
-        }
-
-        AccountingEntry accountingEntry = optionalAccountingEntry.get();
+        AccountingEntry accountingEntry = accountingEntryRepository.findById(model.getId())
+                .orElseThrow(() -> new NotFoundException(AccountingEntry.class, model.getId()));
         accountingEntry.setCode(model.getCode());
         accountingEntry.setDate(model.getDate());
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(new BigDecimal(model.getSum()));
         accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
+
         crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
         return getModel(accountingEntry);

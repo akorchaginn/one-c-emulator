@@ -27,7 +27,7 @@ public class SourceRepositoryTest {
         entityManager.persist(newSource);
         entityManager.flush();
 
-        Source foundSource = repository.findByName(newSource.getName());
+        Source foundSource = repository.findByName(newSource.getName()).orElse(null);
 
         assertNotNull(foundSource);
     }

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,19 +34,16 @@ public class SourceServiceImpl implements SourceService {
     @Transactional
     @Override
     public SourceModel getById(UUID id) throws NotFoundException {
-        Optional<Source> optionalSource = sourceRepository.findById(id);
-        return getModel(optionalSource.orElseThrow(() -> new NotFoundException(Source.class, id)));
+        Source source = sourceRepository.findById(id).orElseThrow(() -> new NotFoundException(Source.class, id));
+        return getModel(source);
     }
 
     @Transactional
     @Override
     public SourceModel getByName(String name) throws NotFoundException {
-        Source source = sourceRepository.findByName(name);
-        if (source != null) {
-            return getModel(source);
-        }
-
-        throw new NotFoundException(Source.class, "name:" + name);
+        Source source = sourceRepository.findByName(name)
+                .orElseThrow(() -> new NotFoundException(Source.class, "name:" + name));
+        return getModel(source);
     }
 
     @Transactional
@@ -62,12 +58,9 @@ public class SourceServiceImpl implements SourceService {
     @Transactional
     @Override
     public List<PayerModel> getPayerList(String name) throws NotFoundException {
-        Source source = sourceRepository.findByName(name);
-        if (source != null) {
-            return source.getPayers().stream().map(this::getModel).collect(Collectors.toList());
-        }
-
-        throw new NotFoundException(Source.class, "name:" + name);
+        Source source = sourceRepository.findByName(name)
+                .orElseThrow(() ->  new NotFoundException(Source.class, "name:" + name));
+        return source.getPayers().stream().map(this::getModel).collect(Collectors.toList());
     }
 
     @Transactional
@@ -113,8 +106,8 @@ public class SourceServiceImpl implements SourceService {
             throw new ValidationException("Name is empty.");
         }
 
-        Optional<Source> optionalSource = sourceRepository.findById(model.getId());
-        Source source = optionalSource.orElseThrow(() -> new NotFoundException(Source.class, model.getId()));
+        Source source = sourceRepository.findById(model.getId())
+                .orElseThrow(() -> new NotFoundException(Source.class, model.getId()));
         source.setName(model.getName());
         source = sourceRepository.save(source);
 

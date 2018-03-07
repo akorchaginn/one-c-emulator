@@ -50,7 +50,7 @@ public class InvoiceRepositoryTest {
         entityManager.flush();
 
         Invoice foundByIdAndSourceInvoice =
-                repository.findByIdAndSource(newInvoice.getId(), newInvoice.getSource().getName());
+                repository.findByIdAndSource(newInvoice.getId(), newInvoice.getSource().getName()).orElse(null);
 
         assertNotNull(foundByIdAndSourceInvoice);
     }
@@ -80,7 +80,8 @@ public class InvoiceRepositoryTest {
         entityManager.flush();
 
         Invoice foundByExternalIdAndSourceInvoice =
-                repository.findByExternalIdAndSource(newInvoice.getExternalId(), newInvoice.getSource().getName());
+                repository.findByExternalIdAndSource(newInvoice.getExternalId(), newInvoice.getSource().getName())
+                        .orElse(null);
 
         assertNotNull(foundByExternalIdAndSourceInvoice);
     }
