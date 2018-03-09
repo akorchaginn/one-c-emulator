@@ -5,13 +5,12 @@ import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.PayerCrm;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface CrmInteractionService {
 
-    DocumentCrm getDocumentsCrmById(UUID id, String source);
+    List<DocumentCrm> getDocumentsCrmById(List<DocumentCrm> documentCrmList, String source);
 
-    DocumentCrm getDocumentCrmByExternalId(String externalId, String source);
+    List<DocumentCrm> getDocumentsCrmByExternalId(List<DocumentCrm> documentCrmList, String source);
 
     List<PayerCrm> getAllPayersCrmBySource(String source);
 

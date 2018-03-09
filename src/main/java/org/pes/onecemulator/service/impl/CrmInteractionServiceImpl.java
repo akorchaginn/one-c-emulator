@@ -23,7 +23,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,14 +48,24 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Autowired
     private AsyncEventBus asyncEventBus;
 
-    public DocumentCrm getDocumentsCrmById(UUID id, String sourceName) {
-        Invoice invoice = invoiceRepository.findByIdAndSource(id, sourceName).orElseGet(Invoice::new);
-        return getDocumentCrm(invoice);
+    public List<DocumentCrm> getDocumentsCrmById(List<DocumentCrm> documentCrmList, String sourceName) {
+        return documentCrmList.stream()
+                .map(documentCrm ->
+                        invoiceRepository.findByIdAndSource(
+                                documentCrm.getId(), sourceName).orElse(null))
+                .filter(Objects::nonNull)
+                .map(this::getDocumentCrm)
+                .collect(Collectors.toList());
     }
 
-    public DocumentCrm getDocumentCrmByExternalId(String externalId, String sourceName) {
-        Invoice invoice = invoiceRepository.findByExternalIdAndSource(externalId, sourceName).orElseGet(Invoice::new);
-        return getDocumentCrm(invoice);
+    public List<DocumentCrm> getDocumentsCrmByExternalId(List<DocumentCrm> documentCrmList, String sourceName) {
+        return documentCrmList.stream()
+                .map(documentCrm ->
+                        invoiceRepository.findByExternalIdAndSource(
+                                documentCrm.getExternalId(), sourceName).orElse(null))
+                .filter(Objects::nonNull)
+                .map(this::getDocumentCrm)
+                .collect(Collectors.toList());
     }
 
     public List<PayerCrm> getAllPayersCrmBySource(String sourceName) {

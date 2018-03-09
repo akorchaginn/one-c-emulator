@@ -1,5 +1,7 @@
 package org.pes.onecemulator.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.service.CrmInteractionService;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,38 +24,36 @@ public class CrmInteractionController {
     @Autowired
     private CrmInteractionService crmInteractionService;
 
+    private final ObjectMapper mapper = new ObjectMapper();
+
     @PostMapping(value = "{source}/hs/DocID")
     public @ResponseBody List<DocumentCrm> getDocById(
             @PathVariable(value = "source") String source,
             @RequestBody List<DocumentCrm> documentCrms) {
-
-        List<DocumentCrm> documentCrmList = new ArrayList<>();
-        documentCrms.forEach(documentCrm ->
-                documentCrmList.add(
-                        crmInteractionService.getDocumentsCrmById(documentCrm.getId(), source)
-                )
-        );
-
-        return documentCrmList;
+        try {
+            LOGGER.info(source + "/hs/DocID " + mapper.writeValueAsString(documentCrms));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return crmInteractionService.getDocumentsCrmById(documentCrms, source);
     }
 
     @PostMapping(value = "{source}/hs/NewDoc")
     public @ResponseBody List<DocumentCrm> getDocByExternalId(
             @PathVariable(value = "source") String source,
             @RequestBody List<DocumentCrm> documentCrms) {
-
-        List<DocumentCrm> documentCrmList = new ArrayList<>();
-        documentCrms.forEach(documentCrm ->
-                documentCrmList.add(
-                        crmInteractionService.getDocumentCrmByExternalId(documentCrm.getExternalId(), source)
-                )
-        );
-
-        return documentCrmList;
+        try {
+            LOGGER.info(source + "/hs/NewDoc " + mapper.writeValueAsString(documentCrms));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return crmInteractionService.getDocumentsCrmByExternalId(documentCrms, source);
     }
 
     @PostMapping(value = "{source}/hs/Con")
-    public @ResponseBody List<PayerCrm> getAllPayers(@PathVariable(value = "source") String source) {
+    public @ResponseBody List<PayerCrm> getAllPayers(
+            @PathVariable(value = "source") String source) {
+        LOGGER.info("source=" + source);
         return crmInteractionService.getAllPayersCrmBySource(source);
     }
 }
