@@ -33,7 +33,6 @@ public class SourceServiceTest {
 
     @TestConfiguration
     static class SourceServiceTestContextConfiguration {
-
         @Bean
         public SourceService sourceService() {
             return new SourceServiceImpl();

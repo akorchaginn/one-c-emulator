@@ -50,6 +50,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     public List<DocumentCrm> getDocumentsCrmById(List<DocumentCrm> documentCrmList, String sourceName) {
         return documentCrmList.stream()
+                .filter(Objects::nonNull)
                 .map(documentCrm ->
                         invoiceRepository.findByIdAndSource(
                                 documentCrm.getId(), sourceName).orElse(null))
@@ -60,6 +61,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     public List<DocumentCrm> getDocumentsCrmByExternalId(List<DocumentCrm> documentCrmList, String sourceName) {
         return documentCrmList.stream()
+                .filter(Objects::nonNull)
                 .map(documentCrm ->
                         invoiceRepository.findByExternalIdAndSource(
                                 documentCrm.getExternalId(), sourceName).orElse(null))

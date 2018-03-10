@@ -31,11 +31,20 @@ public class CrmInteractionController {
             @PathVariable(value = "source") String source,
             @RequestBody List<DocumentCrm> documentCrms) {
         try {
-            LOGGER.info(source + "/hs/DocID " + mapper.writeValueAsString(documentCrms));
+            LOGGER.info("Request: " + source + "/hs/DocID " + mapper.writeValueAsString(documentCrms));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return crmInteractionService.getDocumentsCrmById(documentCrms, source);
+
+        List<DocumentCrm> documentCrmList = crmInteractionService.getDocumentsCrmById(documentCrms, source);
+
+        try {
+            LOGGER.info("Response: " + mapper.writeValueAsString(documentCrmList));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return documentCrmList;
     }
 
     @PostMapping(value = "{source}/hs/NewDoc")
@@ -43,17 +52,31 @@ public class CrmInteractionController {
             @PathVariable(value = "source") String source,
             @RequestBody List<DocumentCrm> documentCrms) {
         try {
-            LOGGER.info(source + "/hs/NewDoc " + mapper.writeValueAsString(documentCrms));
+            LOGGER.info("Request: " + source + "/hs/NewDoc " + mapper.writeValueAsString(documentCrms));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return crmInteractionService.getDocumentsCrmByExternalId(documentCrms, source);
+
+        List<DocumentCrm> documentCrmList = crmInteractionService.getDocumentsCrmByExternalId(documentCrms, source);
+
+        try {
+            LOGGER.info("Response: " + mapper.writeValueAsString(documentCrmList));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return documentCrmList;
     }
 
     @PostMapping(value = "{source}/hs/Con")
     public @ResponseBody List<PayerCrm> getAllPayers(
             @PathVariable(value = "source") String source) {
-        LOGGER.info("source=" + source);
-        return crmInteractionService.getAllPayersCrmBySource(source);
+        LOGGER.info("Request: source=" + source);
+
+        List<PayerCrm> payerCrmList = crmInteractionService.getAllPayersCrmBySource(source);
+
+        LOGGER.info("Response: size=" + payerCrmList.size());
+
+        return payerCrmList;
     }
 }
