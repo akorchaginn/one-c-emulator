@@ -6,7 +6,7 @@ import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
-import org.pes.onecemulator.httpclient.CrmClient;
+import org.pes.onecemulator.httpclient.ExpenseRequestHttp;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
@@ -19,10 +19,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,59 +79,21 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Async
     public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
         try {
-            final String host = Objects.requireNonNull(crmHost);
-            final String uri =  Objects.requireNonNull(crmUri);
-            final String token = Objects.requireNonNull(crmToken);
-            final String dataUrl = createDataUrl(host + uri, accountingEntry);
-            final String sourceName = accountingEntry.getExpenseRequest().getSource().getName();
-            try {
-                preExpenseRequestInfo(dataUrl, token, sourceName);
-                CrmClient.expenseRequest(dataUrl, token, sourceName);
-                postExpenseRequestInfo();
-            } catch (Exception e) {
-                errorExpenseRequestInfo(e);
-            }
+            final ExpenseRequestHttp expenseRequestHttp =
+                    new ExpenseRequestHttp(accountingEntry, crmHost, crmUri, crmToken);
+            expenseRequestHttp.call();
+            postExpenseRequestInfoToUI();
         } catch (Exception e) {
-            errorExpenseRequestInfo(e);
+            errorExpenseRequestInfoToUI(e);
         }
     }
 
-    private String createDataUrl(String endpointUrl, AccountingEntry accountingEntry) {
-        // Порядок join'а важен!
-        String parameterData = new StringJoiner(",")
-                .add(accountingEntry.getExpenseRequest().getNumber())
-                .add(accountingEntry.getSum().toString())
-                .add(accountingEntry.getExpenseRequest().getPaid().toString())
-                .add(accountingEntry.getExpenseRequest().getCurrency())
-                .add(accountingEntry.getCode())
-                .add(accountingEntry.getDocumentName())
-                .add(accountingEntry.getExpenseRequest().getConfirm().toString())
-                .toString();
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String parameterDate = accountingEntry.getDate().format(formatter);
-
-        return new StringJoiner("/")
-                .add(endpointUrl)
-                .add(parameterData)
-                .add(parameterDate)
-                .toString();
-    }
-
-    private void preExpenseRequestInfo(String dataUrl, String token, String sourceName) {
-        LOGGER.info("Start request to CRM: " + dataUrl + " : " + token + " : " + sourceName);
-        asyncEventBus.post(
-                new UINotificationEvent(this, "Запрос: " + dataUrl + " отправлен в CRM."));
-    }
-
-    private void postExpenseRequestInfo() {
-        LOGGER.info("End request to CRM.");
+    private void postExpenseRequestInfoToUI() {
         asyncEventBus.post(
                 new UINotificationEvent(this, "Запрос в CRM отправлен."));
     }
 
-    private void errorExpenseRequestInfo(Exception e) {
-        LOGGER.error("Error request to CRM: ", e);
+    private void errorExpenseRequestInfoToUI(Exception e) {
         asyncEventBus.post(
                 new UINotificationEvent(this, "Ошибка отправки запроса в CRM: " + e.getMessage()));
     }
