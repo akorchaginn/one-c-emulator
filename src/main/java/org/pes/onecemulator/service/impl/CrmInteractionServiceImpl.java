@@ -81,21 +81,22 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         try {
             final ExpenseRequestHttp expenseRequestHttp =
                     new ExpenseRequestHttp(accountingEntry, crmHost, crmUri, crmToken);
-            expenseRequestHttp.call();
-            postExpenseRequestInfoToUI();
+            postExpenseRequestInfoToUI(expenseRequestHttp.call());
         } catch (Exception e) {
-            errorExpenseRequestInfoToUI(e);
+            postExpenseRequestErrorToUI(e);
         }
     }
 
-    private void postExpenseRequestInfoToUI() {
+    private void postExpenseRequestInfoToUI(String uri) {
         asyncEventBus.post(
-                new UINotificationEvent(this, "Запрос в CRM отправлен."));
+                new UINotificationEvent(
+                        this, "Запрос: " + uri + " отправлен в CRM.", false));
     }
 
-    private void errorExpenseRequestInfoToUI(Exception e) {
+    private void postExpenseRequestErrorToUI(Exception e) {
         asyncEventBus.post(
-                new UINotificationEvent(this, "Ошибка отправки запроса в CRM: " + e.getMessage()));
+                new UINotificationEvent(
+                        this, "Ошибка отправки запроса в CRM: " + e.getMessage(), true));
     }
 
     private DocumentCrm getDocumentCrm(Invoice entity) {

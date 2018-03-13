@@ -19,9 +19,9 @@ public class ExpenseRequestHttp {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseRequestHttp.class);
 
-    private String url;
+    private String crmUri;
 
-    private String token;
+    private String crmToken;
 
     private String number;
 
@@ -51,8 +51,8 @@ public class ExpenseRequestHttp {
         Objects.requireNonNull(uri);
         Objects.requireNonNull(token);
 
-        this.url = host + uri;
-        this.token = token;
+        this.crmUri = host + uri;
+        this.crmToken = token;
         this.number = accountingEntry.getExpenseRequest().getNumber();
         this.sum = accountingEntry.getSum();
         this.paid = accountingEntry.getExpenseRequest().getPaid();
@@ -65,95 +65,23 @@ public class ExpenseRequestHttp {
         this.source = accountingEntry.getExpenseRequest().getSource().getName();
     }
 
-    public String getUrl() {
-        return url;
+    public String call() throws Exception {
+        HttpGet httpGet = prepareRequest();
+        LOGGER.info("Request to CRM: " + httpGet.toString() + " : " + Arrays.toString(httpGet.getAllHeaders()));
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            try (CloseableHttpResponse response = client.execute(httpGet)) {
+                if (response.getStatusLine().getStatusCode() != 200) {
+                    throw new Exception("Status code not equal 200.");
+                }
+            }
+            return httpGet.getURI().toString();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            throw e;
+        }
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public BigDecimal getSum() {
-        return sum;
-    }
-
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
-    }
-
-    public Boolean getPaid() {
-        return paid;
-    }
-
-    public void setPaid(Boolean paid) {
-        this.paid = paid;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDocumentName() {
-        return documentName;
-    }
-
-    public void setDocumentName(String documentName) {
-        this.documentName = documentName;
-    }
-
-    public Boolean getConfirm() {
-        return confirm;
-    }
-
-    public void setConfirm(Boolean confirm) {
-        this.confirm = confirm;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public void call() throws Exception {
+    private HttpGet prepareRequest() {
         String params = new StringJoiner(",")
                 .add(number)
                 .add(sum.toString())
@@ -163,22 +91,9 @@ public class ExpenseRequestHttp {
                 .add(documentName)
                 .add(confirm.toString())
                 .toString();
-
-        HttpGet httpGet = new HttpGet(url + "/" + params + "/" + date.format(formatter));
-        httpGet.setHeader("crm-api-token", token);
-        httpGet.setHeader("crm-1c-database-source", source);
-
-        LOGGER.info("Request to CRM: " + httpGet.toString() + " : " + Arrays.toString(httpGet.getAllHeaders()));
-
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            try (CloseableHttpResponse response = client.execute(httpGet)) {
-                if (response.getStatusLine().getStatusCode() != 200) {
-                    throw new Exception("Status code not equal 200.");
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            throw e;
-        }
+        HttpGet request = new HttpGet(crmUri + "/" + params + "/" + date.format(formatter));
+        request.setHeader("crm-api-token", crmToken);
+        request.setHeader("crm-1c-database-source", source);
+        return request;
     }
 }

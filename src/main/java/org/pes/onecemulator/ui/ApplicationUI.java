@@ -69,7 +69,11 @@ public class ApplicationUI extends UI implements ViewDisplay {
     @Subscribe
     public void processUINotification(UINotificationEvent event) {
         if (event.getDescription() != null) {
-            access(() -> InfoNotification.show(event.getDescription()));
+            if (event.getError()) {
+                access(() -> ErrorNotification.show(event.getDescription()));
+            } else {
+                access(() -> InfoNotification.show(event.getDescription()));
+            }
         }
     }
 }
