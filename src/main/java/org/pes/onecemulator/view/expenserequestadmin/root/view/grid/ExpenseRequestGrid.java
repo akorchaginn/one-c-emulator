@@ -40,7 +40,7 @@ public class ExpenseRequestGrid extends Grid<ExpenseRequestModel> {
 
         addColumn(expenseRequestSourceValueProvider).setCaption("БД 1С");
         addColumn(expenseRequestCurrencyValueProvider).setCaption("Валюта");
-        addColumn(expenseRequestConfirmValueProvider).setCaption("Подтвержен");
+        addColumn(expenseRequestConfirmValueProvider).setCaption("Подтвержден");
         addColumn(expenseRequestPaidValueProvider).setCaption("Оплачен");
         addColumn(expenseRequestNumberValueProvider).setCaption("Номер");
         addColumn(expenseRequestSumValueProvider).setCaption("Сумма");

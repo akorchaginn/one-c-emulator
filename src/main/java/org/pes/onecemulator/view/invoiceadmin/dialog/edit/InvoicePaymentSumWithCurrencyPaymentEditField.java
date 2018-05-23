@@ -6,13 +6,13 @@ import org.pes.onecemulator.model.InvoiceModel;
 
 import java.math.BigDecimal;
 
-public class InvoiceSumOplatCurencyPEditField extends TextField {
+public class InvoicePaymentSumWithCurrencyPaymentEditField extends TextField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
     private final String origin;
 
-    InvoiceSumOplatCurencyPEditField(String sum) {
+    InvoicePaymentSumWithCurrencyPaymentEditField(String sum) {
         this.origin = sum;
         setValue(origin);
         setCaption("Сумма факт в валюте платежа");
