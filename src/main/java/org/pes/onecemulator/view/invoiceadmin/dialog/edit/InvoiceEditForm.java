@@ -30,6 +30,14 @@ public class InvoiceEditForm extends FormLayout {
 
     private final InvoiceExternalIdEditField invoiceExternalId;
 
+    private final InvoiceSumRubEditField invoiceSumRubEditField;
+
+    private final InvoicePaymentSumWithCurrencyPaymentEditField invoicePaymentSumWithCurrencyPaymentEditField;
+
+    private final InvoiceCurrencyEditField invoiceCurrencyEditField;
+
+    private final InvoicePaymentCurrencyEditField invoicePaymentCurrencyEditField;
+
     //Version originalVersion;
 
     InvoiceEditForm(InvoiceModel target, List<String> sources) {
@@ -44,6 +52,10 @@ public class InvoiceEditForm extends FormLayout {
         this.invoiceStatus = new InvoiceStatusEditField(target.getStatus());
         this.invoiceSum = new InvoiceSumEditField(target.getInvoiceSum());
         this.invoiceExternalId = new InvoiceExternalIdEditField(target.getExternalId());
+        this.invoiceSumRubEditField = new InvoiceSumRubEditField(target.getInvoiceSumRUB());
+        this.invoiceCurrencyEditField = new InvoiceCurrencyEditField(target.getInvoiceCurrency());
+        this.invoicePaymentSumWithCurrencyPaymentEditField = new InvoicePaymentSumWithCurrencyPaymentEditField(target.getPaymentSumWithCurrencyPayment());
+        this.invoicePaymentCurrencyEditField = new InvoicePaymentCurrencyEditField(target.getPaymentCurrency());
         //this.originalVersion = targetSummary.audit().version();
 
         addComponents(
@@ -57,7 +69,11 @@ public class InvoiceEditForm extends FormLayout {
                 invoicePaymentSum,
                 invoiceStatus,
                 invoiceSum,
-                invoiceExternalId);
+                invoiceExternalId,
+                invoiceCurrencyEditField,
+                invoicePaymentCurrencyEditField,
+                invoicePaymentSumWithCurrencyPaymentEditField,
+                invoiceSumRubEditField);
         setMargin(false);
     }
 
@@ -72,6 +88,10 @@ public class InvoiceEditForm extends FormLayout {
         invoiceStatus.binder.validate();
         invoiceSum.binder.validate();
         invoiceExternalId.binder.validate();
+        invoiceCurrencyEditField.binder.validate();
+        invoicePaymentCurrencyEditField.binder.validate();
+        invoicePaymentSumWithCurrencyPaymentEditField.binder.validate();
+        invoiceSumRubEditField.binder.validate();
     }
 
     boolean hasValidationErrors() {
@@ -88,7 +108,11 @@ public class InvoiceEditForm extends FormLayout {
                 && invoicePaymentSum.binder.isValid()
                 && invoiceStatus.binder.isValid()
                 && invoiceSum.binder.isValid()
-                && invoiceExternalId.binder.isValid();
+                && invoiceExternalId.binder.isValid()
+                && invoiceCurrencyEditField.binder.isValid()
+                && invoicePaymentCurrencyEditField.binder.isValid()
+                && invoicePaymentSumWithCurrencyPaymentEditField.binder.isValid()
+                && invoiceSumRubEditField.binder.isValid();
     }
 
     boolean hasChanges() {
@@ -102,7 +126,11 @@ public class InvoiceEditForm extends FormLayout {
                 || invoicePaymentSum.hasChanges()
                 || invoiceStatus.hasChanges()
                 || invoiceSum.hasChanges()
-                || invoiceExternalId.hasChanges();
+                || invoiceExternalId.hasChanges()
+                || invoiceCurrencyEditField.hasChanges()
+                || invoicePaymentCurrencyEditField.hasChanges()
+                || invoicePaymentSumWithCurrencyPaymentEditField.hasChanges()
+                || invoiceSumRubEditField.hasChanges();
     }
 
     String errorMessagesAsHtml() {
@@ -117,7 +145,11 @@ public class InvoiceEditForm extends FormLayout {
                 invoicePaymentSum.getErrorMessage(),
                 invoiceStatus.getErrorMessage(),
                 invoiceSum.getErrorMessage(),
-                invoiceExternalId.getErrorMessage());
+                invoiceExternalId.getErrorMessage(),
+                invoiceCurrencyEditField.getErrorMessage(),
+                invoicePaymentCurrencyEditField.getErrorMessage(),
+                invoicePaymentSumWithCurrencyPaymentEditField.getErrorMessage(),
+                invoiceSumRubEditField.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
                 compositeErrorMessage.getFormattedHtmlMessage());
@@ -136,6 +168,10 @@ public class InvoiceEditForm extends FormLayout {
         object.setStatus(invoiceStatus.getValue());
         object.setInvoiceSum(invoiceSum.getValue());
         object.setExternalId(invoiceExternalId.getValue());
+        object.setPaymentSumWithCurrencyPayment(invoicePaymentSumWithCurrencyPaymentEditField.getValue());
+        object.setPaymentSum(invoicePaymentSum.getValue());
+        object.setPaymentCurrency(invoicePaymentCurrencyEditField.getValue());
+        object.setInvoiceSumRUB(invoiceSumRubEditField.getValue());
 
         return object;
     }
