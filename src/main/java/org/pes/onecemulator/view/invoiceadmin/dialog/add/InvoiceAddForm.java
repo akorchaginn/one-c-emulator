@@ -105,7 +105,7 @@ public class InvoiceAddForm extends FormLayout {
         object.setPaymentDate(invoicePaymentDate.getValue());
         object.setPaymentSum(invoiceSum.getValue());
         object.setStatus(invoiceStatus.getValue());
-        object.setSum(invoiceSum.getValue());
+        object.setInvoiceSum(invoiceSum.getValue());
         object.setExternalId(invoiceExternalId.getValue());
 
         return object;

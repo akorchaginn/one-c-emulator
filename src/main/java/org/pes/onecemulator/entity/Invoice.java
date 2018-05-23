@@ -45,10 +45,22 @@ public class Invoice extends AbstractEntity {
     private String status;
 
     @Column(name = "sum")
-    private BigDecimal sum;
+    private BigDecimal invoiceSum;
 
     @Column(name = "external_id", nullable = false)
     private String externalId;
+
+    @Column(name = "payment_sum_currency", nullable = true)
+    private String paymentSumWithCurrencyPayment;
+
+    @Column(name = "sum_rub", nullable = true)
+    private String invoiceSumRUB;
+
+    @Column(name = "payment_currency", nullable = true)
+    private String paymentCurrency;
+
+    @Column(name = "invoice_currency", nullable = true)
+    private String invoiceCurrency;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "payer_id", foreignKey = @ForeignKey(name = "fk_invoice_payer_id"))
@@ -106,12 +118,12 @@ public class Invoice extends AbstractEntity {
         this.status = status;
     }
 
-    public BigDecimal getSum() {
-        return sum;
+    public BigDecimal getInvoiceSum() {
+        return invoiceSum;
     }
 
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
+    public void setInvoiceSum(BigDecimal invoiceSum) {
+        this.invoiceSum = invoiceSum;
     }
 
     public String getExternalId() {
@@ -137,4 +149,20 @@ public class Invoice extends AbstractEntity {
     public void setSource(Source source) {
         this.source = source;
     }
+
+    public String getPaymentSumWithCurrencyPayment() { return paymentSumWithCurrencyPayment; }
+
+    public void setPaymentSumWithCurrencyPayment(String paymentSumWithCurrencyPayment) { this.paymentSumWithCurrencyPayment = paymentSumWithCurrencyPayment; }
+
+    public String getInvoiceSumRUB() { return invoiceSumRUB; }
+
+    public void setInvoiceSumRUB(String invoiceSumRUB) { this.invoiceSumRUB = invoiceSumRUB; }
+
+    public String getPaymentCurrency() { return paymentCurrency; }
+
+    public void setPaymentCurrency(String paymentCurrency) { this.paymentCurrency = paymentCurrency; }
+
+    public String getInvoiceCurrency() { return invoiceCurrency; }
+
+    public void setInvoiceCurrency(String invoiceCurrency) { this.invoiceCurrency = invoiceCurrency; }
 }

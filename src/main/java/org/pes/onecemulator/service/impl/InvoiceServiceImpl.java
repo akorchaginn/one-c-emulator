@@ -87,8 +87,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setPaymentDate(model.getPaymentDate());
         invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
         invoice.setStatus(model.getStatus());
-        invoice.setSum(new BigDecimal(model.getSum()));
+        invoice.setInvoiceSum(new BigDecimal(model.getInvoiceSum()));
         invoice.setExternalId(model.getExternalId());
+        invoice.setPaymentCurrency(model.getPaymentCurrency());
+        invoice.setInvoiceCurrency(model.getInvoiceCurrency());
+        invoice.setPaymentSumWithCurrencyPayment(model.getPaymentSumWithCurrencyPayment());
+        invoice.setInvoiceSumRUB(model.getInvoiceSumRUB());
         invoice = invoiceRepository.save(invoice);
 
         return getModel(invoice);
@@ -135,8 +139,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setPaymentDate(model.getPaymentDate());
         invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
         invoice.setStatus(model.getStatus());
-        invoice.setSum(new BigDecimal(model.getSum()));
+        invoice.setInvoiceSum(new BigDecimal(model.getInvoiceSum()));
         invoice.setExternalId(model.getExternalId());
+        invoice.setPaymentCurrency(model.getPaymentCurrency());
+        invoice.setInvoiceCurrency(model.getInvoiceCurrency());
+        invoice.setPaymentSumWithCurrencyPayment(model.getPaymentSumWithCurrencyPayment());
+        invoice.setInvoiceSumRUB(model.getInvoiceSumRUB());
         invoice = invoiceRepository.save(invoice);
 
         return getModel(invoice);
@@ -159,8 +167,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         model.setPaymentDate(entity.getPaymentDate());
         model.setPaymentSum(entity.getPaymentSum().toString());
         model.setStatus(entity.getStatus());
-        model.setSum(entity.getSum().toString());
+        model.setInvoiceSum(entity.getInvoiceSum().toString());
         model.setExternalId(entity.getExternalId());
+        model.setPaymentCurrency(entity.getPaymentCurrency());
+        model.setInvoiceCurrency(entity.getInvoiceCurrency());
+        model.setPaymentSumWithCurrencyPayment(entity.getPaymentSumWithCurrencyPayment());
+        model.setInvoiceSumRUB(entity.getInvoiceSumRUB());
 
         return model;
     }

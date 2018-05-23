@@ -42,7 +42,7 @@ public class InvoiceEditForm extends FormLayout {
         this.invoicePaymentDate = new InvoicePaymentDateEditField(target.getPaymentDate());
         this.invoicePaymentSum = new InvoicePaymentSumEditField(target.getPaymentSum());
         this.invoiceStatus = new InvoiceStatusEditField(target.getStatus());
-        this.invoiceSum = new InvoiceSumEditField(target.getSum());
+        this.invoiceSum = new InvoiceSumEditField(target.getInvoiceSum());
         this.invoiceExternalId = new InvoiceExternalIdEditField(target.getExternalId());
         //this.originalVersion = targetSummary.audit().version();
 
@@ -134,7 +134,7 @@ public class InvoiceEditForm extends FormLayout {
         object.setPaymentDate(invoicePaymentDate.getValue());
         object.setPaymentSum(invoicePaymentSum.getValue());
         object.setStatus(invoiceStatus.getValue());
-        object.setSum(invoiceSum.getValue());
+        object.setInvoiceSum(invoiceSum.getValue());
         object.setExternalId(invoiceExternalId.getValue());
 
         return object;

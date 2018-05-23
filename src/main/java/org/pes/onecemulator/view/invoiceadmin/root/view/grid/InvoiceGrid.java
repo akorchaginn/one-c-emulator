@@ -22,7 +22,7 @@ public class InvoiceGrid extends Grid<InvoiceModel> {
     private static final ValueProvider<InvoiceModel, LocalDate> invoicePaymentDateValueProvider = InvoiceModel::getPaymentDate;
     private static final ValueProvider<InvoiceModel, String> invoicePaymentSumValueProvider = InvoiceModel::getPaymentSum;
     private static final ValueProvider<InvoiceModel, String> invoiceStatusValueProvider = InvoiceModel::getStatus;
-    private static final ValueProvider<InvoiceModel, String> invoiceSumValueProvider = InvoiceModel::getSum;
+    private static final ValueProvider<InvoiceModel, String> invoiceSumValueProvider = InvoiceModel::getInvoiceSum;
     private static final ValueProvider<InvoiceModel, String> invoiceExternalIdValueProvider = InvoiceModel::getExternalId;
 
     private ListDataProvider<InvoiceModel> dataProvider;
