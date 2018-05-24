@@ -171,6 +171,7 @@ public class InvoiceEditForm extends FormLayout {
         object.setPaymentSumWithCurrencyPayment(invoicePaymentSumWithCurrencyPaymentEditField.getValue());
         object.setPaymentSum(invoicePaymentSum.getValue());
         object.setPaymentCurrency(invoicePaymentCurrencyEditField.getValue());
+        object.setInvoiceCurrency(invoiceCurrencyEditField.getValue());
         object.setInvoiceSumRUB(invoiceSumRubEditField.getValue());
 
         return object;

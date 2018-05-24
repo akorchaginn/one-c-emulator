@@ -12,8 +12,8 @@ public class InvoiceCurrencyEditField extends TextField {
 
     private final String origin;
 
-    InvoiceCurrencyEditField(String sum) {
-        this.origin = sum;
+    InvoiceCurrencyEditField(String currency) {
+        this.origin = currency;
         setValue(origin);
         setCaption("Валюта счёта");
         setSizeFull();
@@ -25,7 +25,4 @@ public class InvoiceCurrencyEditField extends TextField {
         return !origin.equals(now);
     }
 
-    BigDecimal valueAsBigDecimal() {
-        return new BigDecimal(getValue());
-    }
 }
