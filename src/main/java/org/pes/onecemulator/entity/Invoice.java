@@ -50,16 +50,16 @@ public class Invoice extends AbstractEntity {
     @Column(name = "external_id", nullable = false)
     private String externalId;
 
-    @Column(name = "payment_sum_currency", nullable = true)
+    @Column(name = "payment_sum_currency")
     private String paymentSumWithCurrencyPayment;
 
-    @Column(name = "sum_rub", nullable = true)
+    @Column(name = "sum_rub")
     private String invoiceSumRUB;
 
-    @Column(name = "payment_currency", nullable = true)
+    @Column(name = "payment_currency")
     private String paymentCurrency;
 
-    @Column(name = "invoice_currency", nullable = true)
+    @Column(name = "invoice_currency")
     private String invoiceCurrency;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

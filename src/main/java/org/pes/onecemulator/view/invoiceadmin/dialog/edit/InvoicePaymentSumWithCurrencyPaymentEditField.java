@@ -15,7 +15,7 @@ public class InvoicePaymentSumWithCurrencyPaymentEditField extends TextField {
     InvoicePaymentSumWithCurrencyPaymentEditField(String sum) {
         this.origin = sum;
         setValue(origin);
-        setCaption("Сумма факт в валюте платежа");
+        setCaption("Сумма платежа в валюте платежа");
         setSizeFull();
         binder.bind(this, "paymentSumWithCurrencyPayment");
     }
