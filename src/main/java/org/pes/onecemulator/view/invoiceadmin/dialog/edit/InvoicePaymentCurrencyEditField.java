@@ -10,8 +10,8 @@ public class InvoicePaymentCurrencyEditField extends TextField {
 
     private final String origin;
 
-    InvoicePaymentCurrencyEditField(String status) {
-        this.origin = status;
+    InvoicePaymentCurrencyEditField(String currency) {
+        this.origin = currency;
         setValue(origin);
         setCaption("Валюта платежа");
         setSizeFull();

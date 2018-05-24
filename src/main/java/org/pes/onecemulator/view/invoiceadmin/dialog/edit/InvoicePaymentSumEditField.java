@@ -15,7 +15,7 @@ public class InvoicePaymentSumEditField extends TextField {
     InvoicePaymentSumEditField(String paymentSum) {
         this.origin = paymentSum;
         setValue(origin);
-        setCaption("Сумма оплты");
+        setCaption("Сумма оплаты");
         setSizeFull();
         binder.bind(this, "paymentSum");
     }
