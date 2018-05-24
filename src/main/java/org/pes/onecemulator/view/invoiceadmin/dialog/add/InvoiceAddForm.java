@@ -68,6 +68,7 @@ public class InvoiceAddForm extends FormLayout {
                 invoiceExternalId,
                 invoiceSumRubInputField,
                 invoicePaymentCurrencyInputField,
+                invoiceCurrencyInputField,
                 invoiceSumRubInputField,
                 invoicePaymentSumWithCurrencyPaymentInputField);
         setMargin(false);
@@ -86,6 +87,7 @@ public class InvoiceAddForm extends FormLayout {
         invoiceExternalId.binder.validate();
         invoiceSumRubInputField.binder.validate();
         invoicePaymentCurrencyInputField.binder.validate();
+        invoiceCurrencyInputField.binder.validate();
         invoiceSumRubInputField.binder.validate();
         invoicePaymentSumWithCurrencyPaymentInputField.binder.validate();
     }
@@ -113,6 +115,7 @@ public class InvoiceAddForm extends FormLayout {
                 invoiceExternalId.getErrorMessage(),
                 invoiceSumRubInputField.getErrorMessage(),
                 invoicePaymentCurrencyInputField.getErrorMessage(),
+                invoiceCurrencyInputField.getErrorMessage(),
                 invoiceSumRubInputField.getErrorMessage(),
                 invoicePaymentSumWithCurrencyPaymentInputField.getErrorMessage());
         return String.format("%s<br/>%s",
