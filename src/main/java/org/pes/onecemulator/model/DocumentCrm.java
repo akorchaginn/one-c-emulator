@@ -27,7 +27,19 @@ public class DocumentCrm {
     private String payerName;
 
     @JsonProperty("sum")
-    private BigDecimal sum;
+    private BigDecimal invoiceSum;
+
+    @JsonProperty("Sum_rub")
+    private String invoiceSumRUB;
+
+    @JsonProperty("sumOplat_currency_P")
+    private String paymentSumWithCurrencyPayment;
+
+    @JsonProperty("currency_S")
+    private String invoiceCurrency;
+
+    @JsonProperty("currency_P")
+    private String paymentCurrency;
 
     @JsonProperty("date")
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -80,12 +92,12 @@ public class DocumentCrm {
         this.payerName = payerName;
     }
 
-    public BigDecimal getSum() {
-        return sum;
+    public BigDecimal getInvoiceSum() {
+        return invoiceSum;
     }
 
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
+    public void setInvoiceSum(BigDecimal invoiceSum) {
+        this.invoiceSum = invoiceSum;
     }
 
     public LocalDate getDate() {
@@ -127,4 +139,20 @@ public class DocumentCrm {
     public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
+
+    public String getInvoiceSumRUB() { return invoiceSumRUB; }
+
+    public void setInvoiceSumRUB(String invoiceSumRUB) { this.invoiceSumRUB = invoiceSumRUB; }
+
+    public String getPaymentSumWithCurrencyPayment() { return paymentSumWithCurrencyPayment; }
+
+    public void setPaymentSumWithCurrencyPayment(String paymentSumWithCurrencyPayment) { this.paymentSumWithCurrencyPayment = paymentSumWithCurrencyPayment; }
+
+    public String getInvoiceCurrency() { return invoiceCurrency; }
+
+    public void setInvoiceCurrency(String invoiceCurrency) { this.invoiceCurrency = invoiceCurrency; }
+
+    public String getPaymentCurrency() { return paymentCurrency; }
+
+    public void setPaymentCurrency(String paymentCurrency) { this.paymentCurrency = paymentCurrency; }
 }

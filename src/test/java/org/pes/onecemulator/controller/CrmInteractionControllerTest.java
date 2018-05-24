@@ -69,7 +69,7 @@ public class CrmInteractionControllerTest {
         documentCrmOutput.setPayerName("РогаИКопыта");
         documentCrmOutput.setStatus("Продано");
         documentCrmOutput.setPaymentSum(new BigDecimal(123));
-        documentCrmOutput.setSum(new BigDecimal(321));
+        documentCrmOutput.setInvoiceSum(new BigDecimal(321));
         documentCrmOutput.setExternalId("4839e2fc-8909-4161-ad0b-5b0c66b5c08b");
         documentCrmOutput.setNumberOq("123");
         documentCrmOutput.setNumber("321");
@@ -91,7 +91,7 @@ public class CrmInteractionControllerTest {
                 .andExpect(jsonPath("$[0].nom", is(documentCrmOutput.getNumber())))
                 .andExpect(jsonPath("$[0].NomOQ", is(documentCrmOutput.getNumberOq())))
                 .andExpect(jsonPath("$[0].name", is(documentCrmOutput.getPayerName())))
-                .andExpect(jsonPath("$[0].sum", is(documentCrmOutput.getSum().intValue())))
+                .andExpect(jsonPath("$[0].sum", is(documentCrmOutput.getInvoiceSum().intValue())))
                 .andExpect(jsonPath("$[0].date", is(documentCrmOutput.getDate().toString())))
                 .andExpect(jsonPath("$[0].status", is(documentCrmOutput.getStatus())))
                 .andExpect(jsonPath("$[0].dataOplat", is(documentCrmOutput.getPaymentDate().toString())))
@@ -111,7 +111,7 @@ public class CrmInteractionControllerTest {
         documentCrmOutput1.setPayerName("РогаИКопыта");
         documentCrmOutput1.setStatus("Продано");
         documentCrmOutput1.setPaymentSum(new BigDecimal(123));
-        documentCrmOutput1.setSum(new BigDecimal(321));
+        documentCrmOutput1.setInvoiceSum(new BigDecimal(321));
         documentCrmOutput1.setExternalId("4839e2fc-8909-4161-ad0b-5b0c66b5c08b");
         documentCrmOutput1.setNumberOq("123");
         documentCrmOutput1.setNumber("321");
@@ -126,7 +126,7 @@ public class CrmInteractionControllerTest {
         documentCrmOutput2.setPayerName("КопытаИрония");
         documentCrmOutput2.setStatus("Продается");
         documentCrmOutput2.setPaymentSum(new BigDecimal(100000));
-        documentCrmOutput2.setSum(new BigDecimal(2000));
+        documentCrmOutput2.setInvoiceSum(new BigDecimal(2000));
         documentCrmOutput2.setExternalId("08e1c400-e2fd-4ae4-a9ff-3bf2ccd24ad3");
         documentCrmOutput2.setNumberOq("фыв");
         documentCrmOutput2.setNumber("уцй");
@@ -148,7 +148,7 @@ public class CrmInteractionControllerTest {
                 .andExpect(jsonPath("$[0].nom", is(documentCrmOutput1.getNumber())))
                 .andExpect(jsonPath("$[0].NomOQ", is(documentCrmOutput1.getNumberOq())))
                 .andExpect(jsonPath("$[0].name", is(documentCrmOutput1.getPayerName())))
-                .andExpect(jsonPath("$[0].sum", is(documentCrmOutput1.getSum().intValue())))
+                .andExpect(jsonPath("$[0].sum", is(documentCrmOutput1.getInvoiceSum().intValue())))
                 .andExpect(jsonPath("$[0].date", is(documentCrmOutput1.getDate().toString())))
                 .andExpect(jsonPath("$[0].status", is(documentCrmOutput1.getStatus())))
                 .andExpect(jsonPath("$[0].dataOplat", is(documentCrmOutput1.getPaymentDate().toString())))
@@ -158,7 +158,7 @@ public class CrmInteractionControllerTest {
                 .andExpect(jsonPath("$[1].nom", is(documentCrmOutput2.getNumber())))
                 .andExpect(jsonPath("$[1].NomOQ", is(documentCrmOutput2.getNumberOq())))
                 .andExpect(jsonPath("$[1].name", is(documentCrmOutput2.getPayerName())))
-                .andExpect(jsonPath("$[1].sum", is(documentCrmOutput2.getSum().intValue())))
+                .andExpect(jsonPath("$[1].sum", is(documentCrmOutput2.getInvoiceSum().intValue())))
                 .andExpect(jsonPath("$[1].date", is(documentCrmOutput2.getDate().toString())))
                 .andExpect(jsonPath("$[1].status", is(documentCrmOutput2.getStatus())))
                 .andExpect(jsonPath("$[1].dataOplat", is(documentCrmOutput2.getPaymentDate().toString())))
