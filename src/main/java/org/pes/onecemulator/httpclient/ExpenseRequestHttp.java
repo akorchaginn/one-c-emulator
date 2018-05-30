@@ -85,11 +85,11 @@ public class ExpenseRequestHttp {
         String params = new StringJoiner(",")
                 .add(number)
                 .add(sum.toString())
-                .add(paid.toString())
+                .add(paid ? "1" : "0")
                 .add(currency)
                 .add(code)
                 .add(documentName)
-                .add(confirm.toString())
+                .add(confirm ? "1" : "0")
                 .toString();
         HttpGet request = new HttpGet(crmUri + "/" + params + "/" + date.format(formatter));
         request.setHeader("crm-api-token", crmToken);
