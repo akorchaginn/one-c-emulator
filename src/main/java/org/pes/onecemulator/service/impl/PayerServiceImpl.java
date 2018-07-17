@@ -144,12 +144,13 @@ public class PayerServiceImpl implements PayerService {
     private Set<Source> updateOrCreateSources(final Set<String> sources) {
         final Set<Source> newSources = new HashSet<>();
         sources.forEach(s -> {
-            Source source = sourceRepository.findByName(s).orElseGet(() ->
-            {
-                Source newSource = new Source();
-                newSource.setName(s);
-                return newSource;
-            });
+            final Source source = sourceRepository.findByName(s)
+                    .orElseGet(() ->
+                    {
+                        final Source newSource = new Source();
+                        newSource.setName(s);
+                        return newSource;
+                    });
             newSources.add(source);
         });
 
