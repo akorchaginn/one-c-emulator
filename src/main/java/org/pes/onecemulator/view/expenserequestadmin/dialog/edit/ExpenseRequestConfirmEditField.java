@@ -8,9 +8,9 @@ class ExpenseRequestConfirmEditField extends CheckBox {
 
     final BeanValidationBinder<ExpenseRequestModel> binder = new BeanValidationBinder<>(ExpenseRequestModel.class);
 
-    private final Boolean origin;
+    private final boolean origin;
 
-    ExpenseRequestConfirmEditField(Boolean origin) {
+    ExpenseRequestConfirmEditField(boolean origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Подтверждено");
@@ -19,7 +19,7 @@ class ExpenseRequestConfirmEditField extends CheckBox {
     }
 
     boolean hasChanges() {
-        Boolean now = getValue();
-        return !origin.equals(now);
+        boolean now = Boolean.TRUE.equals(getValue());
+        return origin != now;
     }
 }

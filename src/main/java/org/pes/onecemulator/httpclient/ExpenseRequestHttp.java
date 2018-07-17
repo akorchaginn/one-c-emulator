@@ -5,6 +5,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.pes.onecemulator.entity.AccountingEntry;
+import org.pes.onecemulator.entity.ExpenseRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class ExpenseRequestHttp {
 
     private String sum;
 
-    private Boolean paid;
+    private boolean paid;
 
     private String currency;
 
@@ -35,7 +36,7 @@ public class ExpenseRequestHttp {
 
     private String documentName;
 
-    private Boolean confirm;
+    private boolean confirm;
 
     private LocalDate date;
 
@@ -51,18 +52,20 @@ public class ExpenseRequestHttp {
         Objects.requireNonNull(uri);
         Objects.requireNonNull(token);
 
+        final ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
+
         this.crmUri = host + uri;
         this.crmToken = token;
-        this.number = accountingEntry.getExpenseRequest().getNumber();
+        this.number = expenseRequest.getNumber();
         this.sum = accountingEntry.getSum();
-        this.paid = accountingEntry.getExpenseRequest().getPaid();
-        this.currency = accountingEntry.getExpenseRequest().getCurrency();
+        this.paid = Boolean.TRUE.equals(expenseRequest.getPaid());
+        this.currency = expenseRequest.getCurrency();
         this.code = accountingEntry.getCode();
         this.documentName = accountingEntry.getDocumentName();
-        this.confirm = accountingEntry.getExpenseRequest().getConfirm();
+        this.confirm = Boolean.TRUE.equals(expenseRequest.getConfirm());
         this.date = accountingEntry.getDate();
         this.formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        this.source = accountingEntry.getExpenseRequest().getSource().getName();
+        this.source = expenseRequest.getSource().getName();
     }
 
     public String call() throws Exception {

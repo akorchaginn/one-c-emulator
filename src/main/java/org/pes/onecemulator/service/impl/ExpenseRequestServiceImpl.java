@@ -125,8 +125,8 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         model.setId(entity.getId());
         model.setSource(entity.getSource().getName());
         model.setCurrency(entity.getCurrency());
-        model.setConfirm(entity.getConfirm());
-        model.setPaid(entity.getPaid());
+        model.setConfirm(Boolean.TRUE.equals(entity.getConfirm()));
+        model.setPaid(Boolean.TRUE.equals(entity.getPaid()));
         model.setNumber(entity.getNumber());
         model.setSum(entity.getSum());
 
