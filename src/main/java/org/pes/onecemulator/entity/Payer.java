@@ -8,7 +8,6 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.util.HashSet;
@@ -41,9 +40,6 @@ public class Payer extends AbstractEntity {
 
     @Column(name = "name")
     private String name;
-
-    @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Invoice> invoices = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(
@@ -105,14 +101,6 @@ public class Payer extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<Invoice> getInvoices() {
-        return invoices;
-    }
-
-    public void setInvoices(Set<Invoice> invoices) {
-        this.invoices = invoices;
     }
 
     public Set<Source> getSources() {

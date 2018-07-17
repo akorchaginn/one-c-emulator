@@ -2,7 +2,6 @@ package org.pes.onecemulator.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiError {
@@ -14,11 +13,8 @@ public class ApiError {
     private String cause;
 
     ApiError(Exception e) {
-        this.error = ExceptionUtils.getMessage(e);
-        this.cause =
-                !ExceptionUtils.getMessage(e).equals(ExceptionUtils.getRootCauseMessage(e))
-                        ? ExceptionUtils.getRootCauseMessage(e)
-                        : null;
+        this.error = e.getLocalizedMessage();
+        this.cause = e.getCause().getLocalizedMessage();
     }
 
     public String getError() {

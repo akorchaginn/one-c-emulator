@@ -4,7 +4,7 @@ import com.vaadin.ui.TextField;
 
 import java.util.UUID;
 
-public class SourceIdReadOnlyField extends TextField {
+class SourceIdReadOnlyField extends TextField {
 
     SourceIdReadOnlyField(UUID origin) {
         setValue(origin.toString());

@@ -4,7 +4,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 import org.pes.onecemulator.view.expenserequestadmin.root.view.ExpenseRequestAdminView;
 
-public class ToExpenseRequestAdminViewButton extends Button {
+class ToExpenseRequestAdminViewButton extends Button {
 
     private final static String ID = "ToExpenseRequestAdminViewButton";
 

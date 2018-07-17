@@ -1,18 +1,16 @@
 package org.pes.onecemulator.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Version;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -32,15 +30,13 @@ public abstract class AbstractEntity {
     )
     private UUID id;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_time")
-    @CreationTimestamp
-    private Calendar createdTime;
+    @Generated(GenerationTime.INSERT)
+    private LocalDateTime createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_time")
-    @UpdateTimestamp
-    private Calendar updatedTime;
+    @Generated(GenerationTime.ALWAYS)
+    private LocalDateTime updatedTime;
 
     @Version
     private Long version;
@@ -53,19 +49,19 @@ public abstract class AbstractEntity {
         this.id = id;
     }
 
-    public Calendar getCreatedTime() {
+    public LocalDateTime getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Calendar createdTime) {
+    public void setCreatedTime(LocalDateTime createdTime) {
         this.createdTime = createdTime;
     }
 
-    public Calendar getUpdatedTime() {
+    public LocalDateTime getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Calendar updatedTime) {
+    public void setUpdatedTime(LocalDateTime updatedTime) {
         this.updatedTime = updatedTime;
     }
 

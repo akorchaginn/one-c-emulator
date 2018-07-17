@@ -7,7 +7,7 @@ import org.pes.onecemulator.model.PayerModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PayerEditForm extends FormLayout {
+class PayerEditForm extends FormLayout {
 
     private final PayerIdReadOnlyField payerId;
 

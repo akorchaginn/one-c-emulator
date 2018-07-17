@@ -12,7 +12,6 @@ public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
     @Override
     public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //convert String to LocalDate
         return LocalDate.parse(jsonParser.getText(), formatter);
     }
 }

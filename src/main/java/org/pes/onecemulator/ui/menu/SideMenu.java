@@ -6,8 +6,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 public class SideMenu extends CssLayout {
 
-    private final Title title = new Title();
-
     private final ToTopViewButton toTopViewButton = new ToTopViewButton();
 
     private final ToPayerAdminViewButton toPayerAdminViewButton = new ToPayerAdminViewButton();
@@ -22,6 +20,7 @@ public class SideMenu extends CssLayout {
 
     public SideMenu() {
         setPrimaryStyleName(ValoTheme.MENU_ROOT);
+        Title title = new Title();
         addComponents(
                 title,
                 toTopViewButton,

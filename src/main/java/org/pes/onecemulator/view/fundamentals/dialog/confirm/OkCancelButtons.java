@@ -3,7 +3,7 @@ package org.pes.onecemulator.view.fundamentals.dialog.confirm;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 
-public class OkCancelButtons extends HorizontalLayout {
+class OkCancelButtons extends HorizontalLayout {
 
     final OkButton okButton = new OkButton();
 

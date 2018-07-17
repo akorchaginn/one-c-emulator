@@ -5,11 +5,8 @@ import com.vaadin.ui.DateField;
 import org.pes.onecemulator.model.InvoiceModel;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
-public class InvoicePaymentDateEditField extends DateField {
+class InvoicePaymentDateEditField extends DateField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
@@ -28,7 +25,4 @@ public class InvoicePaymentDateEditField extends DateField {
         return !origin.equals(now);
     }
 
-    Calendar valueAsCalendar() {
-        return GregorianCalendar.from(getValue().atStartOfDay(ZoneId.systemDefault()));
-    }
 }

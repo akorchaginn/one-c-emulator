@@ -4,7 +4,7 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 
-public class ExpenseRequestSumInputField extends TextField {
+class ExpenseRequestSumInputField extends TextField {
 
     final BeanValidationBinder<ExpenseRequestModel> binder = new BeanValidationBinder<>(ExpenseRequestModel.class);
 

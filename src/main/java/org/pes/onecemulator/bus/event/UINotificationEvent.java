@@ -6,9 +6,9 @@ public class UINotificationEvent {
 
     private final String description;
 
-    private final Boolean error;
+    private final boolean error;
 
-    public UINotificationEvent(Object source, String description, Boolean error) {
+    public UINotificationEvent(final Object source, final String description, final boolean error) {
         this.source = source;
         this.description = description;
         this.error = error;
@@ -22,5 +22,5 @@ public class UINotificationEvent {
         return description;
     }
 
-    public Boolean getError() { return error; }
+    public boolean getError() { return error; }
 }

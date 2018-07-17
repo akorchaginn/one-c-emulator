@@ -4,9 +4,7 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.InvoiceModel;
 
-import java.math.BigDecimal;
-
-public class InvoiceCurrencyEditField extends TextField {
+class InvoiceCurrencyEditField extends TextField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 

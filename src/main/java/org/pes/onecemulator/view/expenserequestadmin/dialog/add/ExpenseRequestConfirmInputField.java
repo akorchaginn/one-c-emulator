@@ -4,7 +4,7 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.CheckBox;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 
-public class ExpenseRequestConfirmInputField extends CheckBox {
+class ExpenseRequestConfirmInputField extends CheckBox {
 
     final BeanValidationBinder<ExpenseRequestModel> binder = new BeanValidationBinder<>(ExpenseRequestModel.class);
 

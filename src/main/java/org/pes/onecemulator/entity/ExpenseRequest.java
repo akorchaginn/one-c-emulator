@@ -1,18 +1,12 @@
 package org.pes.onecemulator.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(
@@ -36,14 +30,11 @@ public class ExpenseRequest extends AbstractEntity {
     private String number;
 
     @Column(name = "sum", nullable = false)
-    private BigDecimal sum;
+    private String sum;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "source_id", foreignKey = @ForeignKey(name = "fk_expense_request_source_id"))
     private Source source;
-
-    @OneToMany(mappedBy = "expenseRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<AccountingEntry> accountingEntries = new HashSet<>();
 
     public String getCurrency() {
         return currency;
@@ -77,11 +68,11 @@ public class ExpenseRequest extends AbstractEntity {
         this.number = number;
     }
 
-    public BigDecimal getSum() {
+    public String getSum() {
         return sum;
     }
 
-    public void setSum(BigDecimal sum) {
+    public void setSum(String sum) {
         this.sum = sum;
     }
 
@@ -91,13 +82,5 @@ public class ExpenseRequest extends AbstractEntity {
 
     public void setSource(Source source) {
         this.source = source;
-    }
-
-    public Set<AccountingEntry> getAccountingEntries() {
-        return accountingEntries;
-    }
-
-    public void setAccountingEntries(Set<AccountingEntry> accountingEntries) {
-        this.accountingEntries = accountingEntries;
     }
 }

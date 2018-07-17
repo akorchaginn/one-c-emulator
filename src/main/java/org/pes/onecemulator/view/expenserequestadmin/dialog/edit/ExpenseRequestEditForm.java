@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.ExpenseRequestModel;
 
 import java.util.List;
 
-public class ExpenseRequestEditForm extends FormLayout {
+class ExpenseRequestEditForm extends FormLayout {
 
     private final ExpenseRequestIdReadOnlyField expenseRequestId;
 

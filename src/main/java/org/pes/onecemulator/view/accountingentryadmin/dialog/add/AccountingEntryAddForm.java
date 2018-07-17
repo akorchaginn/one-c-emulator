@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.AccountingEntryModel;
 
 import java.util.List;
 
-public class AccountingEntryAddForm extends FormLayout {
+class AccountingEntryAddForm extends FormLayout {
 
     private final AccountingEntryCodeInputField accountingEntryCode;
 

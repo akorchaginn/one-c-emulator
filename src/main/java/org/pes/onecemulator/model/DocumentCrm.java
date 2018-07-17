@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.pes.onecemulator.model.api.LocalDateDeserializer;
 import org.pes.onecemulator.model.api.LocalDateSerializer;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -27,7 +26,7 @@ public class DocumentCrm {
     private String payerName;
 
     @JsonProperty("sum")
-    private BigDecimal invoiceSum;
+    private String invoiceSum;
 
     @JsonProperty("Sum_rub")
     private String invoiceSumRUB;
@@ -55,7 +54,7 @@ public class DocumentCrm {
     private LocalDate paymentDate;
 
     @JsonProperty("sumOplat")
-    private BigDecimal paymentSum;
+    private String paymentSum;
 
     @JsonProperty(value = "uuid")
     private String externalId;
@@ -92,11 +91,11 @@ public class DocumentCrm {
         this.payerName = payerName;
     }
 
-    public BigDecimal getInvoiceSum() {
+    public String getInvoiceSum() {
         return invoiceSum;
     }
 
-    public void setInvoiceSum(BigDecimal invoiceSum) {
+    public void setInvoiceSum(String invoiceSum) {
         this.invoiceSum = invoiceSum;
     }
 
@@ -124,11 +123,11 @@ public class DocumentCrm {
         this.paymentDate = paymentDate;
     }
 
-    public BigDecimal getPaymentSum() {
+    public String getPaymentSum() {
         return paymentSum;
     }
 
-    public void setPaymentSum(BigDecimal paymentSum) {
+    public void setPaymentSum(String paymentSum) {
         this.paymentSum = paymentSum;
     }
 

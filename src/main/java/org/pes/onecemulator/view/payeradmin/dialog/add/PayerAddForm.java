@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.PayerModel;
 
 import java.util.List;
 
-public class PayerAddForm extends FormLayout {
+class PayerAddForm extends FormLayout {
 
     private final PayerCodeInputField payerCode;
 
@@ -61,7 +61,6 @@ public class PayerAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
         CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 payerCode.getErrorMessage(),
                 payerName.getErrorMessage(),

@@ -4,7 +4,7 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.PayerModel;
 
-public class PayerKppEditField extends TextField {
+class PayerKppEditField extends TextField {
 
     final BeanValidationBinder<PayerModel> binder = new BeanValidationBinder<>(PayerModel.class);
 

@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.InvoiceModel;
 
-public class InvoicePaymentSumWithCurrencyPaymentInputField extends TextField {
+class InvoicePaymentSumRUBInputField extends TextField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
-    InvoicePaymentSumWithCurrencyPaymentInputField() {
-        setCaption("Сумма факт в валюте платежа");
+    InvoicePaymentSumRUBInputField() {
+        setCaption("Сумма оплаты");
         setSizeFull();
-        binder.bind(this, "paymentSumWithCurrencyPayment");
+        binder.bind(this, "paymentSumRUB");
     }
 }

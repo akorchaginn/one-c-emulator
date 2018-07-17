@@ -9,12 +9,10 @@ import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.SourceModel;
 import org.pes.onecemulator.repository.SourceRepository;
-import org.pes.onecemulator.service.impl.SourceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,20 +22,12 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
 public class SourceServiceTest {
-
-    @TestConfiguration
-    static class SourceServiceTestContextConfiguration {
-        @Bean
-        public SourceService sourceService() {
-            return new SourceServiceImpl();
-        }
-    }
 
     @MockBean
     private SourceRepository repository;
@@ -104,20 +94,6 @@ public class SourceServiceTest {
         assertFalse(service.list().isEmpty());
     }
 
-    @Test(expected = NotFoundException.class)
-    public void payerListNotFoundSourceTest() throws NotFoundException {
-        service.getPayerList("1db");
-    }
-
-    @Test
-    public void payerListEmptyTest() throws NotFoundException {
-        assertTrue(service.getPayerList("2db").isEmpty());
-    }
-
-    @Test
-    public void payerListNotEmptyTest() throws NotFoundException {
-        assertFalse(service.getPayerList("3db").isEmpty());
-    }
 
     @Test(expected = ValidationException.class)
     public void createModelIsNullValidationTest() throws Exception {

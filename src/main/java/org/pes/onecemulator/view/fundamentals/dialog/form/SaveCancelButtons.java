@@ -3,7 +3,7 @@ package org.pes.onecemulator.view.fundamentals.dialog.form;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 
-public class SaveCancelButtons extends HorizontalLayout {
+class SaveCancelButtons extends HorizontalLayout {
 
     final SaveButton saveButton = new SaveButton();
     final CancelButton cancelButton = new CancelButton();

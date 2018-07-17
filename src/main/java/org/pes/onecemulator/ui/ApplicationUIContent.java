@@ -4,7 +4,7 @@ import com.vaadin.ui.HorizontalLayout;
 import org.pes.onecemulator.ui.menu.SideMenu;
 import org.pes.onecemulator.ui.panel.ViewDisplayPanel;
 
-public class ApplicationUIContent extends HorizontalLayout {
+class ApplicationUIContent extends HorizontalLayout {
 
     final SideMenu sideMenu = new SideMenu();
     final ViewDisplayPanel viewDisplay = new ViewDisplayPanel();

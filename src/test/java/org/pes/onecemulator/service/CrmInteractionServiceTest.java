@@ -1,19 +1,15 @@
 package org.pes.onecemulator.service;
 
-import com.google.common.eventbus.AsyncEventBus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
-import org.pes.onecemulator.repository.SourceRepository;
-import org.pes.onecemulator.service.impl.CrmInteractionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,28 +21,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
 public class CrmInteractionServiceTest {
-
-    @TestConfiguration
-    static class CrmInteractionServiceTestContextConfiguration {
-        @Bean
-        public CrmInteractionService crmInteractionService() {
-            return new CrmInteractionServiceImpl();
-        }
-    }
 
     @Autowired
     private CrmInteractionService service;
 
     @MockBean
     private InvoiceRepository invoiceRepository;
-
-    @MockBean
-    private SourceRepository sourceRepository;
-
-    @MockBean
-    private AsyncEventBus asyncEventBus;
 
     @Test
     public void getDocumentsCrmByIdEmptyResultTest() {
@@ -67,7 +50,7 @@ public class CrmInteractionServiceTest {
         List<DocumentCrm> documentCrmResult =
                 service.getDocumentsCrmById(Collections.singletonList(documentCrm), "1db");
 
-        Assert.assertTrue(documentCrmResult.size() == 1);
+        Assert.assertEquals(1, documentCrmResult.size());
         Assert.assertEquals(documentCrmResult.get(0).getId(), documentCrm.getId());
     }
 
@@ -84,7 +67,7 @@ public class CrmInteractionServiceTest {
         List<DocumentCrm> documentCrmResult =
                 service.getDocumentsCrmById(Arrays.asList(documentCrm, null), "1db");
 
-        Assert.assertTrue(documentCrmResult.size() == 1);
+        Assert.assertEquals(1, documentCrmResult.size());
         Assert.assertEquals(documentCrmResult.get(0).getId(), documentCrm.getId());
     }
 
@@ -104,7 +87,7 @@ public class CrmInteractionServiceTest {
         List<DocumentCrm> documentCrmResult =
                 service.getDocumentsCrmById(Arrays.asList(documentCrm1, documentCrm2), "1db");
 
-        Assert.assertTrue(documentCrmResult.size() == 1);
+        Assert.assertEquals(1, documentCrmResult.size());
         Assert.assertEquals(documentCrmResult.get(0).getId(), documentCrm1.getId());
     }
 
@@ -127,7 +110,7 @@ public class CrmInteractionServiceTest {
         List<DocumentCrm> documentCrmResult =
                 service.getDocumentsCrmByExternalId(Collections.singletonList(documentCrm), "1db");
 
-        Assert.assertTrue(documentCrmResult.size() == 1);
+        Assert.assertEquals(1, documentCrmResult.size());
         Assert.assertEquals(documentCrmResult.get(0).getExternalId(), documentCrm.getExternalId());
     }
 
@@ -144,7 +127,7 @@ public class CrmInteractionServiceTest {
         List<DocumentCrm> documentCrmResult =
                 service.getDocumentsCrmByExternalId(Arrays.asList(documentCrm, null), "1db");
 
-        Assert.assertTrue(documentCrmResult.size() == 1);
+        Assert.assertEquals(1, documentCrmResult.size());
         Assert.assertEquals(documentCrmResult.get(0).getExternalId(), documentCrm.getExternalId());
     }
 
@@ -164,7 +147,7 @@ public class CrmInteractionServiceTest {
         List<DocumentCrm> documentCrmResult =
                 service.getDocumentsCrmByExternalId(Arrays.asList(documentCrm1, documentCrm2), "1db");
 
-        Assert.assertTrue(documentCrmResult.size() == 1);
+        Assert.assertEquals(1, documentCrmResult.size());
         Assert.assertEquals(documentCrmResult.get(0).getExternalId(), documentCrm1.getExternalId());
     }
 }

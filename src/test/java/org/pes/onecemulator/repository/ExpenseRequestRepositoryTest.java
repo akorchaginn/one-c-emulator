@@ -9,8 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
-
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
@@ -35,7 +33,7 @@ public class ExpenseRequestRepositoryTest {
         newExpenseRequest.setSource(newSource);
         newExpenseRequest.setCurrency("RUR");
         newExpenseRequest.setNumber("1234567890");
-        newExpenseRequest.setSum(new BigDecimal(1000));
+        newExpenseRequest.setSum("1000");
 
         entityManager.persist(newExpenseRequest);
         entityManager.flush();

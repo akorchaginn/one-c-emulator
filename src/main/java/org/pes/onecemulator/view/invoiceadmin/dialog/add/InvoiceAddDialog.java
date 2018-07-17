@@ -67,7 +67,6 @@ public class InvoiceAddDialog extends FormDialog implements View, IInvoiceAddDia
 
     @Override
     public void returnInvoiceAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(InvoiceAdminView.VIEW_NAME);
     }

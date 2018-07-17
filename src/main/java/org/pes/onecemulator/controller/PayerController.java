@@ -3,8 +3,6 @@ package org.pes.onecemulator.controller;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.service.PayerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +20,12 @@ import java.util.UUID;
 @RequestMapping("api/payer")
 public class PayerController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PayerController.class);
+    private final PayerService payerService;
 
     @Autowired
-    private PayerService payerService;
+    public PayerController(PayerService payerService) {
+        this.payerService = payerService;
+    }
 
     @GetMapping(value = "/get-by-id/{id}")
     public @ResponseBody PayerModel getById(@PathVariable UUID id) throws NotFoundException {

@@ -4,7 +4,7 @@ import com.vaadin.ui.TextField;
 
 import java.util.UUID;
 
-public class PayerIdReadOnlyField extends TextField {
+class PayerIdReadOnlyField extends TextField {
 
     PayerIdReadOnlyField(UUID origin) {
         setValue(origin.toString());

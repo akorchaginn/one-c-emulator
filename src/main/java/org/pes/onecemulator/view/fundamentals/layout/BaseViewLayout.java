@@ -7,9 +7,8 @@ import org.pes.onecemulator.view.fundamentals.fragment.header.ViewHeader;
 
 public abstract class BaseViewLayout extends VerticalLayout {
 
-    private final ViewFooter viewFooter = new ViewFooter();
-
     public BaseViewLayout() {
+        ViewFooter viewFooter = new ViewFooter();
         addComponent(viewFooter);
         setSizeFull();
     }

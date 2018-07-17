@@ -4,7 +4,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.pes.onecemulator.view.fundamentals.control.ControlArea;
 import org.pes.onecemulator.view.invoiceadmin.root.view.grid.InvoiceGrid;
 
-public class InvoiceAdminViewBody extends VerticalLayout {
+class InvoiceAdminViewBody extends VerticalLayout {
 
     final ControlArea controlArea = new ControlArea("номер, внешний идентификатор");
 

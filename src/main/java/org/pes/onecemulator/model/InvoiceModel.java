@@ -44,25 +44,25 @@ public class InvoiceModel {
     private LocalDate paymentDate;
 
     @JsonProperty("sumOplat")
+    private String paymentSumRUB;
+
+    @JsonProperty("sumOplat_currency_P")
     private String paymentSum;
+
+    @JsonProperty("currency_P")
+    private String paymentCurrency;
 
     @JsonProperty("status")
     private String status;
 
     @JsonProperty("sum")
-    private String invoiceSum;
+    private String sum;
 
     @JsonProperty("Sum_rub")
-    private String invoiceSumRUB;
-
-    @JsonProperty("sumOplat_currency_P")
-    private String paymentSumWithCurrencyPayment;
+    private String sumRUB;
 
     @JsonProperty("currency_S")
-    private String invoiceCurrency;
-
-    @JsonProperty("currency_P")
-    private String paymentCurrency;
+    private String currency;
 
     @JsonProperty("externalId")
     @NotNull
@@ -124,12 +124,28 @@ public class InvoiceModel {
         this.paymentDate = paymentDate;
     }
 
+    public String getPaymentSumRUB() {
+        return paymentSumRUB;
+    }
+
+    public void setPaymentSumRUB(String paymentSumRUB) {
+        this.paymentSumRUB = paymentSumRUB;
+    }
+
     public String getPaymentSum() {
         return paymentSum;
     }
 
     public void setPaymentSum(String paymentSum) {
         this.paymentSum = paymentSum;
+    }
+
+    public String getPaymentCurrency() {
+        return paymentCurrency;
+    }
+
+    public void setPaymentCurrency(String paymentCurrency) {
+        this.paymentCurrency = paymentCurrency;
     }
 
     public String getStatus() {
@@ -140,12 +156,28 @@ public class InvoiceModel {
         this.status = status;
     }
 
-    public String getInvoiceSum() {
-        return invoiceSum;
+    public String getSum() {
+        return sum;
     }
 
-    public void setInvoiceSum(String invoiceSum) {
-        this.invoiceSum = invoiceSum;
+    public void setSum(String sum) {
+        this.sum = sum;
+    }
+
+    public String getSumRUB() {
+        return sumRUB;
+    }
+
+    public void setSumRUB(String sumRUB) {
+        this.sumRUB = sumRUB;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getExternalId() {
@@ -155,22 +187,6 @@ public class InvoiceModel {
     public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
-
-    public String getInvoiceSumRUB() { return invoiceSumRUB; }
-
-    public void setInvoiceSumRUB(String invoiceSumRUB) { this.invoiceSumRUB = invoiceSumRUB; }
-
-    public String getPaymentSumWithCurrencyPayment() { return paymentSumWithCurrencyPayment; }
-
-    public void setPaymentSumWithCurrencyPayment(String paymentSumWithCurrencyPayment) { this.paymentSumWithCurrencyPayment = paymentSumWithCurrencyPayment; }
-
-    public String getInvoiceCurrency() { return invoiceCurrency; }
-
-    public void setInvoiceCurrency(String invoiceCurrency) { this.invoiceCurrency = invoiceCurrency; }
-
-    public String getPaymentCurrency() { return paymentCurrency; }
-
-    public void setPaymentCurrency(String paymentCurrency) { this.paymentCurrency = paymentCurrency; }
 
     public boolean containsWithIgnoreCase(String text) {
         return number.toLowerCase().contains(text)
@@ -189,14 +205,14 @@ public class InvoiceModel {
                 Objects.equals(numberOq, model.numberOq) &&
                 Objects.equals(payerCode, model.payerCode) &&
                 Objects.equals(paymentDate, model.paymentDate) &&
-                Objects.equals(paymentSum, model.paymentSum) &&
+                Objects.equals(paymentSumRUB, model.paymentSumRUB) &&
                 Objects.equals(status, model.status) &&
-                Objects.equals(invoiceSum, model.invoiceSum) &&
+                Objects.equals(sum, model.sum) &&
                 Objects.equals(externalId, model.externalId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, source, date, number, numberOq, payerCode, paymentDate, paymentSum, status, invoiceSum, externalId);
+        return Objects.hash(id, source, date, number, numberOq, payerCode, paymentDate, paymentSumRUB, status, sum, externalId);
     }
 }

@@ -21,51 +21,57 @@ public class CrmInteractionController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CrmInteractionController.class);
 
-    @Autowired
-    private CrmInteractionService crmInteractionService;
-
     private final ObjectMapper mapper = new ObjectMapper();
+
+    private final CrmInteractionService crmInteractionService;
+
+    @Autowired
+    public CrmInteractionController(CrmInteractionService crmInteractionService) {
+        this.crmInteractionService = crmInteractionService;
+    }
 
     @PostMapping(value = "{source}/hs/DocID")
     public @ResponseBody List<DocumentCrm> getDocById(
             @PathVariable(value = "source") String source,
-            @RequestBody List<DocumentCrm> documentCrms) {
+            @RequestBody List<DocumentCrm> documents) {
         try {
-            LOGGER.info("Request: " + source + "/hs/DocID " + mapper.writeValueAsString(documentCrms));
+            LOGGER.info("Request: " + source + "/hs/DocID " + mapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        List<DocumentCrm> documentCrmList = crmInteractionService.getDocumentsCrmById(documentCrms, source);
+        final List<DocumentCrm> documentList =
+                crmInteractionService.getDocumentsCrmById(documents, source);
 
         try {
-            LOGGER.info("Response: " + mapper.writeValueAsString(documentCrmList));
+            LOGGER.info("Response: " + mapper.writeValueAsString(documentList));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        return documentCrmList;
+        return documentList;
     }
 
     @PostMapping(value = "{source}/hs/NewDoc")
     public @ResponseBody List<DocumentCrm> getDocByExternalId(
             @PathVariable(value = "source") String source,
-            @RequestBody List<DocumentCrm> documentCrms) {
+            @RequestBody List<DocumentCrm> documents) {
         try {
-            LOGGER.info("Request: " + source + "/hs/NewDoc " + mapper.writeValueAsString(documentCrms));
+            LOGGER.info("Request: " + source + "/hs/NewDoc " + mapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        List<DocumentCrm> documentCrmList = crmInteractionService.getDocumentsCrmByExternalId(documentCrms, source);
+        final List<DocumentCrm> documentList =
+                crmInteractionService.getDocumentsCrmByExternalId(documents, source);
 
         try {
-            LOGGER.info("Response: " + mapper.writeValueAsString(documentCrmList));
+            LOGGER.info("Response: " + mapper.writeValueAsString(documentList));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        return documentCrmList;
+        return documentList;
     }
 
     @PostMapping(value = "{source}/hs/Con")
@@ -73,10 +79,11 @@ public class CrmInteractionController {
             @PathVariable(value = "source") String source) {
         LOGGER.info("Request: source=" + source);
 
-        List<PayerCrm> payerCrmList = crmInteractionService.getAllPayersCrmBySource(source);
+        final List<PayerCrm> payerList =
+                crmInteractionService.getAllPayersCrmBySource(source);
 
-        LOGGER.info("Response: size=" + payerCrmList.size());
+        LOGGER.info("Response: size=" + payerList.size());
 
-        return payerCrmList;
+        return payerList;
     }
 }

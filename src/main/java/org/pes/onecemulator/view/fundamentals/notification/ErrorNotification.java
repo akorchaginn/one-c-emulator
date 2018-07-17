@@ -3,7 +3,6 @@ package org.pes.onecemulator.view.fundamentals.notification;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 public final class ErrorNotification {
 
@@ -17,7 +16,7 @@ public final class ErrorNotification {
     public static void show(Exception e) {
         Notification error = new Notification(
                 "Ошибка:",
-                e.getMessage() + "\n" + ExceptionUtils.getRootCauseMessage(e),
+                e.getMessage() + "\n" + e,
                 Notification.Type.ERROR_MESSAGE);
         error.setDelayMsec(-1);
         error.setPosition(Position.TOP_RIGHT);

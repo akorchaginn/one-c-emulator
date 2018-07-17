@@ -4,7 +4,7 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.AccountingEntryModel;
 
-public class AccountingEntryCodeEditField extends TextField {
+class AccountingEntryCodeEditField extends TextField {
 
     final BeanValidationBinder<AccountingEntryModel> binder = new BeanValidationBinder<>(AccountingEntryModel.class);
 

@@ -4,7 +4,7 @@ import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.ui.FormLayout;
 import org.pes.onecemulator.model.SourceModel;
 
-public class SourceAddForm extends FormLayout {
+class SourceAddForm extends FormLayout {
 
     private final SourceNameInputField sourceName;
 

@@ -3,7 +3,7 @@ package org.pes.onecemulator.view.fundamentals.control;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class SearchField extends CssLayout {
+class SearchField extends CssLayout {
 
     final SearchTextField searchText;
 

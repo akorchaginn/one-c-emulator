@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.ExpenseRequestModel;
 
 import java.util.List;
 
-public class ExpenseRequestAddForm extends FormLayout {
+class ExpenseRequestAddForm extends FormLayout {
 
     private final ExpenseRequestSourceInputField expenseRequestSource;
 

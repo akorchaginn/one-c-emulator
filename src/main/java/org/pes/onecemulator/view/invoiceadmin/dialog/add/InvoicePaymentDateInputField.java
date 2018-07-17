@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.InvoiceModel;
 
 import java.time.LocalDate;
 
-public class InvoicePaymentDateInputField extends DateField {
+class InvoicePaymentDateInputField extends DateField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 

@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.AccountingEntryModel;
 
 import java.time.LocalDate;
 
-public class AccountingEntryDateInputField extends DateField {
+class AccountingEntryDateInputField extends DateField {
 
     final BeanValidationBinder<AccountingEntryModel> binder = new BeanValidationBinder<>(AccountingEntryModel.class);
 

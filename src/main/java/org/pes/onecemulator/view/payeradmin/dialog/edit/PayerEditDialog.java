@@ -35,7 +35,6 @@ public class PayerEditDialog extends FormDialog implements View, IPayerEditDialo
 
     @Override
     public void enter(ViewChangeEvent event) {
-        // initialize from data of transition source view
         IPayerAdminView sourceView = (IPayerAdminView) event.getOldView();
         this.form = new PayerEditForm(sourceView.gridSelection(), presenter.getSourceList());
         setForm(form);
@@ -73,7 +72,6 @@ public class PayerEditDialog extends FormDialog implements View, IPayerEditDialo
 
     @Override
     public void returnPayerAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(PayerAdminView.VIEW_NAME);
     }

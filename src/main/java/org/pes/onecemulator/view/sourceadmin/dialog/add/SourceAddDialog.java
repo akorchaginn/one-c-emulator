@@ -59,7 +59,6 @@ public class SourceAddDialog extends FormDialog implements View, ISourceAddDialo
 
     @Override
     public void returnSourceAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(SourceAdminView.VIEW_NAME);
     }

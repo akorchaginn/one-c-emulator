@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.ExpenseRequestModel;
 
 import java.util.List;
 
-public class ExpenseRequestSourceEditField extends ComboBox<String> {
+class ExpenseRequestSourceEditField extends ComboBox<String> {
 
     final BeanValidationBinder<ExpenseRequestModel> binder = new BeanValidationBinder<>(ExpenseRequestModel.class);
 

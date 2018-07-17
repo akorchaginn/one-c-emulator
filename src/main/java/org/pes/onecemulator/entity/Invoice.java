@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -39,28 +38,28 @@ public class Invoice extends AbstractEntity {
     private LocalDate paymentDate;
 
     @Column(name = "payment_sum")
-    private BigDecimal paymentSum;
+    private String paymentSum;
+
+    @Column(name = "payment_sum_rub")
+    private String paymentSumRUB;
+
+    @Column(name = "payment_currency")
+    private String paymentCurrency;
 
     @Column(name = "status")
     private String status;
 
     @Column(name = "sum")
-    private BigDecimal invoiceSum;
+    private String sum;
+
+    @Column(name = "sum_rub")
+    private String sumRUB;
+
+    @Column(name = "currency")
+    private String currency;
 
     @Column(name = "external_id", nullable = false)
     private String externalId;
-
-    @Column(name = "payment_sum_currency")
-    private String paymentSumWithCurrencyPayment;
-
-    @Column(name = "sum_rub")
-    private String invoiceSumRUB;
-
-    @Column(name = "payment_currency")
-    private String paymentCurrency;
-
-    @Column(name = "invoice_currency")
-    private String invoiceCurrency;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "payer_id", foreignKey = @ForeignKey(name = "fk_invoice_payer_id"))
@@ -102,12 +101,28 @@ public class Invoice extends AbstractEntity {
         this.paymentDate = paymentDate;
     }
 
-    public BigDecimal getPaymentSum() {
+    public String getPaymentSum() {
         return paymentSum;
     }
 
-    public void setPaymentSum(BigDecimal paymentSum) {
+    public void setPaymentSum(String paymentSum) {
         this.paymentSum = paymentSum;
+    }
+
+    public String getPaymentSumRUB() {
+        return paymentSumRUB;
+    }
+
+    public void setPaymentSumRUB(String paymentSumRUB) {
+        this.paymentSumRUB = paymentSumRUB;
+    }
+
+    public String getPaymentCurrency() {
+        return paymentCurrency;
+    }
+
+    public void setPaymentCurrency(String paymentCurrency) {
+        this.paymentCurrency = paymentCurrency;
     }
 
     public String getStatus() {
@@ -118,12 +133,28 @@ public class Invoice extends AbstractEntity {
         this.status = status;
     }
 
-    public BigDecimal getInvoiceSum() {
-        return invoiceSum;
+    public String getSum() {
+        return sum;
     }
 
-    public void setInvoiceSum(BigDecimal invoiceSum) {
-        this.invoiceSum = invoiceSum;
+    public void setSum(String sum) {
+        this.sum = sum;
+    }
+
+    public String getSumRUB() {
+        return sumRUB;
+    }
+
+    public void setSumRUB(String sumRUB) {
+        this.sumRUB = sumRUB;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getExternalId() {
@@ -149,20 +180,4 @@ public class Invoice extends AbstractEntity {
     public void setSource(Source source) {
         this.source = source;
     }
-
-    public String getPaymentSumWithCurrencyPayment() { return paymentSumWithCurrencyPayment; }
-
-    public void setPaymentSumWithCurrencyPayment(String paymentSumWithCurrencyPayment) { this.paymentSumWithCurrencyPayment = paymentSumWithCurrencyPayment; }
-
-    public String getInvoiceSumRUB() { return invoiceSumRUB; }
-
-    public void setInvoiceSumRUB(String invoiceSumRUB) { this.invoiceSumRUB = invoiceSumRUB; }
-
-    public String getPaymentCurrency() { return paymentCurrency; }
-
-    public void setPaymentCurrency(String paymentCurrency) { this.paymentCurrency = paymentCurrency; }
-
-    public String getInvoiceCurrency() { return invoiceCurrency; }
-
-    public void setInvoiceCurrency(String invoiceCurrency) { this.invoiceCurrency = invoiceCurrency; }
 }

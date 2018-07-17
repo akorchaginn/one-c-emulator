@@ -28,7 +28,8 @@ public class DeadEventProcessor {
     }
 
     @Subscribe
-    public void processDeadEvent(DeadEvent deadEvent){
+    @SuppressWarnings("unused")
+    public void processDeadEvent(final DeadEvent deadEvent){
         LOGGER.error("Dead event detected: {}, from source: {}",
                 deadEvent.getEvent().getClass(), deadEvent.getSource().getClass());
     }

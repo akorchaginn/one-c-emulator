@@ -3,7 +3,7 @@ package org.pes.onecemulator.view.fundamentals.control;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class AddEditDeleteButtons extends CssLayout {
+class AddEditDeleteButtons extends CssLayout {
 
     final AddButton addButton = new AddButton();
 

@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.InvoiceModel;
 
 import java.util.List;
 
-public class InvoiceAddForm extends FormLayout {
+class InvoiceAddForm extends FormLayout {
 
     final InvoiceSourceInputField invoiceSource;
 
@@ -20,7 +20,7 @@ public class InvoiceAddForm extends FormLayout {
 
     private final InvoicePaymentDateInputField invoicePaymentDate;
 
-    private final InvoicePaymentSumInputField invoicePaymentSum;
+    private final InvoicePaymentSumRUBInputField invoicePaymentSum;
 
     private final InvoiceStatusInputField invoiceStatus;
 
@@ -32,11 +32,9 @@ public class InvoiceAddForm extends FormLayout {
 
     private final InvoicePaymentCurrencyInputField invoicePaymentCurrencyInputField;
 
-    private final InvoicePaymentSumWithCurrencyPaymentInputField invoicePaymentSumWithCurrencyPaymentInputField;
+    private final InvoicePaymentSumInputField invoicePaymentSumInputField;
 
     private final InvoiceSumRubInputField invoiceSumRubInputField;
-
-    //Version originalVersion;
 
     InvoiceAddForm(List<String> sources) {
         this.invoiceSource = new InvoiceSourceInputField(sources);
@@ -45,13 +43,13 @@ public class InvoiceAddForm extends FormLayout {
         this.invoiceNumberOq = new InvoiceNumberOqInputField();
         this.invoicePayer = new InvoicePayerInputField();
         this.invoicePaymentDate = new InvoicePaymentDateInputField();
-        this.invoicePaymentSum = new InvoicePaymentSumInputField();
+        this.invoicePaymentSum = new InvoicePaymentSumRUBInputField();
         this.invoiceStatus = new InvoiceStatusInputField();
         this.invoiceSum = new InvoiceSumInputField();
         this.invoiceExternalId = new InvoiceExternalIdInputField();
         this.invoiceCurrencyInputField = new InvoiceCurrencyInputField();
         this.invoicePaymentCurrencyInputField = new InvoicePaymentCurrencyInputField();
-        this.invoicePaymentSumWithCurrencyPaymentInputField = new InvoicePaymentSumWithCurrencyPaymentInputField();
+        this.invoicePaymentSumInputField = new InvoicePaymentSumInputField();
         this.invoiceSumRubInputField = new InvoiceSumRubInputField();
 
 
@@ -70,7 +68,7 @@ public class InvoiceAddForm extends FormLayout {
                 invoicePaymentCurrencyInputField,
                 invoiceCurrencyInputField,
                 invoiceSumRubInputField,
-                invoicePaymentSumWithCurrencyPaymentInputField);
+                invoicePaymentSumInputField);
         setMargin(false);
     }
 
@@ -89,7 +87,7 @@ public class InvoiceAddForm extends FormLayout {
         invoicePaymentCurrencyInputField.binder.validate();
         invoiceCurrencyInputField.binder.validate();
         invoiceSumRubInputField.binder.validate();
-        invoicePaymentSumWithCurrencyPaymentInputField.binder.validate();
+        invoicePaymentSumInputField.binder.validate();
     }
 
     boolean hasValidationErrors() {
@@ -117,7 +115,7 @@ public class InvoiceAddForm extends FormLayout {
                 invoicePaymentCurrencyInputField.getErrorMessage(),
                 invoiceCurrencyInputField.getErrorMessage(),
                 invoiceSumRubInputField.getErrorMessage(),
-                invoicePaymentSumWithCurrencyPaymentInputField.getErrorMessage());
+                invoicePaymentSumInputField.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
                 compositeErrorMessage.getFormattedHtmlMessage());
@@ -133,12 +131,12 @@ public class InvoiceAddForm extends FormLayout {
         object.setPaymentDate(invoicePaymentDate.getValue());
         object.setPaymentSum(invoiceSum.getValue());
         object.setStatus(invoiceStatus.getValue());
-        object.setInvoiceSum(invoiceSum.getValue());
+        object.setSum(invoiceSum.getValue());
         object.setExternalId(invoiceExternalId.getValue());
-        object.setInvoiceCurrency(invoiceCurrencyInputField.getValue());
-        object.setInvoiceSumRUB(invoiceSumRubInputField.getValue());
+        object.setCurrency(invoiceCurrencyInputField.getValue());
+        object.setSumRUB(invoiceSumRubInputField.getValue());
         object.setPaymentCurrency(invoicePaymentCurrencyInputField.getValue());
-        object.setPaymentSumWithCurrencyPayment(invoicePaymentSumWithCurrencyPaymentInputField.getValue());
+        object.setPaymentSum(invoicePaymentSumInputField.getValue());
 
         return object;
     }
