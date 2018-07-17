@@ -61,8 +61,8 @@ public class ApplicationUI extends UI implements ViewDisplay {
             addWindow((Window) view);
             return;
         }
-        content.sideMenu.selectedItemRelatedTo(view);
-        content.viewDisplay.setContent(view.getViewComponent());
+        content.getSideMenu().selectedItemRelatedTo(view);
+        content.getViewDisplay().setContent(view.getViewComponent());
     }
 
     @Subscribe

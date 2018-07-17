@@ -25,8 +25,6 @@ class PayerEditForm extends FormLayout {
 
     private final PayerSourceEditField payerSource;
 
-    //Version originalVersion;
-
     PayerEditForm(PayerModel target, List<String> sourceList) {
         this.payerId = new PayerIdReadOnlyField(target.getId());
         this.payerCode = new PayerCodeEditField(target.getCode());
@@ -36,7 +34,6 @@ class PayerEditForm extends FormLayout {
         this.payerKpp = new PayerKppEditField(target.getKpp());
         this.payerAddress = new PayerAddressEditField(target.getAddress());
         this.payerSource = new PayerSourceEditField(new ArrayList<>(target.getSources()), sourceList);
-        //this.originalVersion = targetSummary.audit().version();
 
         addComponents(payerId, payerCode, payerName, payerFullName, payerInn, payerKpp, payerAddress, payerSource);
         setMargin(false);
@@ -78,8 +75,7 @@ class PayerEditForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 payerCode.getErrorMessage(),
                 payerName.getErrorMessage(),
                 payerFullName.getErrorMessage(),
@@ -93,7 +89,7 @@ class PayerEditForm extends FormLayout {
     }
 
     PayerModel valueAsObject() {
-        PayerModel object = new PayerModel();
+        final PayerModel object = new PayerModel();
         object.setId(payerId.valueAsUUID());
         object.setCode(payerCode.getValue());
         object.setName(payerName.getValue());

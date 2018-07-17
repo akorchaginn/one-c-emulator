@@ -59,7 +59,6 @@ public class ExpenseRequestAddDialog extends FormDialog implements View, IExpens
 
     @Override
     public void returnExpenseRequestAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(ExpenseRequestAdminView.VIEW_NAME);
     }

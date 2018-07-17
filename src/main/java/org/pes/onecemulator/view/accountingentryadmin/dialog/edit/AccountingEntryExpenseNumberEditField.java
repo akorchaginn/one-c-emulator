@@ -12,7 +12,7 @@ class AccountingEntryExpenseNumberEditField extends ComboBox<String> {
 
     private final String origin;
 
-    AccountingEntryExpenseNumberEditField(String origin, List<String> expenseRequests) {
+    AccountingEntryExpenseNumberEditField(final String origin, final List<String> expenseRequests) {
         this.origin = origin;
         setCaption("Номер заявки на расход");
         setEmptySelectionAllowed(false);
@@ -24,7 +24,7 @@ class AccountingEntryExpenseNumberEditField extends ComboBox<String> {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

@@ -10,7 +10,7 @@ class AccountingEntryDocumentNameEditField extends TextField {
 
     private final String origin;
 
-    AccountingEntryDocumentNameEditField(String origin) {
+    AccountingEntryDocumentNameEditField(final String origin) {
         this.origin = origin;
         setCaption("Наименование документа");
         setValue(origin);
@@ -19,7 +19,7 @@ class AccountingEntryDocumentNameEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

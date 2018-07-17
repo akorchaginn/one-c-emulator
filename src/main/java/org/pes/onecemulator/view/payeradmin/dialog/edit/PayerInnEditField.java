@@ -10,7 +10,7 @@ class PayerInnEditField extends TextField {
 
     private final String origin;
 
-    PayerInnEditField(String origin) {
+    PayerInnEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("ИНН");
@@ -19,7 +19,7 @@ class PayerInnEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

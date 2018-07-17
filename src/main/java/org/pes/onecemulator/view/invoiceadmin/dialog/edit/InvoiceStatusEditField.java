@@ -10,7 +10,7 @@ class InvoiceStatusEditField extends TextField {
 
     private final String origin;
 
-    InvoiceStatusEditField(String status) {
+    InvoiceStatusEditField(final String status) {
         this.origin = status;
         setValue(origin);
         setCaption("Статус");
@@ -19,7 +19,7 @@ class InvoiceStatusEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

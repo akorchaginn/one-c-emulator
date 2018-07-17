@@ -10,7 +10,7 @@ class ExpenseRequestConfirmEditField extends CheckBox {
 
     private final boolean origin;
 
-    ExpenseRequestConfirmEditField(boolean origin) {
+    ExpenseRequestConfirmEditField(final boolean origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Подтверждено");
@@ -19,7 +19,7 @@ class ExpenseRequestConfirmEditField extends CheckBox {
     }
 
     boolean hasChanges() {
-        boolean now = Boolean.TRUE.equals(getValue());
+        final boolean now = Boolean.TRUE.equals(getValue());
         return origin != now;
     }
 }

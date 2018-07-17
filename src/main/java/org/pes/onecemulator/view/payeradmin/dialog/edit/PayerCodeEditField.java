@@ -10,7 +10,7 @@ class PayerCodeEditField extends TextField {
 
     private final String origin;
 
-    PayerCodeEditField(String origin) {
+    PayerCodeEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Код");
@@ -19,7 +19,7 @@ class PayerCodeEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

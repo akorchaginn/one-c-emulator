@@ -10,7 +10,7 @@ class SourceNameEditField extends TextField {
 
     private final String origin;
 
-    SourceNameEditField(String origin) {
+    SourceNameEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Название");
@@ -19,7 +19,7 @@ class SourceNameEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

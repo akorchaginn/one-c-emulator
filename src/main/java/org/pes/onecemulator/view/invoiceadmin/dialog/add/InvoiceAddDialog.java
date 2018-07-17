@@ -35,13 +35,13 @@ public class InvoiceAddDialog extends FormDialog implements View, IInvoiceAddDia
     public void enter(ViewChangeEvent event) {
         this.form = new InvoiceAddForm(presenter.getSourceList());
         setForm(form);
-        form.invoiceSource.addValueChangeListener(e -> {
+        form.getInvoiceSource().addValueChangeListener(e -> {
             if (e.getValue() != null && !e.getValue().isEmpty()) {
-                form.invoicePayer.setItems(presenter.getPayerListBySource(e.getValue()));
-                form.invoicePayer.setReadOnly(false);
+                form.getInvoicePayer().setItems(presenter.getPayerListBySource(e.getValue()));
+                form.getInvoicePayer().setReadOnly(false);
             } else {
-                form.invoicePayer.clear();
-                form.invoicePayer.setReadOnly(true);
+                form.getInvoicePayer().clear();
+                form.getInvoicePayer().setReadOnly(true);
             }
         });
         addClickEvenListenerToSaveButton(e -> presenter.onClickSaveButton(form.valueAsObject()));

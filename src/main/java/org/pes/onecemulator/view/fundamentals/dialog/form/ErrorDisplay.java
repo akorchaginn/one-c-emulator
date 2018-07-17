@@ -15,7 +15,7 @@ class ErrorDisplay extends Label {
         setSizeFull();
     }
 
-    void setMessageAsHtml(String messageAsHtml) {
+    void setMessageAsHtml(final String messageAsHtml) {
         setContentMode(ContentMode.HTML);
         setValue(messageAsHtml);
     }

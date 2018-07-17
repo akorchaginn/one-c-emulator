@@ -10,7 +10,7 @@ class InvoicePaymentSumEditField extends TextField {
 
     private final String origin;
 
-    InvoicePaymentSumEditField(String sum) {
+    InvoicePaymentSumEditField(final String sum) {
         this.origin = sum;
         setValue(origin);
         setCaption("Сумма платежа в валюте платежа");
@@ -19,7 +19,7 @@ class InvoicePaymentSumEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 

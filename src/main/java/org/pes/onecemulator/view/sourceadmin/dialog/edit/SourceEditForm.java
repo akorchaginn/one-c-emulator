@@ -35,7 +35,7 @@ class SourceEditForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 sourceName.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
@@ -43,7 +43,7 @@ class SourceEditForm extends FormLayout {
     }
 
     SourceModel valueAsObject() {
-        SourceModel object = new SourceModel();
+        final SourceModel object = new SourceModel();
         object.setId(sourceId.valueAsUUID());
         object.setName(sourceName.getValue());
 

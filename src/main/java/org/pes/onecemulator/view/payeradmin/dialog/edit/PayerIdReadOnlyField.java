@@ -6,7 +6,7 @@ import java.util.UUID;
 
 class PayerIdReadOnlyField extends TextField {
 
-    PayerIdReadOnlyField(UUID origin) {
+    PayerIdReadOnlyField(final UUID origin) {
         setValue(origin.toString());
         setCaption("Id");
         setSizeFull();

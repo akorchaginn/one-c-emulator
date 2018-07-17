@@ -60,8 +60,7 @@ class ExpenseRequestAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 expenseRequestNumber.getErrorMessage(),
                 expenseRequestSum.getErrorMessage(),
                 expenseRequestCurrency.getErrorMessage(),
@@ -74,7 +73,7 @@ class ExpenseRequestAddForm extends FormLayout {
     }
 
     ExpenseRequestModel valueAsObject() {
-        ExpenseRequestModel object = new ExpenseRequestModel();
+        final ExpenseRequestModel object = new ExpenseRequestModel();
         object.setSource(expenseRequestSource.getValue());
         object.setCurrency(expenseRequestCurrency.getValue());
         object.setConfirm(expenseRequestConfirm.getValue());

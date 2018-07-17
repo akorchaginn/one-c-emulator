@@ -10,7 +10,7 @@ class InvoiceExternalIdEditField extends TextField {
 
     private final String origin;
 
-    InvoiceExternalIdEditField(String externalId) {
+    InvoiceExternalIdEditField(final String externalId) {
         this.origin = externalId;
         setValue(origin);
         setCaption("Внешний идентификатор");
@@ -19,7 +19,7 @@ class InvoiceExternalIdEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

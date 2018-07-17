@@ -6,7 +6,7 @@ import com.vaadin.ui.Notification;
 
 public final class ErrorNotification {
 
-    public static void show(String description) {
+    public static void show(final String description) {
         Notification error = new Notification("Ошибка:", description, Notification.Type.ERROR_MESSAGE);
         error.setDelayMsec(-1);
         error.setPosition(Position.TOP_RIGHT);

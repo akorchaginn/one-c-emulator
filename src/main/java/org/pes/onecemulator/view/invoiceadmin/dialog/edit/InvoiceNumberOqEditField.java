@@ -10,7 +10,7 @@ class InvoiceNumberOqEditField extends TextField {
 
     private final String origin;
 
-    InvoiceNumberOqEditField(String numberOq) {
+    InvoiceNumberOqEditField(final String numberOq) {
         this.origin = numberOq;
         setValue(origin);
         setCaption("Номер в OQ");
@@ -19,7 +19,7 @@ class InvoiceNumberOqEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

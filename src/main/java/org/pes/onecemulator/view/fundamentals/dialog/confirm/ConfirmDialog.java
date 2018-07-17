@@ -9,7 +9,7 @@ public abstract class ConfirmDialog extends Window {
 
     private final OkCancelButtons buttons = new OkCancelButtons();
 
-    public ConfirmDialog(String message) {
+    public ConfirmDialog(final String message) {
         ConfirmMessageDisplay confirmMessageDisplay = new ConfirmMessageDisplay();
         confirmMessageDisplay.setValue(message);
 

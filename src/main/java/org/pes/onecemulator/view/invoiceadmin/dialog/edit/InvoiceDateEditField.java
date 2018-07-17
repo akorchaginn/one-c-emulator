@@ -12,7 +12,7 @@ class InvoiceDateEditField extends DateField {
 
     private final LocalDate origin;
 
-    InvoiceDateEditField(LocalDate localDate) {
+    InvoiceDateEditField(final LocalDate localDate) {
         this.origin = localDate;
         setValue(origin);
         setCaption("Дата");
@@ -21,7 +21,7 @@ class InvoiceDateEditField extends DateField {
     }
 
     boolean hasChanges() {
-        LocalDate now = getValue();
+        final LocalDate now = getValue();
         return !origin.equals(now);
     }
 

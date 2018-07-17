@@ -23,9 +23,7 @@ public class InvoiceAdminView extends BaseViewLayout implements View, IInvoiceAd
 
     public static final String CAPTION = "Счета";
 
-    public static final String TITLE = "1C-emulator: " + CAPTION;
-
-    private final ViewHeader viewHeader = new ViewHeader(CAPTION);
+    private static final String TITLE = "1C-emulator: " + CAPTION;
 
     private final InvoiceAdminViewBody viewBody = new InvoiceAdminViewBody();
 
@@ -38,6 +36,7 @@ public class InvoiceAdminView extends BaseViewLayout implements View, IInvoiceAd
         this.presenter = presenter;
         setCaption(CAPTION);
         UI.getCurrent().getPage().setTitle(TITLE);
+        ViewHeader viewHeader = new ViewHeader(CAPTION);
         addHeaderAndBody(viewHeader, viewBody);
     }
 

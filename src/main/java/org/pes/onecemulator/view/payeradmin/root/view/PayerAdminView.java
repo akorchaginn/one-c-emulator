@@ -23,9 +23,7 @@ public class PayerAdminView extends BaseViewLayout implements View, IPayerAdminV
 
     public static final String CAPTION = "Плательщики";
 
-    public static final String TITLE = "1C-emulator: " + CAPTION;
-
-    private final ViewHeader viewHeader = new ViewHeader(CAPTION);
+    private static final String TITLE = "1C-emulator: " + CAPTION;
 
     private final PayerAdminViewBody viewBody = new PayerAdminViewBody();
 
@@ -38,6 +36,7 @@ public class PayerAdminView extends BaseViewLayout implements View, IPayerAdminV
         this.presenter = presenter;
         setCaption(CAPTION);
         UI.getCurrent().getPage().setTitle(TITLE);
+        ViewHeader viewHeader = new ViewHeader(CAPTION);
         addHeaderAndBody(viewHeader, viewBody);
     }
 

@@ -12,7 +12,7 @@ class AccountingEntryDateEditField extends DateField {
 
     private final LocalDate origin;
 
-    AccountingEntryDateEditField(LocalDate origin) {
+    AccountingEntryDateEditField(final LocalDate origin) {
         this.origin = origin;
         setCaption("Дата");
         setValue(origin);
@@ -21,7 +21,7 @@ class AccountingEntryDateEditField extends DateField {
     }
 
     boolean hasChanges() {
-        LocalDate now = getValue();
+        final LocalDate now = getValue();
         return !origin.equals(now);
     }
 }

@@ -52,15 +52,17 @@ public class ExpenseRequestGrid extends Grid<ExpenseRequestModel> {
     }
 
     public ExpenseRequestModel selection() {
-        return getSelectedItems().stream()
-                .findFirst().orElseThrow(IllegalStateException::new);
+        return getSelectedItems()
+                .stream()
+                .findFirst()
+                .orElseThrow(IllegalStateException::new);
     }
 
     public List<ExpenseRequestModel> allSelections() {
         return new ArrayList<>(getSelectedItems());
     }
 
-    public void filterBy(String searchText) {
+    public void filterBy(final String searchText) {
         dataProvider.setFilter(sourceModel -> sourceModel.containsWithIgnoreCase(searchText));
     }
 }

@@ -12,7 +12,7 @@ class ExpenseRequestSourceEditField extends ComboBox<String> {
 
     private final String origin;
 
-    ExpenseRequestSourceEditField(String origin, List<String> sources) {
+    ExpenseRequestSourceEditField(final String origin, final List<String> sources) {
         this.origin = origin;
         setEmptySelectionAllowed(false);
         setItems(sources);
@@ -24,7 +24,7 @@ class ExpenseRequestSourceEditField extends ComboBox<String> {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

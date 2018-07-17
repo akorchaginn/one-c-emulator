@@ -10,7 +10,7 @@ class ExpenseRequestCurrencyEditField extends TextField {
 
     private final String origin;
 
-    ExpenseRequestCurrencyEditField(String origin) {
+    ExpenseRequestCurrencyEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Валюта");
@@ -19,7 +19,7 @@ class ExpenseRequestCurrencyEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

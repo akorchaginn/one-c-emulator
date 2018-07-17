@@ -8,8 +8,6 @@ class SourceAddForm extends FormLayout {
 
     private final SourceNameInputField sourceName;
 
-    //Version originalVersion;
-
     SourceAddForm() {
         this.sourceName = new SourceNameInputField();
         addComponents(sourceName);
@@ -29,8 +27,7 @@ class SourceAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 sourceName.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
@@ -38,7 +35,7 @@ class SourceAddForm extends FormLayout {
     }
 
     SourceModel valueAsObject() {
-        SourceModel object = new SourceModel();
+        final SourceModel object = new SourceModel();
         object.setName(sourceName.getValue());
 
         return object;

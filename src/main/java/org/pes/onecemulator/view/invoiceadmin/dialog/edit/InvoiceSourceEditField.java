@@ -12,11 +12,8 @@ class InvoiceSourceEditField extends ComboBox<String> {
 
     private final String origin;
 
-    private final List<String> sources;
-
-    InvoiceSourceEditField(String source, List<String> sources) {
+    InvoiceSourceEditField(final String source, final List<String> sources) {
         this.origin = source;
-        this.sources = sources;
         setEmptySelectionAllowed(false);
         setItems(sources);
         setValue(origin);
@@ -27,7 +24,7 @@ class InvoiceSourceEditField extends ComboBox<String> {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

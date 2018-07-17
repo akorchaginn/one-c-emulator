@@ -54,8 +54,7 @@ class AccountingEntryAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 accountingEntryCode.getErrorMessage(),
                 accountingEntryDate.getErrorMessage(),
                 accountingEntryDocumentName.getErrorMessage(),
@@ -67,7 +66,7 @@ class AccountingEntryAddForm extends FormLayout {
     }
 
     AccountingEntryModel valueAsObject() {
-        AccountingEntryModel object = new AccountingEntryModel();
+        final AccountingEntryModel object = new AccountingEntryModel();
         object.setCode(accountingEntryCode.getValue());
         object.setDate(accountingEntryDate.getValue());
         object.setDocumentName(accountingEntryDocumentName.getValue());

@@ -35,7 +35,6 @@ public class InvoiceEditDialog extends FormDialog implements View, IInvoiceEditD
 
     @Override
     public void enter(ViewChangeEvent event) {
-        // initialize from data of transition source view
         IInvoiceAdminView invoiceView = (IInvoiceAdminView) event.getOldView();
         this.form = new InvoiceEditForm(invoiceView.gridSelection(), presenter.getSourceList());
         setForm(form);
@@ -81,7 +80,6 @@ public class InvoiceEditDialog extends FormDialog implements View, IInvoiceEditD
 
     @Override
     public void returnInvoiceAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(InvoiceAdminView.VIEW_NAME);
     }

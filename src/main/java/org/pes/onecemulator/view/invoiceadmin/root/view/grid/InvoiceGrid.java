@@ -15,14 +15,23 @@ public class InvoiceGrid extends Grid<InvoiceModel> {
     private static final String ID = "InvoiceGrid";
 
     private static final ValueProvider<InvoiceModel, String> invoiceSourceValueProvider = InvoiceModel::getSource;
+
     private static final ValueProvider<InvoiceModel, LocalDate> invoiceDateValueProvider = InvoiceModel::getDate;
+
     private static final ValueProvider<InvoiceModel, String> invoiceNumberValueProvider = InvoiceModel::getNumber;
+
     private static final ValueProvider<InvoiceModel, String> invoiceNumberOqValueProvider = InvoiceModel::getNumberOq;
+
     private static final ValueProvider<InvoiceModel, String> invoicePayerValueProvider = InvoiceModel::getPayerCode;
+
     private static final ValueProvider<InvoiceModel, LocalDate> invoicePaymentDateValueProvider = InvoiceModel::getPaymentDate;
+
     private static final ValueProvider<InvoiceModel, String> invoicePaymentSumValueProvider = InvoiceModel::getPaymentSumRUB;
+
     private static final ValueProvider<InvoiceModel, String> invoiceStatusValueProvider = InvoiceModel::getStatus;
+
     private static final ValueProvider<InvoiceModel, String> invoiceSumValueProvider = InvoiceModel::getSum;
+
     private static final ValueProvider<InvoiceModel, String> invoiceExternalIdValueProvider = InvoiceModel::getExternalId;
 
     private ListDataProvider<InvoiceModel> dataProvider;
@@ -58,7 +67,7 @@ public class InvoiceGrid extends Grid<InvoiceModel> {
         return new ArrayList<>(getSelectedItems());
     }
 
-    public void filterBy(String searchText) {
+    public void filterBy(final String searchText) {
         dataProvider.setFilter(invoiceModel -> invoiceModel.containsWithIgnoreCase(searchText));
     }
 }

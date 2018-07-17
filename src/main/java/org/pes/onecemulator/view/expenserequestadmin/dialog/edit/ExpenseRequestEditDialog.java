@@ -35,7 +35,6 @@ public class ExpenseRequestEditDialog extends FormDialog implements View, IExpen
 
     @Override
     public void enter(ViewChangeEvent event) {
-        // initialize from data of transition source view
         IExpenseRequestAdminView expenseRequestView = (IExpenseRequestAdminView) event.getOldView();
         this.form = new ExpenseRequestEditForm(expenseRequestView.gridSelection(), presenter.getSourceList());
         setForm(form);
@@ -73,7 +72,6 @@ public class ExpenseRequestEditDialog extends FormDialog implements View, IExpen
 
     @Override
     public void returnExpenseRequestAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(ExpenseRequestAdminView.VIEW_NAME);
     }

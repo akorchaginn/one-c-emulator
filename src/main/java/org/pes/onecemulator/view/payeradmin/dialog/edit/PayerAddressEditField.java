@@ -10,7 +10,7 @@ class PayerAddressEditField extends TextField {
 
     private final String origin;
 
-    PayerAddressEditField(String origin) {
+    PayerAddressEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Адрес");
@@ -19,7 +19,7 @@ class PayerAddressEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

@@ -14,7 +14,7 @@ class PayerSourceEditField extends CheckBoxGroup<String> {
 
     private final List<String> old;
 
-    PayerSourceEditField(List<String> old, List<String> origin) {
+    PayerSourceEditField(final List<String> old, final List<String> origin) {
         super("БД 1С");
         this.old = old;
         setItems(origin);

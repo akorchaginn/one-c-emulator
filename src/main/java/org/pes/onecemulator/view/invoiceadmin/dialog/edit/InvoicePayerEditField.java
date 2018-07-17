@@ -10,7 +10,7 @@ class InvoicePayerEditField extends ComboBox<String> {
 
     private final String origin;
 
-    InvoicePayerEditField(String payer) {
+    InvoicePayerEditField(final String payer) {
         this.origin = payer;
         setEmptySelectionAllowed(false);
         setValue(origin);
@@ -22,7 +22,7 @@ class InvoicePayerEditField extends ComboBox<String> {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

@@ -22,8 +22,6 @@ class PayerAddForm extends FormLayout {
 
     private final PayerSourceInputField payerSource;
 
-    //Version originalVersion;
-
     PayerAddForm(List<String> sources) {
         this.payerCode = new PayerCodeInputField();
         this.payerName = new PayerNameInputField();
@@ -61,7 +59,7 @@ class PayerAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 payerCode.getErrorMessage(),
                 payerName.getErrorMessage(),
                 payerFullName.getErrorMessage(),
@@ -75,7 +73,7 @@ class PayerAddForm extends FormLayout {
     }
 
     PayerModel valueAsObject() {
-        PayerModel object = new PayerModel();
+        final PayerModel object = new PayerModel();
         object.setCode(payerCode.getValue());
         object.setName(payerName.getValue());
         object.setFullName(payerFullName.getValue());

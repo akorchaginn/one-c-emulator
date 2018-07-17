@@ -8,7 +8,7 @@ import java.util.List;
 
 class InvoiceAddForm extends FormLayout {
 
-    final InvoiceSourceInputField invoiceSource;
+    private final InvoiceSourceInputField invoiceSource;
 
     private final InvoiceDateInputField invoiceDate;
 
@@ -16,7 +16,7 @@ class InvoiceAddForm extends FormLayout {
 
     private final InvoiceNumberOqInputField invoiceNumberOq;
 
-    final InvoicePayerInputField invoicePayer;
+    private final InvoicePayerInputField invoicePayer;
 
     private final InvoicePaymentDateInputField invoicePaymentDate;
 
@@ -72,6 +72,14 @@ class InvoiceAddForm extends FormLayout {
         setMargin(false);
     }
 
+    InvoiceSourceInputField getInvoiceSource() {
+        return invoiceSource;
+    }
+
+    InvoicePayerInputField getInvoicePayer() {
+        return invoicePayer;
+    }
+
     void validate() {
         invoiceSource.binder.validate();
         invoiceDate.binder.validate();
@@ -99,8 +107,7 @@ class InvoiceAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 invoiceSource.getErrorMessage(),
                 invoiceDate.getErrorMessage(),
                 invoiceNumber.getErrorMessage(),
@@ -122,7 +129,7 @@ class InvoiceAddForm extends FormLayout {
     }
 
     InvoiceModel valueAsObject() {
-        InvoiceModel object = new InvoiceModel();
+        final InvoiceModel object = new InvoiceModel();
         object.setSource(invoiceSource.getValue());
         object.setDate(invoiceDate.getValue());
         object.setNumber(invoiceNumber.getValue());

@@ -10,7 +10,7 @@ class ExpenseRequestPaidEditField extends CheckBox {
 
     private final boolean origin;
 
-    ExpenseRequestPaidEditField(boolean origin) {
+    ExpenseRequestPaidEditField(final boolean origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Оплачено");
@@ -19,7 +19,7 @@ class ExpenseRequestPaidEditField extends CheckBox {
     }
 
     boolean hasChanges() {
-        boolean now = getValue();
+        final boolean now = getValue();
         return origin != now;
     }
 }

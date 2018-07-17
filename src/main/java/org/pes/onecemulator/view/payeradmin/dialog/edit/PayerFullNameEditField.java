@@ -10,7 +10,7 @@ class PayerFullNameEditField extends TextField {
 
     private final String origin;
 
-    PayerFullNameEditField(String origin) {
+    PayerFullNameEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Полное название");
@@ -19,7 +19,7 @@ class PayerFullNameEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

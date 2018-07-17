@@ -10,7 +10,7 @@ class ExpenseRequestSumEditField extends TextField {
 
     private final String origin;
 
-    ExpenseRequestSumEditField(String origin) {
+    ExpenseRequestSumEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Сумма");
@@ -19,7 +19,7 @@ class ExpenseRequestSumEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

@@ -12,7 +12,7 @@ class InvoicePaymentDateEditField extends DateField {
 
     private final LocalDate origin;
 
-    InvoicePaymentDateEditField(LocalDate paymentDate) {
+    InvoicePaymentDateEditField(final LocalDate paymentDate) {
         this.origin = paymentDate;
         setValue(origin);
         setCaption("Дата оплаты");
@@ -21,7 +21,7 @@ class InvoicePaymentDateEditField extends DateField {
     }
 
     boolean hasChanges() {
-        LocalDate now = getValue();
+        final LocalDate now = getValue();
         return !origin.equals(now);
     }
 

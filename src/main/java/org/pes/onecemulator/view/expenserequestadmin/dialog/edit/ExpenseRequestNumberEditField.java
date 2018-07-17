@@ -10,7 +10,7 @@ class ExpenseRequestNumberEditField extends TextField {
 
     private final String origin;
 
-    ExpenseRequestNumberEditField(String origin) {
+    ExpenseRequestNumberEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Номер");
@@ -19,7 +19,7 @@ class ExpenseRequestNumberEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

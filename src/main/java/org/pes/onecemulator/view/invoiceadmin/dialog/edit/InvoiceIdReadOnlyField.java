@@ -6,7 +6,7 @@ import java.util.UUID;
 
 class InvoiceIdReadOnlyField extends TextField {
 
-    InvoiceIdReadOnlyField(UUID origin) {
+    InvoiceIdReadOnlyField(final UUID origin) {
         setValue(origin.toString());
         setCaption("Id");
         setSizeFull();

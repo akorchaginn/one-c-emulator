@@ -72,7 +72,6 @@ public class AccountingEntryEditDialog extends FormDialog implements View, IAcco
 
     @Override
     public void returnAccountingEntryAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(AccountingEntryAdminView.VIEW_NAME);
     }

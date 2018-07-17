@@ -6,7 +6,7 @@ import java.util.UUID;
 
 class AccountingEntryIdReadOnlyField extends TextField {
 
-    AccountingEntryIdReadOnlyField(UUID origin) {
+    AccountingEntryIdReadOnlyField(final UUID origin) {
         setValue(origin.toString());
         setCaption("Id");
         setSizeFull();

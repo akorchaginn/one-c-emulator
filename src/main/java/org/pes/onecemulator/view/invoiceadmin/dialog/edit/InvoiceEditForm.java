@@ -54,7 +54,6 @@ class InvoiceEditForm extends FormLayout {
         this.invoiceCurrencyEditField = new InvoiceCurrencyEditField(target.getCurrency());
         this.invoicePaymentSumEditField = new InvoicePaymentSumEditField(target.getPaymentSum());
         this.invoicePaymentCurrencyEditField = new InvoicePaymentCurrencyEditField(target.getPaymentCurrency());
-        //this.originalVersion = targetSummary.audit().version();
 
         addComponents(
                 invoiceId,
@@ -122,7 +121,6 @@ class InvoiceEditForm extends FormLayout {
     }
 
     boolean hasChanges() {
-        // note: binder.setBean() and binder.hasChange() are not work I expected
         return invoiceSource.hasChanges()
                 || invoiceDate.hasChanges()
                 || invoiceNumber.hasChanges()
@@ -140,8 +138,7 @@ class InvoiceEditForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 invoiceSource.getErrorMessage(),
                 invoiceDate.getErrorMessage(),
                 invoiceNumber.getErrorMessage(),
@@ -162,7 +159,7 @@ class InvoiceEditForm extends FormLayout {
     }
 
     InvoiceModel valueAsObject() {
-        InvoiceModel object = new InvoiceModel();
+        final InvoiceModel object = new InvoiceModel();
         object.setId(invoiceId.valueAsUUID());
         object.setSource(invoiceSource.getValue());
         object.setDate(invoiceDate.getValue());
