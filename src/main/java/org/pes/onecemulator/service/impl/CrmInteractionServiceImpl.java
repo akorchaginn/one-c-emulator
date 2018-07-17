@@ -119,12 +119,12 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         model.setDate(entity.getDate());
         model.setStatus(entity.getStatus());
         model.setPaymentDate(entity.getPaymentDate());
-        model.setPaymentSum(entity.getPaymentSum());
+        model.setPaymentSumRUB(entity.getPaymentSumRUB());
         model.setExternalId(entity.getExternalId());
         model.setInvoiceSumRUB(entity.getSumRUB());
         model.setInvoiceCurrency(entity.getCurrency());
         model.setPaymentCurrency(entity.getPaymentCurrency());
-        model.setPaymentSumWithCurrencyPayment(entity.getPaymentSumRUB());
+        model.setPaymentSum(entity.getPaymentSum());
 
         return model;
     }

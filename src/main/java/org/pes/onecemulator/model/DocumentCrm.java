@@ -31,11 +31,19 @@ public class DocumentCrm {
     @JsonProperty("Sum_rub")
     private String invoiceSumRUB;
 
-    @JsonProperty("sumOplat_currency_P")
-    private String paymentSumWithCurrencyPayment;
-
     @JsonProperty("currency_S")
     private String invoiceCurrency;
+
+    @JsonProperty("dataOplat")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate paymentDate;
+
+    @JsonProperty("sumOplat_currency_P")
+    private String paymentSum;
+
+    @JsonProperty("sumOplat")
+    private String paymentSumRUB;
 
     @JsonProperty("currency_P")
     private String paymentCurrency;
@@ -47,14 +55,6 @@ public class DocumentCrm {
 
     @JsonProperty("status")
     private String status;
-
-    @JsonProperty("dataOplat")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate paymentDate;
-
-    @JsonProperty("sumOplat")
-    private String paymentSum;
 
     @JsonProperty(value = "uuid")
     private String externalId;
@@ -99,20 +99,20 @@ public class DocumentCrm {
         this.invoiceSum = invoiceSum;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public String getInvoiceSumRUB() {
+        return invoiceSumRUB;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setInvoiceSumRUB(String invoiceSumRUB) {
+        this.invoiceSumRUB = invoiceSumRUB;
     }
 
-    public String getStatus() {
-        return status;
+    public String getInvoiceCurrency() {
+        return invoiceCurrency;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setInvoiceCurrency(String invoiceCurrency) {
+        this.invoiceCurrency = invoiceCurrency;
     }
 
     public LocalDate getPaymentDate() {
@@ -131,6 +131,38 @@ public class DocumentCrm {
         this.paymentSum = paymentSum;
     }
 
+    public String getPaymentSumRUB() {
+        return paymentSumRUB;
+    }
+
+    public void setPaymentSumRUB(String paymentSumRUB) {
+        this.paymentSumRUB = paymentSumRUB;
+    }
+
+    public String getPaymentCurrency() {
+        return paymentCurrency;
+    }
+
+    public void setPaymentCurrency(String paymentCurrency) {
+        this.paymentCurrency = paymentCurrency;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getExternalId() {
         return externalId;
     }
@@ -138,20 +170,4 @@ public class DocumentCrm {
     public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
-
-    public String getInvoiceSumRUB() { return invoiceSumRUB; }
-
-    public void setInvoiceSumRUB(String invoiceSumRUB) { this.invoiceSumRUB = invoiceSumRUB; }
-
-    public String getPaymentSumWithCurrencyPayment() { return paymentSumWithCurrencyPayment; }
-
-    public void setPaymentSumWithCurrencyPayment(String paymentSumWithCurrencyPayment) { this.paymentSumWithCurrencyPayment = paymentSumWithCurrencyPayment; }
-
-    public String getInvoiceCurrency() { return invoiceCurrency; }
-
-    public void setInvoiceCurrency(String invoiceCurrency) { this.invoiceCurrency = invoiceCurrency; }
-
-    public String getPaymentCurrency() { return paymentCurrency; }
-
-    public void setPaymentCurrency(String paymentCurrency) { this.paymentCurrency = paymentCurrency; }
 }
