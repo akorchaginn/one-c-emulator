@@ -4,20 +4,18 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.InvoiceModel;
 
-import java.math.BigDecimal;
-
 class InvoicePaymentSumRUBEditField extends TextField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
     private final String origin;
 
-    InvoicePaymentSumRUBEditField(String sum) {
-        this.origin = sum;
+    InvoicePaymentSumRUBEditField(String paymentSum) {
+        this.origin = paymentSum;
         setValue(origin);
-        setCaption("Сумма платежа в валюте платежа");
+        setCaption("Сумма оплаты");
         setSizeFull();
-        binder.bind(this, "paymentSumWithCurrencyPayment");
+        binder.bind(this, "paymentSumRUB");
     }
 
     boolean hasChanges() {

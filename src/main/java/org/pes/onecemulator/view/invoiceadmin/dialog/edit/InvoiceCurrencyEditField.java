@@ -15,7 +15,7 @@ class InvoiceCurrencyEditField extends TextField {
         setValue(origin);
         setCaption("Валюта счёта");
         setSizeFull();
-        binder.bind(this, "invoiceCurrency");
+        binder.bind(this, "currency");
     }
 
     boolean hasChanges() {

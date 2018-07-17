@@ -11,6 +11,6 @@ class InvoiceSumInputField extends TextField {
     InvoiceSumInputField() {
         setCaption("Сумма");
         setSizeFull();
-        binder.bind(this, "invoiceSum");
+        binder.bind(this, "sum");
     }
 }

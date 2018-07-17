@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.InvoiceModel;
 
 import java.util.List;
 
-public class InvoiceEditForm extends FormLayout {
+class InvoiceEditForm extends FormLayout {
 
     private InvoiceIdReadOnlyField invoiceId;
 
@@ -22,7 +22,7 @@ public class InvoiceEditForm extends FormLayout {
 
     private InvoicePaymentDateEditField invoicePaymentDate;
 
-    private InvoicePaymentSumEditField invoicePaymentSum;
+    private InvoicePaymentSumRUBEditField invoicePaymentSum;
 
     private InvoiceStatusEditField invoiceStatus;
 
@@ -30,9 +30,9 @@ public class InvoiceEditForm extends FormLayout {
 
     private InvoiceExternalIdEditField invoiceExternalId;
 
-    private InvoiceSumRubEditField invoiceSumRubEditField;
+    private InvoiceSumRUBEditField invoiceSumRUBEditField;
 
-    private InvoicePaymentSumRUBEditField invoicePaymentSumRUBEditField;
+    private InvoicePaymentSumEditField invoicePaymentSumEditField;
 
     private InvoiceCurrencyEditField invoiceCurrencyEditField;
 
@@ -46,13 +46,13 @@ public class InvoiceEditForm extends FormLayout {
         this.invoiceNumberOq = new InvoiceNumberOqEditField(target.getNumberOq());
         this.invoicePayer = new InvoicePayerEditField(target.getPayerCode());
         this.invoicePaymentDate = new InvoicePaymentDateEditField(target.getPaymentDate());
-        this.invoicePaymentSum = new InvoicePaymentSumEditField(target.getPaymentSumRUB());
+        this.invoicePaymentSum = new InvoicePaymentSumRUBEditField(target.getPaymentSumRUB());
         this.invoiceStatus = new InvoiceStatusEditField(target.getStatus());
         this.invoiceSum = new InvoiceSumEditField(target.getSum());
         this.invoiceExternalId = new InvoiceExternalIdEditField(target.getExternalId());
-        this.invoiceSumRubEditField = new InvoiceSumRubEditField(target.getSumRUB());
+        this.invoiceSumRUBEditField = new InvoiceSumRUBEditField(target.getSumRUB());
         this.invoiceCurrencyEditField = new InvoiceCurrencyEditField(target.getCurrency());
-        this.invoicePaymentSumRUBEditField = new InvoicePaymentSumRUBEditField(target.getPaymentSum());
+        this.invoicePaymentSumEditField = new InvoicePaymentSumEditField(target.getPaymentSum());
         this.invoicePaymentCurrencyEditField = new InvoicePaymentCurrencyEditField(target.getPaymentCurrency());
         //this.originalVersion = targetSummary.audit().version();
 
@@ -70,8 +70,8 @@ public class InvoiceEditForm extends FormLayout {
                 invoiceExternalId,
                 invoiceCurrencyEditField,
                 invoicePaymentCurrencyEditField,
-                invoicePaymentSumRUBEditField,
-                invoiceSumRubEditField);
+                invoicePaymentSumEditField,
+                invoiceSumRUBEditField);
         setMargin(false);
     }
 
@@ -96,8 +96,8 @@ public class InvoiceEditForm extends FormLayout {
         invoiceExternalId.binder.validate();
         invoiceCurrencyEditField.binder.validate();
         invoicePaymentCurrencyEditField.binder.validate();
-        invoicePaymentSumRUBEditField.binder.validate();
-        invoiceSumRubEditField.binder.validate();
+        invoicePaymentSumEditField.binder.validate();
+        invoiceSumRUBEditField.binder.validate();
     }
 
     boolean hasValidationErrors() {
@@ -117,8 +117,8 @@ public class InvoiceEditForm extends FormLayout {
                 && invoiceExternalId.binder.isValid()
                 && invoiceCurrencyEditField.binder.isValid()
                 && invoicePaymentCurrencyEditField.binder.isValid()
-                && invoicePaymentSumRUBEditField.binder.isValid()
-                && invoiceSumRubEditField.binder.isValid();
+                && invoicePaymentSumEditField.binder.isValid()
+                && invoiceSumRUBEditField.binder.isValid();
     }
 
     boolean hasChanges() {
@@ -135,8 +135,8 @@ public class InvoiceEditForm extends FormLayout {
                 || invoiceExternalId.hasChanges()
                 || invoiceCurrencyEditField.hasChanges()
                 || invoicePaymentCurrencyEditField.hasChanges()
-                || invoicePaymentSumRUBEditField.hasChanges()
-                || invoiceSumRubEditField.hasChanges();
+                || invoicePaymentSumEditField.hasChanges()
+                || invoiceSumRUBEditField.hasChanges();
     }
 
     String errorMessagesAsHtml() {
@@ -154,8 +154,8 @@ public class InvoiceEditForm extends FormLayout {
                 invoiceExternalId.getErrorMessage(),
                 invoiceCurrencyEditField.getErrorMessage(),
                 invoicePaymentCurrencyEditField.getErrorMessage(),
-                invoicePaymentSumRUBEditField.getErrorMessage(),
-                invoiceSumRubEditField.getErrorMessage());
+                invoicePaymentSumEditField.getErrorMessage(),
+                invoiceSumRUBEditField.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
                 compositeErrorMessage.getFormattedHtmlMessage());
@@ -174,11 +174,11 @@ public class InvoiceEditForm extends FormLayout {
         object.setStatus(invoiceStatus.getValue());
         object.setSum(invoiceSum.getValue());
         object.setExternalId(invoiceExternalId.getValue());
-        object.setPaymentSum(invoicePaymentSumRUBEditField.getValue());
+        object.setPaymentSum(invoicePaymentSumEditField.getValue());
         object.setPaymentSumRUB(invoicePaymentSum.getValue());
         object.setPaymentCurrency(invoicePaymentCurrencyEditField.getValue());
         object.setCurrency(invoiceCurrencyEditField.getValue());
-        object.setSumRUB(invoiceSumRubEditField.getValue());
+        object.setSumRUB(invoiceSumRUBEditField.getValue());
 
         return object;
     }
