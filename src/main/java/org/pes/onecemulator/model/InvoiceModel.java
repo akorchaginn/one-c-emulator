@@ -44,13 +44,25 @@ public class InvoiceModel {
     private LocalDate paymentDate;
 
     @JsonProperty("sumOplat")
+    private String paymentSumRUB;
+
+    @JsonProperty("sumOplat_currency_P")
     private String paymentSum;
+
+    @JsonProperty("currency_P")
+    private String paymentCurrency;
 
     @JsonProperty("status")
     private String status;
 
     @JsonProperty("sum")
     private String sum;
+
+    @JsonProperty("Sum_rub")
+    private String sumRUB;
+
+    @JsonProperty("currency_S")
+    private String currency;
 
     @JsonProperty("externalId")
     @NotNull
@@ -112,12 +124,28 @@ public class InvoiceModel {
         this.paymentDate = paymentDate;
     }
 
+    public String getPaymentSumRUB() {
+        return paymentSumRUB;
+    }
+
+    public void setPaymentSumRUB(String paymentSumRUB) {
+        this.paymentSumRUB = paymentSumRUB;
+    }
+
     public String getPaymentSum() {
         return paymentSum;
     }
 
     public void setPaymentSum(String paymentSum) {
         this.paymentSum = paymentSum;
+    }
+
+    public String getPaymentCurrency() {
+        return paymentCurrency;
+    }
+
+    public void setPaymentCurrency(String paymentCurrency) {
+        this.paymentCurrency = paymentCurrency;
     }
 
     public String getStatus() {
@@ -134,6 +162,22 @@ public class InvoiceModel {
 
     public void setSum(String sum) {
         this.sum = sum;
+    }
+
+    public String getSumRUB() {
+        return sumRUB;
+    }
+
+    public void setSumRUB(String sumRUB) {
+        this.sumRUB = sumRUB;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getExternalId() {
@@ -161,7 +205,7 @@ public class InvoiceModel {
                 Objects.equals(numberOq, model.numberOq) &&
                 Objects.equals(payerCode, model.payerCode) &&
                 Objects.equals(paymentDate, model.paymentDate) &&
-                Objects.equals(paymentSum, model.paymentSum) &&
+                Objects.equals(paymentSumRUB, model.paymentSumRUB) &&
                 Objects.equals(status, model.status) &&
                 Objects.equals(sum, model.sum) &&
                 Objects.equals(externalId, model.externalId);
@@ -169,6 +213,6 @@ public class InvoiceModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, source, date, number, numberOq, payerCode, paymentDate, paymentSum, status, sum, externalId);
+        return Objects.hash(id, source, date, number, numberOq, payerCode, paymentDate, paymentSumRUB, status, sum, externalId);
     }
 }

@@ -7,11 +7,10 @@ import com.vaadin.ui.Window;
 
 public abstract class ConfirmDialog extends Window {
 
-    private final ConfirmMessageDisplay confirmMessageDisplay = new ConfirmMessageDisplay();
-
     private final OkCancelButtons buttons = new OkCancelButtons();
 
-    public ConfirmDialog(String message) {
+    public ConfirmDialog(final String message) {
+        ConfirmMessageDisplay confirmMessageDisplay = new ConfirmMessageDisplay();
         confirmMessageDisplay.setValue(message);
 
         VerticalLayout body = new VerticalLayout();

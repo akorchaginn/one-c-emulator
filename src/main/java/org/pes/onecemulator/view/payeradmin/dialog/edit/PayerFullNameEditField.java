@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.PayerModel;
 
-public class PayerFullNameEditField extends TextField {
+class PayerFullNameEditField extends TextField {
 
     final BeanValidationBinder<PayerModel> binder = new BeanValidationBinder<>(PayerModel.class);
 
     private final String origin;
 
-    PayerFullNameEditField(String origin) {
+    PayerFullNameEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Полное название");
@@ -19,7 +19,7 @@ public class PayerFullNameEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

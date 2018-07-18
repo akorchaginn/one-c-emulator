@@ -4,7 +4,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 import org.pes.onecemulator.view.sourceadmin.root.view.SourceAdminView;
 
-public class ToSourceAdminViewButton extends Button {
+class ToSourceAdminViewButton extends Button {
 
     private final static String ID = "ToSourceAdminViewButton";
 

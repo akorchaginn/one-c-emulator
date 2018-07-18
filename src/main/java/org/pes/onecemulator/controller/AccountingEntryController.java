@@ -3,8 +3,6 @@ package org.pes.onecemulator.controller;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.AccountingEntryModel;
 import org.pes.onecemulator.service.AccountingEntryService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +20,12 @@ import java.util.UUID;
 @RequestMapping("api/entry")
 public class AccountingEntryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountingEntryController.class);
+    private final AccountingEntryService accountingEntryService;
 
     @Autowired
-    private AccountingEntryService accountingEntryService;
+    public AccountingEntryController(AccountingEntryService accountingEntryService) {
+        this.accountingEntryService = accountingEntryService;
+    }
 
     @GetMapping(value = "/get-by-id/{id}")
     public @ResponseBody

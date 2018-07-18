@@ -3,8 +3,6 @@ package org.pes.onecemulator.controller;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.service.InvoiceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +20,12 @@ import java.util.UUID;
 @RequestMapping("api/invoice")
 public class InvoiceController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceController.class);
+    private final InvoiceService invoiceService;
 
     @Autowired
-    private InvoiceService invoiceService;
+    public InvoiceController(InvoiceService invoiceService) {
+        this.invoiceService = invoiceService;
+    }
 
     @GetMapping(value = "/get-by-id/{id}")
     public @ResponseBody

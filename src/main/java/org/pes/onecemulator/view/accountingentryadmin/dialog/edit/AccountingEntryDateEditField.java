@@ -6,13 +6,13 @@ import org.pes.onecemulator.model.AccountingEntryModel;
 
 import java.time.LocalDate;
 
-public class AccountingEntryDateEditField extends DateField {
+class AccountingEntryDateEditField extends DateField {
 
     final BeanValidationBinder<AccountingEntryModel> binder = new BeanValidationBinder<>(AccountingEntryModel.class);
 
     private final LocalDate origin;
 
-    AccountingEntryDateEditField(LocalDate origin) {
+    AccountingEntryDateEditField(final LocalDate origin) {
         this.origin = origin;
         setCaption("Дата");
         setValue(origin);
@@ -21,7 +21,7 @@ public class AccountingEntryDateEditField extends DateField {
     }
 
     boolean hasChanges() {
-        LocalDate now = getValue();
+        final LocalDate now = getValue();
         return !origin.equals(now);
     }
 }

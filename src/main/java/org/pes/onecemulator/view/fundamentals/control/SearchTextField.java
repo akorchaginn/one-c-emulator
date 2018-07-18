@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.fundamentals.control;
 
 import com.vaadin.ui.TextField;
 
-public class SearchTextField extends TextField {
+class SearchTextField extends TextField {
 
     private final static String ID = "SearchTextField";
 

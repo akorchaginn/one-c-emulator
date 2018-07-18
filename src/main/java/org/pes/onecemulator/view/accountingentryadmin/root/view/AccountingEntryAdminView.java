@@ -23,9 +23,7 @@ public class AccountingEntryAdminView extends BaseViewLayout implements View, IA
 
     public static final String CAPTION = "Проводки";
 
-    public static final String TITLE = "1C-emulator: " + CAPTION;
-
-    private final ViewHeader viewHeader = new ViewHeader(CAPTION);
+    private static final String TITLE = "1C-emulator: " + CAPTION;
 
     private final AccountingEntryAdminViewBody viewBody = new AccountingEntryAdminViewBody();
 
@@ -38,6 +36,7 @@ public class AccountingEntryAdminView extends BaseViewLayout implements View, IA
         this.presenter = presenter;
         setCaption(CAPTION);
         UI.getCurrent().getPage().setTitle(TITLE);
+        ViewHeader viewHeader = new ViewHeader(CAPTION);
         addHeaderAndBody(viewHeader, viewBody);
     }
 

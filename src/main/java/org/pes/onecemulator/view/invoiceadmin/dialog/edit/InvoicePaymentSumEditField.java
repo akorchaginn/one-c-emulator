@@ -4,28 +4,23 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.InvoiceModel;
 
-import java.math.BigDecimal;
-
-public class InvoicePaymentSumEditField extends TextField {
+class InvoicePaymentSumEditField extends TextField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
     private final String origin;
 
-    InvoicePaymentSumEditField(String paymentSum) {
-        this.origin = paymentSum;
+    InvoicePaymentSumEditField(final String sum) {
+        this.origin = sum;
         setValue(origin);
-        setCaption("Сумма оплты");
+        setCaption("Сумма платежа в валюте платежа");
         setSizeFull();
         binder.bind(this, "paymentSum");
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 
-    BigDecimal valueAsBigDecimal() {
-        return new BigDecimal(getValue());
-    }
 }

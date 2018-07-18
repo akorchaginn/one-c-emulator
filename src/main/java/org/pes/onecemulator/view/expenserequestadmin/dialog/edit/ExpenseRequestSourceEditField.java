@@ -6,13 +6,13 @@ import org.pes.onecemulator.model.ExpenseRequestModel;
 
 import java.util.List;
 
-public class ExpenseRequestSourceEditField extends ComboBox<String> {
+class ExpenseRequestSourceEditField extends ComboBox<String> {
 
     final BeanValidationBinder<ExpenseRequestModel> binder = new BeanValidationBinder<>(ExpenseRequestModel.class);
 
     private final String origin;
 
-    ExpenseRequestSourceEditField(String origin, List<String> sources) {
+    ExpenseRequestSourceEditField(final String origin, final List<String> sources) {
         this.origin = origin;
         setEmptySelectionAllowed(false);
         setItems(sources);
@@ -24,7 +24,7 @@ public class ExpenseRequestSourceEditField extends ComboBox<String> {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

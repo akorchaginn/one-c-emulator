@@ -35,7 +35,6 @@ public class SourceEditDialog extends FormDialog implements View, ISourceEditDia
 
     @Override
     public void enter(ViewChangeEvent event) {
-        // initialize from data of transition source view
         ISourceAdminView sourceView = (ISourceAdminView) event.getOldView();
         this.form = new SourceEditForm(sourceView.gridSelection());
         setForm(form);
@@ -73,7 +72,6 @@ public class SourceEditDialog extends FormDialog implements View, ISourceEditDia
 
     @Override
     public void returnSourceAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(SourceAdminView.VIEW_NAME);
     }

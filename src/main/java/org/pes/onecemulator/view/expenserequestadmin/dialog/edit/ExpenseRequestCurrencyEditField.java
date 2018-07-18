@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 
-public class ExpenseRequestCurrencyEditField extends TextField {
+class ExpenseRequestCurrencyEditField extends TextField {
 
     final BeanValidationBinder<ExpenseRequestModel> binder = new BeanValidationBinder<>(ExpenseRequestModel.class);
 
     private final String origin;
 
-    ExpenseRequestCurrencyEditField(String origin) {
+    ExpenseRequestCurrencyEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Валюта");
@@ -19,7 +19,7 @@ public class ExpenseRequestCurrencyEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

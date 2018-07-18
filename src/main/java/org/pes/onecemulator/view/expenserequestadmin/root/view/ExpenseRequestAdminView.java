@@ -23,9 +23,7 @@ public class ExpenseRequestAdminView extends BaseViewLayout implements View, IEx
 
     public static final String CAPTION = "Заявки на расход";
 
-    public static final String TITLE = "1C-emulator: " + CAPTION;
-
-    private final ViewHeader viewHeader = new ViewHeader(CAPTION);
+    private static final String TITLE = "1C-emulator: " + CAPTION;
 
     private final ExpenseRequestAdminViewBody viewBody = new ExpenseRequestAdminViewBody();
 
@@ -38,6 +36,7 @@ public class ExpenseRequestAdminView extends BaseViewLayout implements View, IEx
         this.presenter = presenter;
         setCaption(CAPTION);
         UI.getCurrent().getPage().setTitle(TITLE);
+        ViewHeader viewHeader = new ViewHeader(CAPTION);
         addHeaderAndBody(viewHeader, viewBody);
     }
 

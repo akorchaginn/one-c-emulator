@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.AccountingEntryModel;
 
-public class AccountingEntryDocumentNameEditField extends TextField {
+class AccountingEntryDocumentNameEditField extends TextField {
 
     final BeanValidationBinder<AccountingEntryModel> binder = new BeanValidationBinder<>(AccountingEntryModel.class);
 
     private final String origin;
 
-    AccountingEntryDocumentNameEditField(String origin) {
+    AccountingEntryDocumentNameEditField(final String origin) {
         this.origin = origin;
         setCaption("Наименование документа");
         setValue(origin);
@@ -19,7 +19,7 @@ public class AccountingEntryDocumentNameEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

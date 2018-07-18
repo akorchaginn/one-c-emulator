@@ -6,9 +6,9 @@ import org.pes.onecemulator.model.InvoiceModel;
 
 import java.util.List;
 
-public class InvoiceAddForm extends FormLayout {
+class InvoiceAddForm extends FormLayout {
 
-    final InvoiceSourceInputField invoiceSource;
+    private final InvoiceSourceInputField invoiceSource;
 
     private final InvoiceDateInputField invoiceDate;
 
@@ -16,11 +16,11 @@ public class InvoiceAddForm extends FormLayout {
 
     private final InvoiceNumberOqInputField invoiceNumberOq;
 
-    final InvoicePayerInputField invoicePayer;
+    private final InvoicePayerInputField invoicePayer;
 
     private final InvoicePaymentDateInputField invoicePaymentDate;
 
-    private final InvoicePaymentSumInputField invoicePaymentSum;
+    private final InvoicePaymentSumRUBInputField invoicePaymentSum;
 
     private final InvoiceStatusInputField invoiceStatus;
 
@@ -28,7 +28,13 @@ public class InvoiceAddForm extends FormLayout {
 
     private final InvoiceExternalIdInputField invoiceExternalId;
 
-    //Version originalVersion;
+    private final InvoiceCurrencyInputField invoiceCurrencyInputField;
+
+    private final InvoicePaymentCurrencyInputField invoicePaymentCurrencyInputField;
+
+    private final InvoicePaymentSumInputField invoicePaymentSumInputField;
+
+    private final InvoiceSumRUBInputField invoiceSumRUBInputField;
 
     InvoiceAddForm(List<String> sources) {
         this.invoiceSource = new InvoiceSourceInputField(sources);
@@ -37,10 +43,15 @@ public class InvoiceAddForm extends FormLayout {
         this.invoiceNumberOq = new InvoiceNumberOqInputField();
         this.invoicePayer = new InvoicePayerInputField();
         this.invoicePaymentDate = new InvoicePaymentDateInputField();
-        this.invoicePaymentSum = new InvoicePaymentSumInputField();
+        this.invoicePaymentSum = new InvoicePaymentSumRUBInputField();
         this.invoiceStatus = new InvoiceStatusInputField();
         this.invoiceSum = new InvoiceSumInputField();
         this.invoiceExternalId = new InvoiceExternalIdInputField();
+        this.invoiceCurrencyInputField = new InvoiceCurrencyInputField();
+        this.invoicePaymentCurrencyInputField = new InvoicePaymentCurrencyInputField();
+        this.invoicePaymentSumInputField = new InvoicePaymentSumInputField();
+        this.invoiceSumRUBInputField = new InvoiceSumRUBInputField();
+
 
         addComponents(
                 invoiceSource,
@@ -52,8 +63,21 @@ public class InvoiceAddForm extends FormLayout {
                 invoicePaymentSum,
                 invoiceStatus,
                 invoiceSum,
-                invoiceExternalId);
+                invoiceExternalId,
+                invoiceSumRUBInputField,
+                invoicePaymentCurrencyInputField,
+                invoiceCurrencyInputField,
+                invoiceSumRUBInputField,
+                invoicePaymentSumInputField);
         setMargin(false);
+    }
+
+    InvoiceSourceInputField getInvoiceSource() {
+        return invoiceSource;
+    }
+
+    InvoicePayerInputField getInvoicePayer() {
+        return invoicePayer;
     }
 
     void validate() {
@@ -67,6 +91,11 @@ public class InvoiceAddForm extends FormLayout {
         invoiceStatus.binder.validate();
         invoiceSum.binder.validate();
         invoiceExternalId.binder.validate();
+        invoiceSumRUBInputField.binder.validate();
+        invoicePaymentCurrencyInputField.binder.validate();
+        invoiceCurrencyInputField.binder.validate();
+        invoiceSumRUBInputField.binder.validate();
+        invoicePaymentSumInputField.binder.validate();
     }
 
     boolean hasValidationErrors() {
@@ -78,8 +107,7 @@ public class InvoiceAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 invoiceSource.getErrorMessage(),
                 invoiceDate.getErrorMessage(),
                 invoiceNumber.getErrorMessage(),
@@ -89,14 +117,19 @@ public class InvoiceAddForm extends FormLayout {
                 invoicePaymentSum.getErrorMessage(),
                 invoiceStatus.getErrorMessage(),
                 invoiceSum.getErrorMessage(),
-                invoiceExternalId.getErrorMessage());
+                invoiceExternalId.getErrorMessage(),
+                invoiceSumRUBInputField.getErrorMessage(),
+                invoicePaymentCurrencyInputField.getErrorMessage(),
+                invoiceCurrencyInputField.getErrorMessage(),
+                invoiceSumRUBInputField.getErrorMessage(),
+                invoicePaymentSumInputField.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
                 compositeErrorMessage.getFormattedHtmlMessage());
     }
 
     InvoiceModel valueAsObject() {
-        InvoiceModel object = new InvoiceModel();
+        final InvoiceModel object = new InvoiceModel();
         object.setSource(invoiceSource.getValue());
         object.setDate(invoiceDate.getValue());
         object.setNumber(invoiceNumber.getValue());
@@ -107,6 +140,10 @@ public class InvoiceAddForm extends FormLayout {
         object.setStatus(invoiceStatus.getValue());
         object.setSum(invoiceSum.getValue());
         object.setExternalId(invoiceExternalId.getValue());
+        object.setCurrency(invoiceCurrencyInputField.getValue());
+        object.setSumRUB(invoiceSumRUBInputField.getValue());
+        object.setPaymentCurrency(invoicePaymentCurrencyInputField.getValue());
+        object.setPaymentSum(invoicePaymentSumInputField.getValue());
 
         return object;
     }

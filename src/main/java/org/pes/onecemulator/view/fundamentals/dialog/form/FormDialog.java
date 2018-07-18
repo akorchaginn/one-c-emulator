@@ -14,7 +14,7 @@ public abstract class FormDialog extends Window {
 
     private final SaveCancelButtons buttons = new SaveCancelButtons();
 
-    protected FormDialog(String caption) {
+    protected FormDialog(final String caption) {
         VerticalLayout body = new VerticalLayout();
         body.addComponents(formDisplay, errorDisplay, buttons);
 
@@ -39,7 +39,7 @@ public abstract class FormDialog extends Window {
         buttons.cancelButton.addClickListener(clickListener);
     }
 
-    protected void setErrorMessageAsHtml(String messageAsHtml) {
+    protected void setErrorMessageAsHtml(final String messageAsHtml) {
         errorDisplay.setMessageAsHtml(messageAsHtml);
     }
 

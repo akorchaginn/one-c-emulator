@@ -12,6 +12,8 @@ public interface PayerService {
 
     List<PayerModel> list();
 
+    List<PayerModel> listBySource(String source);
+
     PayerModel create(PayerModel model) throws Exception;
 
     PayerModel update(PayerModel model) throws Exception;

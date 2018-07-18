@@ -4,9 +4,9 @@ import com.vaadin.ui.TextField;
 
 import java.util.UUID;
 
-public class AccountingEntryIdReadOnlyField extends TextField {
+class AccountingEntryIdReadOnlyField extends TextField {
 
-    AccountingEntryIdReadOnlyField(UUID origin) {
+    AccountingEntryIdReadOnlyField(final UUID origin) {
         setValue(origin.toString());
         setCaption("Id");
         setSizeFull();

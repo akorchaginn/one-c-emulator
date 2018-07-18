@@ -5,17 +5,14 @@ import com.vaadin.ui.DateField;
 import org.pes.onecemulator.model.InvoiceModel;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
-public class InvoicePaymentDateEditField extends DateField {
+class InvoicePaymentDateEditField extends DateField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
     private final LocalDate origin;
 
-    InvoicePaymentDateEditField(LocalDate paymentDate) {
+    InvoicePaymentDateEditField(final LocalDate paymentDate) {
         this.origin = paymentDate;
         setValue(origin);
         setCaption("Дата оплаты");
@@ -24,11 +21,8 @@ public class InvoicePaymentDateEditField extends DateField {
     }
 
     boolean hasChanges() {
-        LocalDate now = getValue();
+        final LocalDate now = getValue();
         return !origin.equals(now);
     }
 
-    Calendar valueAsCalendar() {
-        return GregorianCalendar.from(getValue().atStartOfDay(ZoneId.systemDefault()));
-    }
 }

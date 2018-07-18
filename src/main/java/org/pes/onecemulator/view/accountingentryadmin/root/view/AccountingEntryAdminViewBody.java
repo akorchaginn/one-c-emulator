@@ -4,7 +4,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.pes.onecemulator.view.accountingentryadmin.root.view.grid.AccountingEntryGrid;
 import org.pes.onecemulator.view.fundamentals.control.ControlArea;
 
-public class AccountingEntryAdminViewBody extends VerticalLayout {
+class AccountingEntryAdminViewBody extends VerticalLayout {
 
     final ControlArea controlArea = new ControlArea("код, номер заявки на расход");
 

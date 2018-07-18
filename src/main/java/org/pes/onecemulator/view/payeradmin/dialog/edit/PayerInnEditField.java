@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.PayerModel;
 
-public class PayerInnEditField extends TextField {
+class PayerInnEditField extends TextField {
 
     final BeanValidationBinder<PayerModel> binder = new BeanValidationBinder<>(PayerModel.class);
 
     private final String origin;
 
-    PayerInnEditField(String origin) {
+    PayerInnEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("ИНН");
@@ -19,7 +19,7 @@ public class PayerInnEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

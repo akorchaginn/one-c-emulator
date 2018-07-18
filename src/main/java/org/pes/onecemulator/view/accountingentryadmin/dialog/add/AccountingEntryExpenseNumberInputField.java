@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.AccountingEntryModel;
 
 import java.util.List;
 
-public class AccountingEntryExpenseNumberInputField extends ComboBox<String> {
+class AccountingEntryExpenseNumberInputField extends ComboBox<String> {
 
     final BeanValidationBinder<AccountingEntryModel> binder = new BeanValidationBinder<>(AccountingEntryModel.class);
 

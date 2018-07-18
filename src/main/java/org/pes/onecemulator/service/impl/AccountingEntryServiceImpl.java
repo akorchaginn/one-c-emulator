@@ -9,13 +9,10 @@ import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.service.AccountingEntryService;
 import org.pes.onecemulator.service.CrmInteractionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,21 +20,23 @@ import java.util.stream.Collectors;
 @Service
 public class AccountingEntryServiceImpl implements AccountingEntryService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountingEntryServiceImpl.class);
+    private final ExpenseRequestRepository expenseRequestRepository;
+
+    private final AccountingEntryRepository accountingEntryRepository;
+
+    private final CrmInteractionService crmInteractionService;
 
     @Autowired
-    private ExpenseRequestRepository expenseRequestRepository;
-
-    @Autowired
-    private AccountingEntryRepository accountingEntryRepository;
-
-    @Autowired
-    private CrmInteractionService crmInteractionService;
+    public AccountingEntryServiceImpl(ExpenseRequestRepository expenseRequestRepository, AccountingEntryRepository accountingEntryRepository, CrmInteractionService crmInteractionService) {
+        this.expenseRequestRepository = expenseRequestRepository;
+        this.accountingEntryRepository = accountingEntryRepository;
+        this.crmInteractionService = crmInteractionService;
+    }
 
     @Transactional
     @Override
-    public AccountingEntryModel getById(UUID id) throws NotFoundException {
-        AccountingEntry accountingEntry = accountingEntryRepository.findById(id)
+    public AccountingEntryModel getById(final UUID id) throws NotFoundException {
+        final AccountingEntry accountingEntry = accountingEntryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(AccountingEntryModel.class, id));
         return getModel(accountingEntry);
     }
@@ -45,8 +44,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Transactional
     @Override
     public List<AccountingEntryModel> list() {
-        List<AccountingEntry> accountingEntries = accountingEntryRepository.findAll();
-        return accountingEntries
+        return accountingEntryRepository.findAll()
                 .stream()
                 .map(this::getModel)
                 .collect(Collectors.toList());
@@ -54,7 +52,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
 
     @Transactional
     @Override
-    public AccountingEntryModel create(AccountingEntryModel model) throws Exception {
+    public AccountingEntryModel create(final AccountingEntryModel model) throws Exception {
         if (model == null) {
             throw new ValidationException("Model is null.");
         }
@@ -67,7 +65,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
             throw new ValidationException("Date is null.");
         }
 
-        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
+        final ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
                 .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, "number:" + model.getExpenseNumber()));
 
         AccountingEntry accountingEntry = new AccountingEntry();
@@ -75,7 +73,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry.setDate(model.getDate());
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
-        accountingEntry.setSum(new BigDecimal(model.getSum()));
+        accountingEntry.setSum(model.getSum());
         accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
         crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
@@ -84,7 +82,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
 
     @Transactional
     @Override
-    public AccountingEntryModel update(AccountingEntryModel model) throws Exception {
+    public AccountingEntryModel update(final AccountingEntryModel model) throws Exception {
         if (model == null) {
             throw new ValidationException("Model is null.");
         }
@@ -97,7 +95,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
             throw new ValidationException("Date is null.");
         }
 
-        ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
+        final ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
                 .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, "number: " + model.getExpenseNumber()));
 
         AccountingEntry accountingEntry = accountingEntryRepository.findById(model.getId())
@@ -106,7 +104,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry.setDate(model.getDate());
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
-        accountingEntry.setSum(new BigDecimal(model.getSum()));
+        accountingEntry.setSum(model.getSum());
         accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
 
         crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
@@ -116,12 +114,12 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
 
     @Transactional
     @Override
-    public void delete(UUID id) {
+    public void delete(final UUID id) {
        accountingEntryRepository.deleteById(id);
     }
 
-    private AccountingEntryModel getModel(AccountingEntry entity) {
-        AccountingEntryModel model = new AccountingEntryModel();
+    private AccountingEntryModel getModel(final AccountingEntry entity) {
+        final AccountingEntryModel model = new AccountingEntryModel();
         model.setId(entity.getId());
         model.setCode(entity.getCode());
         model.setDate(entity.getDate());
@@ -130,7 +128,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
                 ? entity.getExpenseRequest().getNumber()
                 : null
         );
-        model.setSum(entity.getSum().toString());
+        model.setSum(entity.getSum());
 
         return model;
     }

@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.ExpenseRequestModel;
 
 import java.util.List;
 
-public class ExpenseRequestEditForm extends FormLayout {
+class ExpenseRequestEditForm extends FormLayout {
 
     private final ExpenseRequestIdReadOnlyField expenseRequestId;
 
@@ -22,9 +22,7 @@ public class ExpenseRequestEditForm extends FormLayout {
 
     private final ExpenseRequestSumEditField expenseRequestSum;
 
-    //Version originalVersion;
-
-    ExpenseRequestEditForm(ExpenseRequestModel target, List<String> sourceList) {
+    ExpenseRequestEditForm(final ExpenseRequestModel target, final List<String> sourceList) {
         this.expenseRequestId = new ExpenseRequestIdReadOnlyField(target.getId());
         this.expenseRequestSource = new ExpenseRequestSourceEditField(target.getSource(), sourceList);
         this.expenseRequestCurrency = new ExpenseRequestCurrencyEditField(target.getCurrency());
@@ -32,7 +30,6 @@ public class ExpenseRequestEditForm extends FormLayout {
         this.expenseRequestPaid = new ExpenseRequestPaidEditField(target.getPaid());
         this.expenseRequestNumber = new ExpenseRequestNumberEditField(target.getNumber());
         this.expenseRequestSum = new ExpenseRequestSumEditField(target.getSum());
-        //this.originalVersion = targetSummary.audit().version();
 
         addComponents(
                 expenseRequestId,
@@ -68,7 +65,6 @@ public class ExpenseRequestEditForm extends FormLayout {
     }
 
     boolean hasChanges() {
-        // note: binder.setBean() and binder.hasChange() are not work I expected
         return expenseRequestSource.hasChanges()
                 || expenseRequestCurrency.hasChanges()
                 || expenseRequestConfirm.hasChanges()
@@ -78,8 +74,7 @@ public class ExpenseRequestEditForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 expenseRequestSource.getErrorMessage(),
                 expenseRequestCurrency.getErrorMessage(),
                 expenseRequestConfirm.getErrorMessage(),
@@ -92,7 +87,7 @@ public class ExpenseRequestEditForm extends FormLayout {
     }
 
     ExpenseRequestModel valueAsObject() {
-        ExpenseRequestModel object = new ExpenseRequestModel();
+        final ExpenseRequestModel object = new ExpenseRequestModel();
         object.setId(expenseRequestId.valueAsUUID());
         object.setSource(expenseRequestSource.getValue());
         object.setCurrency(expenseRequestCurrency.getValue());

@@ -59,7 +59,6 @@ public class PayerAddDialog extends FormDialog implements View, IPayerAddDialog 
 
     @Override
     public void returnPayerAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(PayerAdminView.VIEW_NAME);
     }

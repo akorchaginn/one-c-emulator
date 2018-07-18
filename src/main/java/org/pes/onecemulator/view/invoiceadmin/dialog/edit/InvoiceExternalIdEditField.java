@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.InvoiceModel;
 
-public class InvoiceExternalIdEditField extends TextField {
+class InvoiceExternalIdEditField extends TextField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
     private final String origin;
 
-    InvoiceExternalIdEditField(String externalId) {
+    InvoiceExternalIdEditField(final String externalId) {
         this.origin = externalId;
         setValue(origin);
         setCaption("Внешний идентификатор");
@@ -19,7 +19,7 @@ public class InvoiceExternalIdEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

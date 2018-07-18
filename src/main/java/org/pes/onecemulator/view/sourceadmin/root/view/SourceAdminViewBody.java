@@ -4,7 +4,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.pes.onecemulator.view.fundamentals.control.ControlArea;
 import org.pes.onecemulator.view.sourceadmin.root.view.grid.SourceGrid;
 
-public class SourceAdminViewBody extends VerticalLayout {
+class SourceAdminViewBody extends VerticalLayout {
 
     final ControlArea controlArea = new ControlArea("название");
 

@@ -4,7 +4,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 import org.pes.onecemulator.view.top.view.TopView;
 
-public class ToTopViewButton extends Button {
+class ToTopViewButton extends Button {
 
     private final static String ID = "ToTopViewButton";
 

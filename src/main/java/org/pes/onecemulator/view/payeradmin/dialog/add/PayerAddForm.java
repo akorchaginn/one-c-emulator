@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.PayerModel;
 
 import java.util.List;
 
-public class PayerAddForm extends FormLayout {
+class PayerAddForm extends FormLayout {
 
     private final PayerCodeInputField payerCode;
 
@@ -21,8 +21,6 @@ public class PayerAddForm extends FormLayout {
     private final PayerAddressInputField payerAddress;
 
     private final PayerSourceInputField payerSource;
-
-    //Version originalVersion;
 
     PayerAddForm(List<String> sources) {
         this.payerCode = new PayerCodeInputField();
@@ -61,8 +59,7 @@ public class PayerAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 payerCode.getErrorMessage(),
                 payerName.getErrorMessage(),
                 payerFullName.getErrorMessage(),
@@ -76,7 +73,7 @@ public class PayerAddForm extends FormLayout {
     }
 
     PayerModel valueAsObject() {
-        PayerModel object = new PayerModel();
+        final PayerModel object = new PayerModel();
         object.setCode(payerCode.getValue());
         object.setName(payerName.getValue());
         object.setFullName(payerFullName.getValue());

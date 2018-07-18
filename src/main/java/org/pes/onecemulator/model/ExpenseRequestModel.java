@@ -23,12 +23,12 @@ public class ExpenseRequestModel {
     @JsonProperty("isConfirm")
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     @NotNull
-    private Boolean isConfirm;
+    private boolean isConfirm;
 
     @JsonProperty("isPaid")
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     @NotNull
-    private Boolean isPaid;
+    private boolean isPaid;
 
     @JsonProperty("number")
     @NotNull
@@ -62,19 +62,19 @@ public class ExpenseRequestModel {
         this.currency = currency;
     }
 
-    public Boolean getConfirm() {
+    public boolean getConfirm() {
         return isConfirm;
     }
 
-    public void setConfirm(Boolean confirm) {
+    public void setConfirm(boolean confirm) {
         isConfirm = confirm;
     }
 
-    public Boolean getPaid() {
+    public boolean getPaid() {
         return isPaid;
     }
 
-    public void setPaid(Boolean paid) {
+    public void setPaid(boolean paid) {
         isPaid = paid;
     }
 

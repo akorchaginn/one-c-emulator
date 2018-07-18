@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.InvoiceModel;
 
-public class InvoiceNumberOqEditField extends TextField {
+class InvoiceNumberOqEditField extends TextField {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
     private final String origin;
 
-    InvoiceNumberOqEditField(String numberOq) {
+    InvoiceNumberOqEditField(final String numberOq) {
         this.origin = numberOq;
         setValue(origin);
         setCaption("Номер в OQ");
@@ -19,7 +19,7 @@ public class InvoiceNumberOqEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

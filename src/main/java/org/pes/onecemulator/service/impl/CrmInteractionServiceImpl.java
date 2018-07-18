@@ -12,21 +12,19 @@ import org.pes.onecemulator.model.PayerCrm;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class CrmInteractionServiceImpl implements CrmInteractionService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CrmInteractionServiceImpl.class);
 
     @Value("${crm.interaction.host:#{null}}")
     private String crmHost;
@@ -37,16 +35,22 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Value("${crm.interaction.token:#{null}}")
     private String crmToken;
 
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+    private final InvoiceRepository invoiceRepository;
+
+    private final SourceRepository sourceRepository;
+
+    private final AsyncEventBus asyncEventBus;
 
     @Autowired
-    private SourceRepository sourceRepository;
+    public CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository, AsyncEventBus asyncEventBus) {
+        this.invoiceRepository = invoiceRepository;
+        this.sourceRepository = sourceRepository;
+        this.asyncEventBus = asyncEventBus;
+    }
 
-    @Autowired
-    private AsyncEventBus asyncEventBus;
-
-    public List<DocumentCrm> getDocumentsCrmById(List<DocumentCrm> documentCrmList, String sourceName) {
+    @Transactional
+    @Override
+    public List<DocumentCrm> getDocumentsCrmById(final List<DocumentCrm> documentCrmList, final String sourceName) {
         return documentCrmList.stream()
                 .filter(Objects::nonNull)
                 .map(documentCrm ->
@@ -57,7 +61,9 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .collect(Collectors.toList());
     }
 
-    public List<DocumentCrm> getDocumentsCrmByExternalId(List<DocumentCrm> documentCrmList, String sourceName) {
+    @Transactional
+    @Override
+    public List<DocumentCrm> getDocumentsCrmByExternalId(final List<DocumentCrm> documentCrmList, final String sourceName) {
         return documentCrmList.stream()
                 .filter(Objects::nonNull)
                 .map(documentCrm ->
@@ -68,16 +74,20 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .collect(Collectors.toList());
     }
 
-    public List<PayerCrm> getAllPayersCrmBySource(String sourceName) {
-        Source source = sourceRepository.findByName(sourceName).orElseGet(Source::new);
-        return source.getPayers()
+    @Transactional
+    @Override
+    public List<PayerCrm> getAllPayersCrmBySource(final String sourceName) {
+        return sourceRepository.findByName(sourceName)
+                .map(Source::getPayers)
+                .orElse(new HashSet<>())
                 .stream()
                 .map(this::getPayerCrm)
                 .collect(Collectors.toList());
     }
 
     @Async
-    public void sendAccountingEntryToCrm(AccountingEntry accountingEntry) {
+    @Override
+    public void sendAccountingEntryToCrm(final AccountingEntry accountingEntry) {
         try {
             final ExpenseRequestHttp expenseRequestHttp =
                     new ExpenseRequestHttp(accountingEntry, crmHost, crmUri, crmToken);
@@ -99,24 +109,28 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                         this, "Ошибка отправки запроса в CRM: " + e.getMessage(), true));
     }
 
-    private DocumentCrm getDocumentCrm(Invoice entity) {
-        DocumentCrm model = new DocumentCrm();
+    private DocumentCrm getDocumentCrm(final Invoice entity) {
+        final DocumentCrm model = new DocumentCrm();
         model.setId(entity.getId());
         model.setNumber(entity.getNumber());
         model.setNumberOq(entity.getNumberOq());
         model.setPayerName(entity.getPayer() != null ? entity.getPayer().getName() : null);
-        model.setSum(entity.getSum());
+        model.setInvoiceSum(entity.getSum());
         model.setDate(entity.getDate());
         model.setStatus(entity.getStatus());
         model.setPaymentDate(entity.getPaymentDate());
-        model.setPaymentSum(entity.getPaymentSum());
+        model.setPaymentSumRUB(entity.getPaymentSumRUB());
         model.setExternalId(entity.getExternalId());
+        model.setInvoiceSumRUB(entity.getSumRUB());
+        model.setInvoiceCurrency(entity.getCurrency());
+        model.setPaymentCurrency(entity.getPaymentCurrency());
+        model.setPaymentSum(entity.getPaymentSum());
 
         return model;
     }
 
-    private PayerCrm getPayerCrm(Payer entity) {
-        PayerCrm model = new PayerCrm();
+    private PayerCrm getPayerCrm(final Payer entity) {
+        final PayerCrm model = new PayerCrm();
         model.setId(entity.getAddress());
         model.setCode(entity.getCode());
         model.setName(entity.getName());

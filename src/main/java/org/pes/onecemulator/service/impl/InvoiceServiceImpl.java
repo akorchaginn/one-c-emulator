@@ -10,13 +10,10 @@ import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.InvoiceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,29 +21,31 @@ import java.util.stream.Collectors;
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceServiceImpl.class);
+    private final InvoiceRepository invoiceRepository;
+
+    private final PayerRepository payerRepository;
+
+    private final SourceRepository sourceRepository;
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private PayerRepository payerRepository;
-
-    @Autowired
-    private SourceRepository sourceRepository;
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, PayerRepository payerRepository, SourceRepository sourceRepository) {
+        this.invoiceRepository = invoiceRepository;
+        this.payerRepository = payerRepository;
+        this.sourceRepository = sourceRepository;
+    }
 
     @Transactional
     @Override
-    public InvoiceModel getById(UUID id) throws NotFoundException {
-        Invoice invoice = invoiceRepository.findById(id).orElseThrow(() -> new NotFoundException(Invoice.class, id));
+    public InvoiceModel getById(final UUID id) throws NotFoundException {
+        final Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Invoice.class, id));
         return getModel(invoice);
     }
 
     @Transactional
     @Override
     public List<InvoiceModel> list() {
-        List<Invoice> invoices = invoiceRepository.findAll();
-        return invoices
+        return invoiceRepository.findAll()
                 .stream()
                 .map(this::getModel)
                 .collect(Collectors.toList());
@@ -54,7 +53,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional
     @Override
-    public InvoiceModel create(InvoiceModel model) throws Exception {
+    public InvoiceModel create(final InvoiceModel model) throws Exception {
 
         if (model == null) {
             throw new ValidationException("Model is null.");
@@ -68,10 +67,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ValidationException("Payer code is null.");
         }
 
-        Source source = sourceRepository.findByName(model.getSource())
+        final Source source = sourceRepository.findByName(model.getSource())
                 .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
 
-        Payer payer = payerRepository.findByCode(model.getPayerCode())
+        final Payer payer = payerRepository.findByCode(model.getPayerCode())
                 .orElseThrow(() -> new NotFoundException(Payer.class, "code: " + model.getPayerCode()));
 
         if (!payer.getSources().contains(source)) {
@@ -85,10 +84,14 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setNumberOq(model.getNumberOq());
         invoice.setPayer(payer);
         invoice.setPaymentDate(model.getPaymentDate());
-        invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
+        invoice.setPaymentSum(model.getPaymentSumRUB());
         invoice.setStatus(model.getStatus());
-        invoice.setSum(new BigDecimal(model.getSum()));
+        invoice.setSum(model.getSum());
         invoice.setExternalId(model.getExternalId());
+        invoice.setPaymentCurrency(model.getPaymentCurrency());
+        invoice.setCurrency(model.getCurrency());
+        invoice.setPaymentSumRUB(model.getPaymentSum());
+        invoice.setSumRUB(model.getSumRUB());
         invoice = invoiceRepository.save(invoice);
 
         return getModel(invoice);
@@ -96,7 +99,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional
     @Override
-    public InvoiceModel update(InvoiceModel model) throws Exception {
+    public InvoiceModel update(final InvoiceModel model) throws Exception {
 
         if (model == null) {
             throw new ValidationException("Model is null.");
@@ -114,18 +117,18 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ValidationException("Payer code is null.");
         }
 
-        Invoice invoice = invoiceRepository.findById(model.getId())
-                .orElseThrow(() -> new NotFoundException(Invoice.class, model.getId()));
-
-        Source source = sourceRepository.findByName(model.getSource())
+        final Source source = sourceRepository.findByName(model.getSource())
                 .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
 
-        Payer payer = payerRepository.findByCode(model.getPayerCode())
+        final Payer payer = payerRepository.findByCode(model.getPayerCode())
                 .orElseThrow(() -> new NotFoundException(Payer.class, "code: " + model.getPayerCode()));
 
         if (!payer.getSources().contains(source)) {
             throw new ValidationException("Invoice source not equal payer source.");
         }
+
+        Invoice invoice = invoiceRepository.findById(model.getId())
+                .orElseThrow(() -> new NotFoundException(Invoice.class, model.getId()));
 
         invoice.setSource(source);
         invoice.setDate(model.getDate());
@@ -133,10 +136,14 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setNumberOq(model.getNumberOq());
         invoice.setPayer(payer);
         invoice.setPaymentDate(model.getPaymentDate());
-        invoice.setPaymentSum(new BigDecimal(model.getPaymentSum()));
+        invoice.setPaymentSum(model.getPaymentSumRUB());
         invoice.setStatus(model.getStatus());
-        invoice.setSum(new BigDecimal(model.getSum()));
+        invoice.setSum(model.getSum());
         invoice.setExternalId(model.getExternalId());
+        invoice.setPaymentCurrency(model.getPaymentCurrency());
+        invoice.setCurrency(model.getCurrency());
+        invoice.setPaymentSumRUB(model.getPaymentSum());
+        invoice.setSumRUB(model.getSumRUB());
         invoice = invoiceRepository.save(invoice);
 
         return getModel(invoice);
@@ -144,12 +151,12 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional
     @Override
-    public void delete(UUID id) {
+    public void delete(final UUID id) {
         invoiceRepository.deleteById(id);
     }
 
-    private InvoiceModel getModel(Invoice entity) {
-        InvoiceModel model = new InvoiceModel();
+    private InvoiceModel getModel(final Invoice entity) {
+        final InvoiceModel model = new InvoiceModel();
         model.setId(entity.getId());
         model.setSource(entity.getSource().getName());
         model.setDate(entity.getDate());
@@ -157,10 +164,14 @@ public class InvoiceServiceImpl implements InvoiceService {
         model.setNumberOq(entity.getNumberOq());
         model.setPayerCode(entity.getPayer().getCode());
         model.setPaymentDate(entity.getPaymentDate());
-        model.setPaymentSum(entity.getPaymentSum().toString());
+        model.setPaymentSumRUB(entity.getPaymentSum());
         model.setStatus(entity.getStatus());
-        model.setSum(entity.getSum().toString());
+        model.setSum(entity.getSum());
         model.setExternalId(entity.getExternalId());
+        model.setPaymentCurrency(entity.getPaymentCurrency());
+        model.setCurrency(entity.getCurrency());
+        model.setPaymentSum(entity.getPaymentSumRUB());
+        model.setSumRUB(entity.getSumRUB());
 
         return model;
     }

@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.PayerModel;
 
-public class PayerKppEditField extends TextField {
+class PayerKppEditField extends TextField {
 
     final BeanValidationBinder<PayerModel> binder = new BeanValidationBinder<>(PayerModel.class);
 
     private final String origin;
 
-    PayerKppEditField(String origin) {
+    PayerKppEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("КПП");
@@ -19,7 +19,7 @@ public class PayerKppEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

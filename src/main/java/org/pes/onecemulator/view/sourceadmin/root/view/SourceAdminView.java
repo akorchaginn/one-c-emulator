@@ -23,9 +23,7 @@ public class SourceAdminView extends BaseViewLayout implements View, ISourceAdmi
 
     public static final String CAPTION = "Базы 1С";
 
-    public static final String TITLE = "1C-emulator: " + CAPTION;
-
-    private final ViewHeader viewHeader = new ViewHeader(CAPTION);
+    private static final String TITLE = "1C-emulator: " + CAPTION;
 
     private final SourceAdminViewBody viewBody = new SourceAdminViewBody();
 
@@ -38,6 +36,7 @@ public class SourceAdminView extends BaseViewLayout implements View, ISourceAdmi
         this.presenter = presenter;
         setCaption(CAPTION);
         UI.getCurrent().getPage().setTitle(TITLE);
+        ViewHeader viewHeader = new ViewHeader(CAPTION);
         addHeaderAndBody(viewHeader, viewBody);
     }
 

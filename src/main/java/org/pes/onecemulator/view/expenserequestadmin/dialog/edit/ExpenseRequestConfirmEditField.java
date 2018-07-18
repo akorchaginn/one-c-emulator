@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.CheckBox;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 
-public class ExpenseRequestConfirmEditField extends CheckBox {
+class ExpenseRequestConfirmEditField extends CheckBox {
 
     final BeanValidationBinder<ExpenseRequestModel> binder = new BeanValidationBinder<>(ExpenseRequestModel.class);
 
-    private final Boolean origin;
+    private final boolean origin;
 
-    ExpenseRequestConfirmEditField(Boolean origin) {
+    ExpenseRequestConfirmEditField(final boolean origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Подтверждено");
@@ -19,7 +19,7 @@ public class ExpenseRequestConfirmEditField extends CheckBox {
     }
 
     boolean hasChanges() {
-        Boolean now = getValue();
-        return !origin.equals(now);
+        final boolean now = Boolean.TRUE.equals(getValue());
+        return origin != now;
     }
 }

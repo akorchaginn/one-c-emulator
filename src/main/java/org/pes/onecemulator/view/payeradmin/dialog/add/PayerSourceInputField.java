@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.PayerModel;
 
 import java.util.List;
 
-public class PayerSourceInputField extends CheckBoxGroup<String> {
+class PayerSourceInputField extends CheckBoxGroup<String> {
 
     final BeanValidationBinder<PayerModel> binder = new BeanValidationBinder<>(PayerModel.class);
 

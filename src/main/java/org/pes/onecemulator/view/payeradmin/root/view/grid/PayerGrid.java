@@ -49,15 +49,17 @@ public class PayerGrid extends Grid<PayerModel> {
     }
 
     public PayerModel selection() {
-        return getSelectedItems().stream()
-                .findFirst().orElseThrow(IllegalStateException::new);
+        return getSelectedItems()
+                .stream()
+                .findFirst()
+                .orElseThrow(IllegalStateException::new);
     }
 
     public List<PayerModel> allSelections() {
         return new ArrayList<>(getSelectedItems());
     }
 
-    public void filterBy(String searchText) {
+    public void filterBy(final String searchText) {
         dataProvider.setFilter(payerModel -> payerModel.containsWithIgnoreCase(searchText));
     }
 }

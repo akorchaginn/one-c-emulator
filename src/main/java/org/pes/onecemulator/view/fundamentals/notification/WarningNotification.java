@@ -6,9 +6,8 @@ import com.vaadin.ui.Notification;
 
 public final class WarningNotification {
 
-    public static void show(String description) {
-        Notification error =
-                new Notification("Предупреждение:",description, Notification.Type.WARNING_MESSAGE);
+    public static void show(final String description) {
+        Notification error = new Notification("Предупреждение:", description, Notification.Type.WARNING_MESSAGE);
         error.setDelayMsec(3000);
         error.setPosition(Position.TOP_RIGHT);
         error.show(Page.getCurrent());

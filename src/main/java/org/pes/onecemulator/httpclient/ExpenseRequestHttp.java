@@ -5,15 +5,16 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.pes.onecemulator.entity.AccountingEntry;
+import org.pes.onecemulator.entity.ExpenseRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ExpenseRequestHttp {
 
@@ -25,9 +26,9 @@ public class ExpenseRequestHttp {
 
     private String number;
 
-    private BigDecimal sum;
+    private String sum;
 
-    private Boolean paid;
+    private boolean paid;
 
     private String currency;
 
@@ -35,7 +36,7 @@ public class ExpenseRequestHttp {
 
     private String documentName;
 
-    private Boolean confirm;
+    private boolean confirm;
 
     private LocalDate date;
 
@@ -43,7 +44,7 @@ public class ExpenseRequestHttp {
 
     private DateTimeFormatter formatter;
 
-    public ExpenseRequestHttp(AccountingEntry accountingEntry, String host, String uri, String token) {
+    public ExpenseRequestHttp(final AccountingEntry accountingEntry, final String host, final String uri, final String token) {
         Objects.requireNonNull(accountingEntry);
         Objects.requireNonNull(accountingEntry.getExpenseRequest());
         Objects.requireNonNull(accountingEntry.getExpenseRequest().getSource());
@@ -51,23 +52,27 @@ public class ExpenseRequestHttp {
         Objects.requireNonNull(uri);
         Objects.requireNonNull(token);
 
+        final ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
+
         this.crmUri = host + uri;
         this.crmToken = token;
-        this.number = accountingEntry.getExpenseRequest().getNumber();
+        this.number = expenseRequest.getNumber();
         this.sum = accountingEntry.getSum();
-        this.paid = accountingEntry.getExpenseRequest().getPaid();
-        this.currency = accountingEntry.getExpenseRequest().getCurrency();
+        this.paid = Boolean.TRUE.equals(expenseRequest.getPaid());
+        this.currency = expenseRequest.getCurrency();
         this.code = accountingEntry.getCode();
         this.documentName = accountingEntry.getDocumentName();
-        this.confirm = accountingEntry.getExpenseRequest().getConfirm();
+        this.confirm = Boolean.TRUE.equals(expenseRequest.getConfirm());
         this.date = accountingEntry.getDate();
         this.formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        this.source = accountingEntry.getExpenseRequest().getSource().getName();
+        this.source = expenseRequest.getSource().getName();
     }
 
     public String call() throws Exception {
-        HttpGet httpGet = prepareRequest();
+        final HttpGet httpGet = prepareRequest();
+
         LOGGER.info("Request to CRM: " + httpGet.toString() + " : " + Arrays.toString(httpGet.getAllHeaders()));
+
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             try (CloseableHttpResponse response = client.execute(httpGet)) {
                 if (response.getStatusLine().getStatusCode() != 200) {
@@ -82,16 +87,11 @@ public class ExpenseRequestHttp {
     }
 
     private HttpGet prepareRequest() {
-        String params = new StringJoiner(",")
-                .add(number)
-                .add(sum.toString())
-                .add(paid.toString())
-                .add(currency)
-                .add(code)
-                .add(documentName)
-                .add(confirm.toString())
-                .toString();
-        HttpGet request = new HttpGet(crmUri + "/" + params + "/" + date.format(formatter));
+        final String params = Stream
+                .of(number, sum, paid ? "1" : "0", currency, code, documentName, confirm ? "1" : "0")
+                .collect(Collectors.joining(","));
+
+        final HttpGet request = new HttpGet(crmUri + "/" + params + "/" + date.format(formatter));
         request.setHeader("crm-api-token", crmToken);
         request.setHeader("crm-1c-database-source", source);
         return request;

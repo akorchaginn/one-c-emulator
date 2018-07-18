@@ -7,7 +7,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -30,7 +29,7 @@ public class AccountingEntry extends AbstractEntity {
     private String documentName;
 
     @Column(name = "sum", nullable = false)
-    private BigDecimal sum;
+    private String sum;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -62,11 +61,11 @@ public class AccountingEntry extends AbstractEntity {
         this.documentName = documentName;
     }
 
-    public BigDecimal getSum() {
+    public String getSum() {
         return sum;
     }
 
-    public void setSum(BigDecimal sum) {
+    public void setSum(String sum) {
         this.sum = sum;
     }
 

@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.ComboBox;
 import org.pes.onecemulator.model.InvoiceModel;
 
-public class InvoicePayerEditField extends ComboBox<String> {
+class InvoicePayerEditField extends ComboBox<String> {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
     private final String origin;
 
-    InvoicePayerEditField(String payer) {
+    InvoicePayerEditField(final String payer) {
         this.origin = payer;
         setEmptySelectionAllowed(false);
         setValue(origin);
@@ -22,7 +22,7 @@ public class InvoicePayerEditField extends ComboBox<String> {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

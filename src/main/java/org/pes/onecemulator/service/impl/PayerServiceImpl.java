@@ -8,8 +8,6 @@ import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.PayerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,26 +21,28 @@ import java.util.stream.Collectors;
 @Service
 public class PayerServiceImpl implements PayerService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PayerServiceImpl.class);
+    private final PayerRepository payerRepository;
+
+    private final SourceRepository sourceRepository;
 
     @Autowired
-    private PayerRepository payerRepository;
-
-    @Autowired
-    private SourceRepository sourceRepository;
+    public PayerServiceImpl(PayerRepository payerRepository, SourceRepository sourceRepository) {
+        this.payerRepository = payerRepository;
+        this.sourceRepository = sourceRepository;
+    }
 
     @Transactional
     @Override
-    public PayerModel getById(UUID id) throws NotFoundException {
-        Payer payer = payerRepository.findById(id).orElseThrow(() -> new NotFoundException(Payer.class, id));
+    public PayerModel getById(final UUID id) throws NotFoundException {
+        final Payer payer = payerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Payer.class, id));
         return getModel(payer);
     }
 
     @Transactional
     @Override
     public List<PayerModel> list() {
-        List<Payer> payers = payerRepository.findAll();
-        return payers
+        return payerRepository.findAll()
                 .stream()
                 .map(this::getModel)
                 .collect(Collectors.toList());
@@ -50,7 +50,18 @@ public class PayerServiceImpl implements PayerService {
 
     @Transactional
     @Override
-    public PayerModel create(PayerModel model) throws Exception {
+    public List<PayerModel> listBySource(final String source) {
+        return sourceRepository.findByName(source)
+                .map(Source::getPayers)
+                .orElse(new HashSet<>())
+                .stream()
+                .map(this::getModel)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public PayerModel create(final PayerModel model) throws Exception {
 
         if (model == null) {
             throw new ValidationException("Model is null.");
@@ -64,16 +75,7 @@ public class PayerServiceImpl implements PayerService {
             throw new ValidationException("Source list is empty.");
         }
 
-        Set<Source> newSources = new HashSet<>();
-        model.getSources().forEach(s -> {
-            Source source = sourceRepository.findByName(s).orElseGet(() ->
-            {
-                Source newSource = new Source();
-                newSource.setName(s);
-                return newSource;
-            });
-            newSources.add(source);
-        });
+        final Set<Source> newSources = updateOrCreateSources(model.getSources());
 
         if (newSources.isEmpty()) {
             throw new ValidationException("New source list is empty.");
@@ -94,7 +96,7 @@ public class PayerServiceImpl implements PayerService {
 
     @Transactional
     @Override
-    public PayerModel update(PayerModel model) throws Exception {
+    public PayerModel update(final PayerModel model) throws Exception {
 
         if (model == null) {
             throw new ValidationException("Model is null.");
@@ -112,23 +114,14 @@ public class PayerServiceImpl implements PayerService {
             throw new ValidationException("Source list is empty.");
         }
 
-        Payer payer = payerRepository.findById(model.getId())
-                .orElseThrow(() -> new NotFoundException(Payer.class, model.getId()));
-
-        Set<Source> newSources = new HashSet<>();
-        model.getSources().forEach(s -> {
-            Source source = sourceRepository.findByName(s).orElseGet(() ->
-            {
-                Source newSource = new Source();
-                newSource.setName(s);
-                return newSource;
-            });
-            newSources.add(source);
-        });
+        final Set<Source> newSources = updateOrCreateSources(model.getSources());
 
         if (newSources.isEmpty()) {
             throw new ValidationException("New source list is empty.");
         }
+
+        Payer payer = payerRepository.findById(model.getId())
+                .orElseThrow(() -> new NotFoundException(Payer.class, model.getId()));
 
         payer.setCode(model.getCode());
         payer.setName(model.getName());
@@ -144,12 +137,28 @@ public class PayerServiceImpl implements PayerService {
 
     @Transactional
     @Override
-    public void delete(UUID id) {
+    public void delete(final UUID id) {
         payerRepository.deleteById(id);
     }
 
-    private PayerModel getModel(Payer entity) {
-        PayerModel model = new PayerModel();
+    private Set<Source> updateOrCreateSources(final Set<String> sources) {
+        final Set<Source> newSources = new HashSet<>();
+        sources.forEach(s -> {
+            final Source source = sourceRepository.findByName(s)
+                    .orElseGet(() ->
+                    {
+                        final Source newSource = new Source();
+                        newSource.setName(s);
+                        return newSource;
+                    });
+            newSources.add(source);
+        });
+
+        return newSources;
+    }
+
+    private PayerModel getModel(final Payer entity) {
+        final PayerModel model = new PayerModel();
         model.setId(entity.getId());
         model.setCode(entity.getCode());
         model.setName(entity.getName());
@@ -157,7 +166,10 @@ public class PayerServiceImpl implements PayerService {
         model.setInn(entity.getInn());
         model.setKpp(entity.getKpp());
         model.setAddress(entity.getAddress());
-        Set<String> sources = entity.getSources().stream().map(Source::getName).collect(Collectors.toSet());
+        final Set<String> sources = entity.getSources()
+                .stream()
+                .map(Source::getName)
+                .collect(Collectors.toSet());
         model.setSources(sources);
 
         return model;

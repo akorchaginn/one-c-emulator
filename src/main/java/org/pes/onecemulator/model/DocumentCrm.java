@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.pes.onecemulator.model.api.LocalDateDeserializer;
 import org.pes.onecemulator.model.api.LocalDateSerializer;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -27,7 +26,27 @@ public class DocumentCrm {
     private String payerName;
 
     @JsonProperty("sum")
-    private BigDecimal sum;
+    private String invoiceSum;
+
+    @JsonProperty("Sum_rub")
+    private String invoiceSumRUB;
+
+    @JsonProperty("currency_S")
+    private String invoiceCurrency;
+
+    @JsonProperty("dataOplat")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate paymentDate;
+
+    @JsonProperty("sumOplat_currency_P")
+    private String paymentSum;
+
+    @JsonProperty("sumOplat")
+    private String paymentSumRUB;
+
+    @JsonProperty("currency_P")
+    private String paymentCurrency;
 
     @JsonProperty("date")
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -36,14 +55,6 @@ public class DocumentCrm {
 
     @JsonProperty("status")
     private String status;
-
-    @JsonProperty("dataOplat")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate paymentDate;
-
-    @JsonProperty("sumOplat")
-    private BigDecimal paymentSum;
 
     @JsonProperty(value = "uuid")
     private String externalId;
@@ -80,12 +91,60 @@ public class DocumentCrm {
         this.payerName = payerName;
     }
 
-    public BigDecimal getSum() {
-        return sum;
+    public String getInvoiceSum() {
+        return invoiceSum;
     }
 
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
+    public void setInvoiceSum(String invoiceSum) {
+        this.invoiceSum = invoiceSum;
+    }
+
+    public String getInvoiceSumRUB() {
+        return invoiceSumRUB;
+    }
+
+    public void setInvoiceSumRUB(String invoiceSumRUB) {
+        this.invoiceSumRUB = invoiceSumRUB;
+    }
+
+    public String getInvoiceCurrency() {
+        return invoiceCurrency;
+    }
+
+    public void setInvoiceCurrency(String invoiceCurrency) {
+        this.invoiceCurrency = invoiceCurrency;
+    }
+
+    public LocalDate getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public String getPaymentSum() {
+        return paymentSum;
+    }
+
+    public void setPaymentSum(String paymentSum) {
+        this.paymentSum = paymentSum;
+    }
+
+    public String getPaymentSumRUB() {
+        return paymentSumRUB;
+    }
+
+    public void setPaymentSumRUB(String paymentSumRUB) {
+        this.paymentSumRUB = paymentSumRUB;
+    }
+
+    public String getPaymentCurrency() {
+        return paymentCurrency;
+    }
+
+    public void setPaymentCurrency(String paymentCurrency) {
+        this.paymentCurrency = paymentCurrency;
     }
 
     public LocalDate getDate() {
@@ -102,22 +161,6 @@ public class DocumentCrm {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public LocalDate getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public BigDecimal getPaymentSum() {
-        return paymentSum;
-    }
-
-    public void setPaymentSum(BigDecimal paymentSum) {
-        this.paymentSum = paymentSum;
     }
 
     public String getExternalId() {

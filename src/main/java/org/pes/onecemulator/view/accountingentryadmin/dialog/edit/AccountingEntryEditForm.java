@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.AccountingEntryModel;
 
 import java.util.List;
 
-public class AccountingEntryEditForm extends FormLayout {
+class AccountingEntryEditForm extends FormLayout {
 
     private final AccountingEntryIdReadOnlyField accountingEntryId;
 
@@ -68,7 +68,7 @@ public class AccountingEntryEditForm extends FormLayout {
 
     String errorMessagesAsHtml() {
         // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 accountingEntryCode.getErrorMessage(),
                 accountingEntryDate.getErrorMessage(),
                 accountingEntryDocumentName.getErrorMessage(),
@@ -80,7 +80,7 @@ public class AccountingEntryEditForm extends FormLayout {
     }
 
     AccountingEntryModel valueAsObject() {
-        AccountingEntryModel object = new AccountingEntryModel();
+        final AccountingEntryModel object = new AccountingEntryModel();
         object.setId(accountingEntryId.valueAsUUID());
         object.setCode(accountingEntryCode.getValue());
         object.setDate(accountingEntryDate.getValue());

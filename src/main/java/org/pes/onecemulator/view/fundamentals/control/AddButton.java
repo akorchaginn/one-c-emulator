@@ -4,7 +4,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class AddButton extends Button {
+class AddButton extends Button {
 
     private static final String ID = "AddButton";
 

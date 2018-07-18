@@ -4,13 +4,13 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
 import org.pes.onecemulator.model.SourceModel;
 
-public class SourceNameEditField extends TextField {
+class SourceNameEditField extends TextField {
 
     final BeanValidationBinder<SourceModel> binder = new BeanValidationBinder<>(SourceModel.class);
 
     private final String origin;
 
-    SourceNameEditField(String origin) {
+    SourceNameEditField(final String origin) {
         this.origin = origin;
         setValue(origin);
         setCaption("Название");
@@ -19,7 +19,7 @@ public class SourceNameEditField extends TextField {
     }
 
     boolean hasChanges() {
-        String now = getValue();
+        final String now = getValue();
         return !origin.equals(now);
     }
 }

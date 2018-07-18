@@ -35,17 +35,16 @@ public class InvoiceEditDialog extends FormDialog implements View, IInvoiceEditD
 
     @Override
     public void enter(ViewChangeEvent event) {
-        // initialize from data of transition source view
         IInvoiceAdminView invoiceView = (IInvoiceAdminView) event.getOldView();
         this.form = new InvoiceEditForm(invoiceView.gridSelection(), presenter.getSourceList());
         setForm(form);
-        form.invoiceSource.addValueChangeListener(e -> {
+        form.getInvoiceSource().addValueChangeListener(e -> {
             if (e.getValue() != null && !e.getValue().isEmpty()) {
-                form.invoicePayer.setItems(presenter.getPayerListBySource(e.getValue()));
-                form.invoicePayer.setReadOnly(false);
+                form.getInvoicePayer().setItems(presenter.getPayerListBySource(e.getValue()));
+                form.getInvoicePayer().setReadOnly(false);
             } else {
-                form.invoicePayer.clear();
-                form.invoicePayer.setReadOnly(true);
+                form.getInvoicePayer().clear();
+                form.getInvoicePayer().setReadOnly(true);
             }
         });
         addClickEvenListenerToSaveButton(e -> presenter.onClickSaveButton(form.valueAsObject()));
@@ -81,7 +80,6 @@ public class InvoiceEditDialog extends FormDialog implements View, IInvoiceEditD
 
     @Override
     public void returnInvoiceAdminView() {
-        // note: getUI() return null
         close();
         UI.getCurrent().getNavigator().navigateTo(InvoiceAdminView.VIEW_NAME);
     }

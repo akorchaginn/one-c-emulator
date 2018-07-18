@@ -4,7 +4,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 import org.pes.onecemulator.view.invoiceadmin.root.view.InvoiceAdminView;
 
-public class ToInvoiceAdminViewButton extends Button {
+class ToInvoiceAdminViewButton extends Button {
 
     private final static String ID = "ToInvoiceAdminViewButton";
 

@@ -27,8 +27,12 @@ import java.util.Properties;
 @EnableJpaRepositories("org.pes.onecemulator.repository")
 public class JpaConfig implements TransactionManagementConfigurer {
 
+    private final Environment env;
+
     @Autowired
-    private Environment env;
+    public JpaConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public DataSource configureDataSource() {
@@ -49,8 +53,8 @@ public class JpaConfig implements TransactionManagementConfigurer {
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Properties jpaProperties = new Properties();
-        jpaProperties.put(org.hibernate.cfg.Environment.DIALECT, env.getRequiredProperty("hibernate.dialect"));
-        jpaProperties.put(org.hibernate.cfg.Environment.HBM2DDL_AUTO, env.getRequiredProperty("hibernate.hbm2ddl.auto"));
+        jpaProperties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
+        jpaProperties.put("hibernate.hbm2ddl.auto", env.getRequiredProperty("hibernate.hbm2ddl.auto"));
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
         return entityManagerFactoryBean;

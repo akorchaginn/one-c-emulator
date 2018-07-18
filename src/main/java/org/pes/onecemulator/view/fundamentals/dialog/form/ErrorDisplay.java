@@ -4,7 +4,7 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class ErrorDisplay extends Label {
+class ErrorDisplay extends Label {
 
     private static final String ID = "ErrorDisplay";
 
@@ -15,7 +15,7 @@ public class ErrorDisplay extends Label {
         setSizeFull();
     }
 
-    void setMessageAsHtml(String messageAsHtml) {
+    void setMessageAsHtml(final String messageAsHtml) {
         setContentMode(ContentMode.HTML);
         setValue(messageAsHtml);
     }

@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.InvoiceModel;
 
 import java.util.List;
 
-public class InvoiceSourceInputField extends ComboBox<String> {
+class InvoiceSourceInputField extends ComboBox<String> {
 
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 

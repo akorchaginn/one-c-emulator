@@ -2,11 +2,11 @@ package org.pes.onecemulator.view.invoiceadmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.InvoiceModel;
 import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.model.SourceModel;
 import org.pes.onecemulator.service.InvoiceService;
+import org.pes.onecemulator.service.PayerService;
 import org.pes.onecemulator.service.SourceService;
 import org.pes.onecemulator.view.fundamentals.notification.ErrorNotification;
 import org.pes.onecemulator.view.invoiceadmin.dialog.add.IInvoiceAddDialog;
@@ -15,7 +15,6 @@ import org.pes.onecemulator.view.invoiceadmin.dialog.edit.IInvoiceEditDialog;
 import org.pes.onecemulator.view.invoiceadmin.root.view.IInvoiceAdminView;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,12 +30,15 @@ public class InvoiceAdminPresenter implements IInvoiceAdminPresenter {
 
     private IDeleteInvoiceConfirmDialog deleteView;
 
+    private final PayerService payerService;
+
     private final InvoiceService invoiceService;
 
     private final SourceService sourceService;
 
     @Autowired
-    public InvoiceAdminPresenter(InvoiceService invoiceService, SourceService sourceService) {
+    public InvoiceAdminPresenter(PayerService payerService, InvoiceService invoiceService, SourceService sourceService) {
+        this.payerService = payerService;
         this.invoiceService = invoiceService;
         this.sourceService = sourceService;
     }
@@ -103,17 +105,18 @@ public class InvoiceAdminPresenter implements IInvoiceAdminPresenter {
 
     @Override
     public List<String> getSourceList() {
-        return sourceService.list().stream().map(SourceModel::getName).collect(Collectors.toList());
+        return sourceService.list()
+                .stream()
+                .map(SourceModel::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<String> getPayerListBySource(String source) {
-        try {
-            return sourceService.getPayerList(source).stream().map(PayerModel::getCode).collect(Collectors.toList());
-        } catch (NotFoundException e) {
-            ErrorNotification.show(e);
-        }
-        return new ArrayList<>();
+        return payerService.listBySource(source)
+                .stream()
+                .map(PayerModel::getCode)
+                .collect(Collectors.toList());
     }
 
     @Override

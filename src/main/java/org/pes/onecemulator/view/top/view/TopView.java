@@ -13,14 +13,12 @@ public class TopView extends BaseViewLayout implements View {
 
     public static final String CAPTION = "Главная";
 
-    public static final String TITLE = "1C-emulator: Главная";
-
-    private final ViewHeader viewHeader = new ViewHeader(CAPTION);
-
-    private final TopViewBody viewBody = new TopViewBody();
+    private static final String TITLE = "1C-emulator: Главная";
 
     public TopView() {
         super();
+        ViewHeader viewHeader = new ViewHeader(CAPTION);
+        TopViewBody viewBody = new TopViewBody();
         addHeaderAndBody(viewHeader, viewBody);
         setCaption(CAPTION);
         UI.getCurrent().getPage().setTitle(TITLE);

@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -39,13 +38,25 @@ public class Invoice extends AbstractEntity {
     private LocalDate paymentDate;
 
     @Column(name = "payment_sum")
-    private BigDecimal paymentSum;
+    private String paymentSum;
+
+    @Column(name = "payment_sum_rub")
+    private String paymentSumRUB;
+
+    @Column(name = "payment_currency")
+    private String paymentCurrency;
 
     @Column(name = "status")
     private String status;
 
     @Column(name = "sum")
-    private BigDecimal sum;
+    private String sum;
+
+    @Column(name = "sum_rub")
+    private String sumRUB;
+
+    @Column(name = "currency")
+    private String currency;
 
     @Column(name = "external_id", nullable = false)
     private String externalId;
@@ -90,12 +101,28 @@ public class Invoice extends AbstractEntity {
         this.paymentDate = paymentDate;
     }
 
-    public BigDecimal getPaymentSum() {
+    public String getPaymentSum() {
         return paymentSum;
     }
 
-    public void setPaymentSum(BigDecimal paymentSum) {
+    public void setPaymentSum(String paymentSum) {
         this.paymentSum = paymentSum;
+    }
+
+    public String getPaymentSumRUB() {
+        return paymentSumRUB;
+    }
+
+    public void setPaymentSumRUB(String paymentSumRUB) {
+        this.paymentSumRUB = paymentSumRUB;
+    }
+
+    public String getPaymentCurrency() {
+        return paymentCurrency;
+    }
+
+    public void setPaymentCurrency(String paymentCurrency) {
+        this.paymentCurrency = paymentCurrency;
     }
 
     public String getStatus() {
@@ -106,12 +133,28 @@ public class Invoice extends AbstractEntity {
         this.status = status;
     }
 
-    public BigDecimal getSum() {
+    public String getSum() {
         return sum;
     }
 
-    public void setSum(BigDecimal sum) {
+    public void setSum(String sum) {
         this.sum = sum;
+    }
+
+    public String getSumRUB() {
+        return sumRUB;
+    }
+
+    public void setSumRUB(String sumRUB) {
+        this.sumRUB = sumRUB;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getExternalId() {

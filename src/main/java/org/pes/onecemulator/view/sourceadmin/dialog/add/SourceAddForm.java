@@ -4,11 +4,9 @@ import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.ui.FormLayout;
 import org.pes.onecemulator.model.SourceModel;
 
-public class SourceAddForm extends FormLayout {
+class SourceAddForm extends FormLayout {
 
     private final SourceNameInputField sourceName;
-
-    //Version originalVersion;
 
     SourceAddForm() {
         this.sourceName = new SourceNameInputField();
@@ -29,8 +27,7 @@ public class SourceAddForm extends FormLayout {
     }
 
     String errorMessagesAsHtml() {
-        // note: getErrorMessage() always return null before binder.validate()
-        CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
+        final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
                 sourceName.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
@@ -38,7 +35,7 @@ public class SourceAddForm extends FormLayout {
     }
 
     SourceModel valueAsObject() {
-        SourceModel object = new SourceModel();
+        final SourceModel object = new SourceModel();
         object.setName(sourceName.getValue());
 
         return object;

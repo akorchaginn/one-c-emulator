@@ -3,8 +3,6 @@ package org.pes.onecemulator.controller;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.model.ExpenseRequestModel;
 import org.pes.onecemulator.service.ExpenseRequestService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +20,12 @@ import java.util.UUID;
 @RequestMapping("api/expense-request")
 public class ExpenseRequestController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseRequestController.class);
+    private final ExpenseRequestService expenseRequestService;
 
     @Autowired
-    private ExpenseRequestService expenseRequestService;
+    public ExpenseRequestController(ExpenseRequestService expenseRequestService) {
+        this.expenseRequestService = expenseRequestService;
+    }
 
     @GetMapping(value = "/get-by-id/{id}")
     public @ResponseBody
