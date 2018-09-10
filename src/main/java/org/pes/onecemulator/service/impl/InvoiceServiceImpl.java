@@ -84,13 +84,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setNumberOq(model.getNumberOq());
         invoice.setPayer(payer);
         invoice.setPaymentDate(model.getPaymentDate());
-        invoice.setPaymentSum(model.getPaymentSumRUB());
+        invoice.setPaymentSum(model.getPaymentSum());
         invoice.setStatus(model.getStatus());
         invoice.setSum(model.getSum());
         invoice.setExternalId(model.getExternalId());
         invoice.setPaymentCurrency(model.getPaymentCurrency());
         invoice.setCurrency(model.getCurrency());
-        invoice.setPaymentSumRUB(model.getPaymentSum());
+        invoice.setPaymentSumRUB(model.getPaymentSumRUB());
         invoice.setSumRUB(model.getSumRUB());
         invoice = invoiceRepository.save(invoice);
 
@@ -136,13 +136,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setNumberOq(model.getNumberOq());
         invoice.setPayer(payer);
         invoice.setPaymentDate(model.getPaymentDate());
-        invoice.setPaymentSum(model.getPaymentSumRUB());
+        invoice.setPaymentSum(model.getPaymentSum());
         invoice.setStatus(model.getStatus());
         invoice.setSum(model.getSum());
         invoice.setExternalId(model.getExternalId());
         invoice.setPaymentCurrency(model.getPaymentCurrency());
         invoice.setCurrency(model.getCurrency());
-        invoice.setPaymentSumRUB(model.getPaymentSum());
+        invoice.setPaymentSumRUB(model.getPaymentSumRUB());
         invoice.setSumRUB(model.getSumRUB());
         invoice = invoiceRepository.save(invoice);
 
@@ -164,13 +164,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         model.setNumberOq(entity.getNumberOq());
         model.setPayerCode(entity.getPayer().getCode());
         model.setPaymentDate(entity.getPaymentDate());
-        model.setPaymentSumRUB(entity.getPaymentSum());
+        model.setPaymentSumRUB(entity.getPaymentSumRUB());
         model.setStatus(entity.getStatus());
         model.setSum(entity.getSum());
         model.setExternalId(entity.getExternalId());
         model.setPaymentCurrency(entity.getPaymentCurrency());
         model.setCurrency(entity.getCurrency());
-        model.setPaymentSum(entity.getPaymentSumRUB());
+        model.setPaymentSum(entity.getPaymentSum());
         model.setSumRUB(entity.getSumRUB());
 
         return model;
