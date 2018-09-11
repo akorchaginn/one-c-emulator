@@ -10,10 +10,10 @@ class InvoicePaymentSumEditField extends TextField {
 
     private final String origin;
 
-    InvoicePaymentSumEditField(final String sum) {
-        this.origin = sum;
+    InvoicePaymentSumEditField(final String paymentSum) {
+        this.origin = paymentSum;
         setValue(origin);
-        setCaption("Сумма платежа в валюте платежа");
+        setCaption("Сумма оплаты в валюте платежа");
         setSizeFull();
         binder.bind(this, "paymentSum");
     }

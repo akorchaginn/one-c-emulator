@@ -26,7 +26,7 @@ public class InvoiceGrid extends Grid<InvoiceModel> {
 
     private static final ValueProvider<InvoiceModel, LocalDate> invoicePaymentDateValueProvider = InvoiceModel::getPaymentDate;
 
-    private static final ValueProvider<InvoiceModel, String> invoicePaymentSumValueProvider = InvoiceModel::getPaymentSumRUB;
+    private static final ValueProvider<InvoiceModel, String> invoicePaymentSumValueProvider = InvoiceModel::getPaymentSum;
 
     private static final ValueProvider<InvoiceModel, String> invoiceStatusValueProvider = InvoiceModel::getStatus;
 
@@ -47,9 +47,9 @@ public class InvoiceGrid extends Grid<InvoiceModel> {
         addColumn(invoiceNumberOqValueProvider).setCaption("Номер из OQ");
         addColumn(invoicePayerValueProvider).setCaption("Плательщик");
         addColumn(invoicePaymentDateValueProvider).setCaption("Дата оплаты");
-        addColumn(invoicePaymentSumValueProvider).setCaption("Сумма оплаты");
+        addColumn(invoicePaymentSumValueProvider).setCaption("Сумма оплаты в валюте платежа");
         addColumn(invoiceStatusValueProvider).setCaption("Статус");
-        addColumn(invoiceSumValueProvider).setCaption("Сумма");
+        addColumn(invoiceSumValueProvider).setCaption("Сумма счета в валюте счета");
         addColumn(invoiceExternalIdValueProvider).setCaption("Внешний идентификатор");
     }
 

@@ -68,8 +68,8 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         ExpenseRequest expenseRequest = new ExpenseRequest();
         expenseRequest.setSource(source);
         expenseRequest.setCurrency(model.getCurrency());
-        expenseRequest.setConfirm(model.getConfirm());
-        expenseRequest.setPaid(model.getPaid());
+        expenseRequest.setConfirm(model.isConfirm());
+        expenseRequest.setPaid(model.isPaid());
         expenseRequest.setNumber(model.getNumber());
         expenseRequest.setSum(model.getSum());
         expenseRequest = expenseRequestRepository.save(expenseRequest);
@@ -105,8 +105,8 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
 
         expenseRequest.setSource(source);
         expenseRequest.setCurrency(model.getCurrency());
-        expenseRequest.setConfirm(model.getConfirm());
-        expenseRequest.setPaid(model.getPaid());
+        expenseRequest.setConfirm(model.isConfirm());
+        expenseRequest.setPaid(model.isPaid());
         expenseRequest.setNumber(model.getNumber());
         expenseRequest.setSum(model.getSum());
         expenseRequest = expenseRequestRepository.save(expenseRequest);

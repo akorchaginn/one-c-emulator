@@ -26,8 +26,8 @@ class ExpenseRequestEditForm extends FormLayout {
         this.expenseRequestId = new ExpenseRequestIdReadOnlyField(target.getId());
         this.expenseRequestSource = new ExpenseRequestSourceEditField(target.getSource(), sourceList);
         this.expenseRequestCurrency = new ExpenseRequestCurrencyEditField(target.getCurrency());
-        this.expenseRequestConfirm = new ExpenseRequestConfirmEditField(target.getConfirm());
-        this.expenseRequestPaid = new ExpenseRequestPaidEditField(target.getPaid());
+        this.expenseRequestConfirm = new ExpenseRequestConfirmEditField(target.isConfirm());
+        this.expenseRequestPaid = new ExpenseRequestPaidEditField(target.isPaid());
         this.expenseRequestNumber = new ExpenseRequestNumberEditField(target.getNumber());
         this.expenseRequestSum = new ExpenseRequestSumEditField(target.getSum());
 

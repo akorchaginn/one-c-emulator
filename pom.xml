@@ -29,6 +29,7 @@
 		<vaadin.version>3.0.1</vaadin.version>
 		<vaadin-push.version>8.4.5</vaadin-push.version>
 		<h2.version>1.4.196</h2.version>
+		<lombok.version>1.18.2</lombok.version>
 	</properties>
 
 	<dependencies>
@@ -108,12 +109,19 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

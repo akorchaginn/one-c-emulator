@@ -10,25 +10,25 @@ class InvoiceEditForm extends FormLayout {
 
     private InvoiceIdReadOnlyField invoiceId;
 
-    private InvoiceSourceEditField invoiceSource;
+    private InvoiceSourceEditField invoiceSourceEditField;
 
-    private InvoiceDateEditField invoiceDate;
+    private InvoiceDateEditField invoiceDateEditField;
 
-    private InvoiceNumberEditField invoiceNumber;
+    private InvoiceNumberEditField invoiceNumberEditField;
 
-    private InvoiceNumberOqEditField invoiceNumberOq;
+    private InvoiceNumberOqEditField invoiceNumberOqEditField;
 
-    private InvoicePayerEditField invoicePayer;
+    private InvoicePayerEditField invoicePayerEditField;
 
-    private InvoicePaymentDateEditField invoicePaymentDate;
+    private InvoicePaymentDateEditField invoicePaymentDateEditField;
 
-    private InvoicePaymentSumRUBEditField invoicePaymentSum;
+    private InvoicePaymentSumRUBEditField invoicePaymentSumRUBEditField;
 
-    private InvoiceStatusEditField invoiceStatus;
+    private InvoiceStatusEditField invoiceStatusEditField;
 
-    private InvoiceSumEditField invoiceSum;
+    private InvoiceSumEditField invoiceSumEditField;
 
-    private InvoiceExternalIdEditField invoiceExternalId;
+    private InvoiceExternalIdEditField invoiceExternalIdEditField;
 
     private InvoiceSumRUBEditField invoiceSumRUBEditField;
 
@@ -40,16 +40,16 @@ class InvoiceEditForm extends FormLayout {
 
     InvoiceEditForm(InvoiceModel target, List<String> sources) {
         this.invoiceId = new InvoiceIdReadOnlyField(target.getId());
-        this.invoiceSource = new InvoiceSourceEditField(target.getSource(), sources);
-        this.invoiceDate = new InvoiceDateEditField(target.getDate());
-        this.invoiceNumber = new InvoiceNumberEditField(target.getNumber());
-        this.invoiceNumberOq = new InvoiceNumberOqEditField(target.getNumberOq());
-        this.invoicePayer = new InvoicePayerEditField(target.getPayerCode());
-        this.invoicePaymentDate = new InvoicePaymentDateEditField(target.getPaymentDate());
-        this.invoicePaymentSum = new InvoicePaymentSumRUBEditField(target.getPaymentSumRUB());
-        this.invoiceStatus = new InvoiceStatusEditField(target.getStatus());
-        this.invoiceSum = new InvoiceSumEditField(target.getSum());
-        this.invoiceExternalId = new InvoiceExternalIdEditField(target.getExternalId());
+        this.invoiceSourceEditField = new InvoiceSourceEditField(target.getSource(), sources);
+        this.invoiceDateEditField = new InvoiceDateEditField(target.getDate());
+        this.invoiceNumberEditField = new InvoiceNumberEditField(target.getNumber());
+        this.invoiceNumberOqEditField = new InvoiceNumberOqEditField(target.getNumberOq());
+        this.invoicePayerEditField = new InvoicePayerEditField(target.getPayerCode());
+        this.invoicePaymentDateEditField = new InvoicePaymentDateEditField(target.getPaymentDate());
+        this.invoicePaymentSumRUBEditField = new InvoicePaymentSumRUBEditField(target.getPaymentSumRUB());
+        this.invoiceStatusEditField = new InvoiceStatusEditField(target.getStatus());
+        this.invoiceSumEditField = new InvoiceSumEditField(target.getSum());
+        this.invoiceExternalIdEditField = new InvoiceExternalIdEditField(target.getExternalId());
         this.invoiceSumRUBEditField = new InvoiceSumRUBEditField(target.getSumRUB());
         this.invoiceCurrencyEditField = new InvoiceCurrencyEditField(target.getCurrency());
         this.invoicePaymentSumEditField = new InvoicePaymentSumEditField(target.getPaymentSum());
@@ -57,16 +57,16 @@ class InvoiceEditForm extends FormLayout {
 
         addComponents(
                 invoiceId,
-                invoiceSource,
-                invoiceDate,
-                invoiceNumber,
-                invoiceNumberOq,
-                invoicePayer,
-                invoicePaymentDate,
-                invoicePaymentSum,
-                invoiceStatus,
-                invoiceSum,
-                invoiceExternalId,
+                invoiceSourceEditField,
+                invoiceDateEditField,
+                invoiceNumberEditField,
+                invoiceNumberOqEditField,
+                invoicePayerEditField,
+                invoicePaymentDateEditField,
+                invoicePaymentSumRUBEditField,
+                invoiceStatusEditField,
+                invoiceSumEditField,
+                invoiceExternalIdEditField,
                 invoiceCurrencyEditField,
                 invoicePaymentCurrencyEditField,
                 invoicePaymentSumEditField,
@@ -75,24 +75,24 @@ class InvoiceEditForm extends FormLayout {
     }
 
     InvoiceSourceEditField getInvoiceSource() {
-        return invoiceSource;
+        return invoiceSourceEditField;
     }
 
     InvoicePayerEditField getInvoicePayer() {
-        return invoicePayer;
+        return invoicePayerEditField;
     }
 
     void validate() {
-        invoiceSource.binder.validate();
-        invoiceDate.binder.validate();
-        invoiceNumber.binder.validate();
-        invoiceNumberOq.binder.validate();
-        invoicePayer.binder.validate();
-        invoicePaymentDate.binder.validate();
-        invoicePaymentSum.binder.validate();
-        invoiceStatus.binder.validate();
-        invoiceSum.binder.validate();
-        invoiceExternalId.binder.validate();
+        invoiceSourceEditField.binder.validate();
+        invoiceDateEditField.binder.validate();
+        invoiceNumberEditField.binder.validate();
+        invoiceNumberOqEditField.binder.validate();
+        invoicePayerEditField.binder.validate();
+        invoicePaymentDateEditField.binder.validate();
+        invoicePaymentSumRUBEditField.binder.validate();
+        invoiceStatusEditField.binder.validate();
+        invoiceSumEditField.binder.validate();
+        invoiceExternalIdEditField.binder.validate();
         invoiceCurrencyEditField.binder.validate();
         invoicePaymentCurrencyEditField.binder.validate();
         invoicePaymentSumEditField.binder.validate();
@@ -104,16 +104,16 @@ class InvoiceEditForm extends FormLayout {
     }
 
     private boolean allFieldsAreValid() {
-        return invoiceSource.binder.isValid()
-                && invoiceDate.binder.isValid()
-                && invoiceNumber.binder.isValid()
-                && invoiceNumberOq.binder.isValid()
-                && invoicePayer.binder.isValid()
-                && invoicePaymentDate.binder.isValid()
-                && invoicePaymentSum.binder.isValid()
-                && invoiceStatus.binder.isValid()
-                && invoiceSum.binder.isValid()
-                && invoiceExternalId.binder.isValid()
+        return invoiceSourceEditField.binder.isValid()
+                && invoiceDateEditField.binder.isValid()
+                && invoiceNumberEditField.binder.isValid()
+                && invoiceNumberOqEditField.binder.isValid()
+                && invoicePayerEditField.binder.isValid()
+                && invoicePaymentDateEditField.binder.isValid()
+                && invoicePaymentSumRUBEditField.binder.isValid()
+                && invoiceStatusEditField.binder.isValid()
+                && invoiceSumEditField.binder.isValid()
+                && invoiceExternalIdEditField.binder.isValid()
                 && invoiceCurrencyEditField.binder.isValid()
                 && invoicePaymentCurrencyEditField.binder.isValid()
                 && invoicePaymentSumEditField.binder.isValid()
@@ -121,16 +121,16 @@ class InvoiceEditForm extends FormLayout {
     }
 
     boolean hasChanges() {
-        return invoiceSource.hasChanges()
-                || invoiceDate.hasChanges()
-                || invoiceNumber.hasChanges()
-                || invoiceNumberOq.hasChanges()
-                || invoicePayer.hasChanges()
-                || invoicePaymentDate.hasChanges()
-                || invoicePaymentSum.hasChanges()
-                || invoiceStatus.hasChanges()
-                || invoiceSum.hasChanges()
-                || invoiceExternalId.hasChanges()
+        return invoiceSourceEditField.hasChanges()
+                || invoiceDateEditField.hasChanges()
+                || invoiceNumberEditField.hasChanges()
+                || invoiceNumberOqEditField.hasChanges()
+                || invoicePayerEditField.hasChanges()
+                || invoicePaymentDateEditField.hasChanges()
+                || invoicePaymentSumRUBEditField.hasChanges()
+                || invoiceStatusEditField.hasChanges()
+                || invoiceSumEditField.hasChanges()
+                || invoiceExternalIdEditField.hasChanges()
                 || invoiceCurrencyEditField.hasChanges()
                 || invoicePaymentCurrencyEditField.hasChanges()
                 || invoicePaymentSumEditField.hasChanges()
@@ -139,16 +139,16 @@ class InvoiceEditForm extends FormLayout {
 
     String errorMessagesAsHtml() {
         final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
-                invoiceSource.getErrorMessage(),
-                invoiceDate.getErrorMessage(),
-                invoiceNumber.getErrorMessage(),
-                invoiceNumberOq.getErrorMessage(),
-                invoicePayer.getErrorMessage(),
-                invoicePaymentDate.getErrorMessage(),
-                invoicePaymentSum.getErrorMessage(),
-                invoiceStatus.getErrorMessage(),
-                invoiceSum.getErrorMessage(),
-                invoiceExternalId.getErrorMessage(),
+                invoiceSourceEditField.getErrorMessage(),
+                invoiceDateEditField.getErrorMessage(),
+                invoiceNumberEditField.getErrorMessage(),
+                invoiceNumberOqEditField.getErrorMessage(),
+                invoicePayerEditField.getErrorMessage(),
+                invoicePaymentDateEditField.getErrorMessage(),
+                invoicePaymentSumRUBEditField.getErrorMessage(),
+                invoiceStatusEditField.getErrorMessage(),
+                invoiceSumEditField.getErrorMessage(),
+                invoiceExternalIdEditField.getErrorMessage(),
                 invoiceCurrencyEditField.getErrorMessage(),
                 invoicePaymentCurrencyEditField.getErrorMessage(),
                 invoicePaymentSumEditField.getErrorMessage(),
@@ -161,18 +161,17 @@ class InvoiceEditForm extends FormLayout {
     InvoiceModel valueAsObject() {
         final InvoiceModel object = new InvoiceModel();
         object.setId(invoiceId.valueAsUUID());
-        object.setSource(invoiceSource.getValue());
-        object.setDate(invoiceDate.getValue());
-        object.setNumber(invoiceNumber.getValue());
-        object.setNumberOq(invoiceNumberOq.getValue());
-        object.setPayerCode(invoicePayer.getValue());
-        object.setPaymentDate(invoicePaymentDate.getValue());
-        object.setPaymentSumRUB(invoicePaymentSum.getValue());
-        object.setStatus(invoiceStatus.getValue());
-        object.setSum(invoiceSum.getValue());
-        object.setExternalId(invoiceExternalId.getValue());
+        object.setSource(invoiceSourceEditField.getValue());
+        object.setDate(invoiceDateEditField.getValue());
+        object.setNumber(invoiceNumberEditField.getValue());
+        object.setNumberOq(invoiceNumberOqEditField.getValue());
+        object.setPayerCode(invoicePayerEditField.getValue());
+        object.setPaymentDate(invoicePaymentDateEditField.getValue());
+        object.setPaymentSumRUB(invoicePaymentSumRUBEditField.getValue());
+        object.setStatus(invoiceStatusEditField.getValue());
+        object.setSum(invoiceSumEditField.getValue());
+        object.setExternalId(invoiceExternalIdEditField.getValue());
         object.setPaymentSum(invoicePaymentSumEditField.getValue());
-        object.setPaymentSumRUB(invoicePaymentSum.getValue());
         object.setPaymentCurrency(invoicePaymentCurrencyEditField.getValue());
         object.setCurrency(invoiceCurrencyEditField.getValue());
         object.setSumRUB(invoiceSumRUBEditField.getValue());

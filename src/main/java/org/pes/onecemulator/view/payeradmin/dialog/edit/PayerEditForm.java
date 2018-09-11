@@ -97,7 +97,7 @@ class PayerEditForm extends FormLayout {
         object.setInn(payerInn.getValue());
         object.setKpp(payerKpp.getValue());
         object.setAddress(payerAddress.getValue());
-        object.setSources(payerSource.getValue());
+        object.getSources().addAll(payerSource.getValue());
 
         return object;
     }

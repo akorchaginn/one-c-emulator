@@ -9,7 +9,7 @@ class InvoiceSumInputField extends TextField {
     final BeanValidationBinder<InvoiceModel> binder = new BeanValidationBinder<>(InvoiceModel.class);
 
     InvoiceSumInputField() {
-        setCaption("Сумма");
+        setCaption("Сумма счёта в валюте счета");
         setSizeFull();
         binder.bind(this, "sum");
     }

@@ -1,45 +1,21 @@
 package org.pes.onecemulator.model;
 
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.UUID;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 public class SourceModel {
 
     private UUID id;
 
     private String name;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public boolean containsWithIgnoreCase(String text) {
         return name.toLowerCase().contains(text);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SourceModel)) return false;
-        SourceModel model = (SourceModel) o;
-        return Objects.equals(id, model.id) &&
-                Objects.equals(name, model.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
     }
 }

@@ -3,14 +3,19 @@ package org.pes.onecemulator.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.pes.onecemulator.model.api.LocalDateDeserializer;
 import org.pes.onecemulator.model.api.LocalDateSerializer;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.UUID;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 public class InvoiceModel {
 
     @JsonProperty("id")
@@ -68,151 +73,8 @@ public class InvoiceModel {
     @NotNull
     private String externalId;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getNumberOq() {
-        return numberOq;
-    }
-
-    public void setNumberOq(String numberOq) {
-        this.numberOq = numberOq;
-    }
-
-    public String getPayerCode() {
-        return payerCode;
-    }
-
-    public void setPayerCode(String payerCode) {
-        this.payerCode = payerCode;
-    }
-
-    public LocalDate getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public String getPaymentSumRUB() {
-        return paymentSumRUB;
-    }
-
-    public void setPaymentSumRUB(String paymentSumRUB) {
-        this.paymentSumRUB = paymentSumRUB;
-    }
-
-    public String getPaymentSum() {
-        return paymentSum;
-    }
-
-    public void setPaymentSum(String paymentSum) {
-        this.paymentSum = paymentSum;
-    }
-
-    public String getPaymentCurrency() {
-        return paymentCurrency;
-    }
-
-    public void setPaymentCurrency(String paymentCurrency) {
-        this.paymentCurrency = paymentCurrency;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getSum() {
-        return sum;
-    }
-
-    public void setSum(String sum) {
-        this.sum = sum;
-    }
-
-    public String getSumRUB() {
-        return sumRUB;
-    }
-
-    public void setSumRUB(String sumRUB) {
-        this.sumRUB = sumRUB;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
-    }
-
     public boolean containsWithIgnoreCase(String text) {
         return number.toLowerCase().contains(text)
                 || externalId.toLowerCase().contains(text);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InvoiceModel)) return false;
-        InvoiceModel model = (InvoiceModel) o;
-        return Objects.equals(id, model.id) &&
-                Objects.equals(source, model.source) &&
-                Objects.equals(date, model.date) &&
-                Objects.equals(number, model.number) &&
-                Objects.equals(numberOq, model.numberOq) &&
-                Objects.equals(payerCode, model.payerCode) &&
-                Objects.equals(paymentDate, model.paymentDate) &&
-                Objects.equals(paymentSumRUB, model.paymentSumRUB) &&
-                Objects.equals(status, model.status) &&
-                Objects.equals(sum, model.sum) &&
-                Objects.equals(externalId, model.externalId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, source, date, number, numberOq, payerCode, paymentDate, paymentSumRUB, status, sum, externalId);
     }
 }

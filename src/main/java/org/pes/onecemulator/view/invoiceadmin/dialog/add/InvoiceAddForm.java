@@ -8,25 +8,25 @@ import java.util.List;
 
 class InvoiceAddForm extends FormLayout {
 
-    private final InvoiceSourceInputField invoiceSource;
+    private final InvoiceSourceInputField invoiceSourceInputField;
 
-    private final InvoiceDateInputField invoiceDate;
+    private final InvoiceDateInputField invoiceDateInputField;
 
-    private final InvoiceNumberInputField invoiceNumber;
+    private final InvoiceNumberInputField invoiceNumberInputField;
 
-    private final InvoiceNumberOqInputField invoiceNumberOq;
+    private final InvoiceNumberOqInputField invoiceNumberOqInputField;
 
-    private final InvoicePayerInputField invoicePayer;
+    private final InvoicePayerInputField invoicePayerInputField;
 
-    private final InvoicePaymentDateInputField invoicePaymentDate;
+    private final InvoicePaymentDateInputField invoicePaymentDateInputField;
 
-    private final InvoicePaymentSumRUBInputField invoicePaymentSum;
+    private final InvoicePaymentSumRUBInputField invoicePaymentSumRUBInputField;
 
-    private final InvoiceStatusInputField invoiceStatus;
+    private final InvoiceStatusInputField invoiceStatusInputField;
 
-    private final InvoiceSumInputField invoiceSum;
+    private final InvoiceSumInputField invoiceSumInputField;
 
-    private final InvoiceExternalIdInputField invoiceExternalId;
+    private final InvoiceExternalIdInputField invoiceExternalIdInputField;
 
     private final InvoiceCurrencyInputField invoiceCurrencyInputField;
 
@@ -37,16 +37,16 @@ class InvoiceAddForm extends FormLayout {
     private final InvoiceSumRUBInputField invoiceSumRUBInputField;
 
     InvoiceAddForm(List<String> sources) {
-        this.invoiceSource = new InvoiceSourceInputField(sources);
-        this.invoiceDate = new InvoiceDateInputField();
-        this.invoiceNumber = new InvoiceNumberInputField();
-        this.invoiceNumberOq = new InvoiceNumberOqInputField();
-        this.invoicePayer = new InvoicePayerInputField();
-        this.invoicePaymentDate = new InvoicePaymentDateInputField();
-        this.invoicePaymentSum = new InvoicePaymentSumRUBInputField();
-        this.invoiceStatus = new InvoiceStatusInputField();
-        this.invoiceSum = new InvoiceSumInputField();
-        this.invoiceExternalId = new InvoiceExternalIdInputField();
+        this.invoiceSourceInputField = new InvoiceSourceInputField(sources);
+        this.invoiceDateInputField = new InvoiceDateInputField();
+        this.invoiceNumberInputField = new InvoiceNumberInputField();
+        this.invoiceNumberOqInputField = new InvoiceNumberOqInputField();
+        this.invoicePayerInputField = new InvoicePayerInputField();
+        this.invoicePaymentDateInputField = new InvoicePaymentDateInputField();
+        this.invoicePaymentSumRUBInputField = new InvoicePaymentSumRUBInputField();
+        this.invoiceStatusInputField = new InvoiceStatusInputField();
+        this.invoiceSumInputField = new InvoiceSumInputField();
+        this.invoiceExternalIdInputField = new InvoiceExternalIdInputField();
         this.invoiceCurrencyInputField = new InvoiceCurrencyInputField();
         this.invoicePaymentCurrencyInputField = new InvoicePaymentCurrencyInputField();
         this.invoicePaymentSumInputField = new InvoicePaymentSumInputField();
@@ -54,47 +54,45 @@ class InvoiceAddForm extends FormLayout {
 
 
         addComponents(
-                invoiceSource,
-                invoiceDate,
-                invoiceNumber,
-                invoiceNumberOq,
-                invoicePayer,
-                invoicePaymentDate,
-                invoicePaymentSum,
-                invoiceStatus,
-                invoiceSum,
-                invoiceExternalId,
+                invoiceSourceInputField,
+                invoiceDateInputField,
+                invoiceNumberInputField,
+                invoiceNumberOqInputField,
+                invoicePayerInputField,
+                invoicePaymentDateInputField,
+                invoicePaymentSumRUBInputField,
+                invoiceStatusInputField,
+                invoiceSumInputField,
+                invoiceExternalIdInputField,
                 invoiceSumRUBInputField,
                 invoicePaymentCurrencyInputField,
                 invoiceCurrencyInputField,
-                invoiceSumRUBInputField,
                 invoicePaymentSumInputField);
         setMargin(false);
     }
 
     InvoiceSourceInputField getInvoiceSource() {
-        return invoiceSource;
+        return invoiceSourceInputField;
     }
 
     InvoicePayerInputField getInvoicePayer() {
-        return invoicePayer;
+        return invoicePayerInputField;
     }
 
     void validate() {
-        invoiceSource.binder.validate();
-        invoiceDate.binder.validate();
-        invoiceNumber.binder.validate();
-        invoiceNumberOq.binder.validate();
-        invoicePayer.binder.validate();
-        invoicePaymentDate.binder.validate();
-        invoicePaymentSum.binder.validate();
-        invoiceStatus.binder.validate();
-        invoiceSum.binder.validate();
-        invoiceExternalId.binder.validate();
+        invoiceSourceInputField.binder.validate();
+        invoiceDateInputField.binder.validate();
+        invoiceNumberInputField.binder.validate();
+        invoiceNumberOqInputField.binder.validate();
+        invoicePayerInputField.binder.validate();
+        invoicePaymentDateInputField.binder.validate();
+        invoicePaymentSumRUBInputField.binder.validate();
+        invoiceStatusInputField.binder.validate();
+        invoiceSumInputField.binder.validate();
+        invoiceExternalIdInputField.binder.validate();
         invoiceSumRUBInputField.binder.validate();
         invoicePaymentCurrencyInputField.binder.validate();
         invoiceCurrencyInputField.binder.validate();
-        invoiceSumRUBInputField.binder.validate();
         invoicePaymentSumInputField.binder.validate();
     }
 
@@ -103,25 +101,24 @@ class InvoiceAddForm extends FormLayout {
     }
 
     private boolean allFieldsAreValid() {
-        return invoiceNumber.binder.isValid();
+        return invoiceNumberInputField.binder.isValid();
     }
 
     String errorMessagesAsHtml() {
         final CompositeErrorMessage compositeErrorMessage = new CompositeErrorMessage(
-                invoiceSource.getErrorMessage(),
-                invoiceDate.getErrorMessage(),
-                invoiceNumber.getErrorMessage(),
-                invoiceNumberOq.getErrorMessage(),
-                invoicePayer.getErrorMessage(),
-                invoicePaymentDate.getErrorMessage(),
-                invoicePaymentSum.getErrorMessage(),
-                invoiceStatus.getErrorMessage(),
-                invoiceSum.getErrorMessage(),
-                invoiceExternalId.getErrorMessage(),
+                invoiceSourceInputField.getErrorMessage(),
+                invoiceDateInputField.getErrorMessage(),
+                invoiceNumberInputField.getErrorMessage(),
+                invoiceNumberOqInputField.getErrorMessage(),
+                invoicePayerInputField.getErrorMessage(),
+                invoicePaymentDateInputField.getErrorMessage(),
+                invoicePaymentSumRUBInputField.getErrorMessage(),
+                invoiceStatusInputField.getErrorMessage(),
+                invoiceSumInputField.getErrorMessage(),
+                invoiceExternalIdInputField.getErrorMessage(),
                 invoiceSumRUBInputField.getErrorMessage(),
                 invoicePaymentCurrencyInputField.getErrorMessage(),
                 invoiceCurrencyInputField.getErrorMessage(),
-                invoiceSumRUBInputField.getErrorMessage(),
                 invoicePaymentSumInputField.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
@@ -130,16 +127,16 @@ class InvoiceAddForm extends FormLayout {
 
     InvoiceModel valueAsObject() {
         final InvoiceModel object = new InvoiceModel();
-        object.setSource(invoiceSource.getValue());
-        object.setDate(invoiceDate.getValue());
-        object.setNumber(invoiceNumber.getValue());
-        object.setNumberOq(invoiceNumberOq.getValue());
-        object.setPayerCode(invoicePayer.getValue());
-        object.setPaymentDate(invoicePaymentDate.getValue());
-        object.setPaymentSum(invoiceSum.getValue());
-        object.setStatus(invoiceStatus.getValue());
-        object.setSum(invoiceSum.getValue());
-        object.setExternalId(invoiceExternalId.getValue());
+        object.setSource(invoiceSourceInputField.getValue());
+        object.setDate(invoiceDateInputField.getValue());
+        object.setNumber(invoiceNumberInputField.getValue());
+        object.setNumberOq(invoiceNumberOqInputField.getValue());
+        object.setPayerCode(invoicePayerInputField.getValue());
+        object.setPaymentDate(invoicePaymentDateInputField.getValue());
+        object.setPaymentSumRUB(invoicePaymentSumRUBInputField.getValue());
+        object.setStatus(invoiceStatusInputField.getValue());
+        object.setSum(invoiceSumInputField.getValue());
+        object.setExternalId(invoiceExternalIdInputField.getValue());
         object.setCurrency(invoiceCurrencyInputField.getValue());
         object.setSumRUB(invoiceSumRUBInputField.getValue());
         object.setPaymentCurrency(invoicePaymentCurrencyInputField.getValue());

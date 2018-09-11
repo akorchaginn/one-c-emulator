@@ -20,10 +20,10 @@ public class ExpenseRequestGrid extends Grid<ExpenseRequestModel> {
             ExpenseRequestModel::getCurrency;
 
     private static final ValueProvider<ExpenseRequestModel, Boolean> expenseRequestConfirmValueProvider =
-            ExpenseRequestModel::getConfirm;
+            ExpenseRequestModel::isConfirm;
 
     private static final ValueProvider<ExpenseRequestModel, Boolean> expenseRequestPaidValueProvider =
-            ExpenseRequestModel::getPaid;
+            ExpenseRequestModel::isPaid;
 
     private static final ValueProvider<ExpenseRequestModel, String> expenseRequestNumberValueProvider =
             ExpenseRequestModel::getNumber;

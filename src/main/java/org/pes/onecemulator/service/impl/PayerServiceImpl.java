@@ -170,7 +170,7 @@ public class PayerServiceImpl implements PayerService {
                 .stream()
                 .map(Source::getName)
                 .collect(Collectors.toSet());
-        model.setSources(sources);
+        model.getSources().addAll(sources);
 
         return model;
     }
