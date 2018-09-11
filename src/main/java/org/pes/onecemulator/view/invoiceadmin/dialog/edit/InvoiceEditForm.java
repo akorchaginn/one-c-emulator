@@ -67,10 +67,10 @@ class InvoiceEditForm extends FormLayout {
                 invoiceStatusEditField,
                 invoiceSumEditField,
                 invoiceExternalIdEditField,
-                invoiceCurrencyEditField,
+                invoiceSumRUBEditField,
                 invoicePaymentCurrencyEditField,
-                invoicePaymentSumEditField,
-                invoiceSumRUBEditField);
+                invoiceCurrencyEditField,
+                invoicePaymentSumEditField);
         setMargin(false);
     }
 
