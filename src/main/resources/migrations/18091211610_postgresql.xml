@@ -80,13 +80,15 @@
                                  baseColumnNames="source_id"
                                  constraintName="fk_payer_source_source_id"
                                  referencedTableName="source"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
 
         <addForeignKeyConstraint baseTableName="payer_source"
                                  baseColumnNames="payer_id"
                                  constraintName="fk_payer_source_payer_id"
                                  referencedTableName="payer"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="18091211610_04" author="marker91" runOnChange="true" dbms="postgresql">
@@ -132,6 +134,20 @@
 
         <addUniqueConstraint tableName="invoice" columnNames="external_id" constraintName="uk_invoice_external_id"/>
 
+        <addForeignKeyConstraint baseTableName="invoice"
+                                 baseColumnNames="source_id"
+                                 constraintName="fk_invoice_source_id"
+                                 referencedTableName="source"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableName="invoice"
+                                 baseColumnNames="payer_id"
+                                 constraintName="fk_invoice_payer_id"
+                                 referencedTableName="payer"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
         <createIndex tableName="invoice" indexName="i_invoice_external_id">
             <column name="external_id"/>
         </createIndex>
@@ -174,7 +190,8 @@
                                  baseColumnNames="source_id"
                                  constraintName="fk_expense_request_source_id"
                                  referencedTableName="source"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
 
         <createIndex tableName="expense_request" indexName="i_expense_request_number">
             <column name="number"/>
@@ -219,7 +236,8 @@
                                  baseColumnNames="expense_request_id"
                                  constraintName="fk_accounting_entry_expense_request_id"
                                  referencedTableName="expense_request"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="18091211610_02" author="marker91" runOnChange="true" dbms="postgresql">
@@ -305,13 +323,15 @@
                                  baseColumnNames="source_id"
                                  constraintName="fk_employee_source_source_id"
                                  referencedTableName="source"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
 
         <addForeignKeyConstraint baseTableName="employee_source"
                                  baseColumnNames="employee_id"
                                  constraintName="fk_employee_source_employee_id"
                                  referencedTableName="payer"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -1,5 +1,6 @@
 package org.pes.onecemulator.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,7 +53,7 @@ public class Invoice extends AbstractEntity {
     @JoinColumn(name = "payer_id")
     private Payer payer;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "source_id")
     private Source source;
 
