@@ -1,7 +1,5 @@
 package org.pes.onecemulator.ui;
 
-import com.google.common.eventbus.AsyncEventBus;
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Push;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
@@ -13,12 +11,10 @@ import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
-import org.pes.onecemulator.bus.event.UINotificationEvent;
+import org.pes.onecemulator.event.ui.UINotificationEvent;
 import org.pes.onecemulator.view.fundamentals.notification.ErrorNotification;
 import org.pes.onecemulator.view.fundamentals.notification.InfoNotification;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
+import org.springframework.context.event.EventListener;
 
 @Push(transport = Transport.WEBSOCKET_XHR)
 @SpringUI
@@ -26,18 +22,6 @@ import javax.annotation.PostConstruct;
 public class ApplicationUI extends UI implements ViewDisplay {
 
     private final ApplicationUIContent content = new ApplicationUIContent();
-
-    private final AsyncEventBus asyncEventBus;
-
-    @Autowired
-    ApplicationUI(AsyncEventBus asyncEventBus) {
-        this.asyncEventBus = asyncEventBus;
-    }
-
-    @PostConstruct
-    public void init() {
-        asyncEventBus.register(this);
-    }
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -65,7 +49,7 @@ public class ApplicationUI extends UI implements ViewDisplay {
         content.getViewDisplay().setContent(view.getViewComponent());
     }
 
-    @Subscribe
+    @EventListener
     @SuppressWarnings("unused")
     public void processUINotification(final UINotificationEvent event) {
         if (event.getDescription() != null) {

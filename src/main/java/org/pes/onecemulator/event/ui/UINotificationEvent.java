@@ -1,6 +1,8 @@
-package org.pes.onecemulator.bus.event;
+package org.pes.onecemulator.event.ui;
 
-public class UINotificationEvent {
+import org.springframework.context.ApplicationEvent;
+
+public class UINotificationEvent extends ApplicationEvent {
 
     private final Object source;
 
@@ -9,6 +11,7 @@ public class UINotificationEvent {
     private final boolean error;
 
     public UINotificationEvent(final Object source, final String description, final boolean error) {
+        super(source);
         this.source = source;
         this.description = description;
         this.error = error;

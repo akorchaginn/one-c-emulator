@@ -4,23 +4,15 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(
-        name = "payer",
-        uniqueConstraints = @UniqueConstraint(
-                columnNames = "code",
-                name = "uk_payer_code"
-        )
-)
+@Table(name = "payer")
 public class Payer extends AbstractEntity {
 
     @Column(name = "address")
@@ -42,18 +34,11 @@ public class Payer extends AbstractEntity {
     private String name;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "payer_source",
-            joinColumns = {
-                    @JoinColumn(
-                            name = "payer_id",
-                            foreignKey = @ForeignKey(name = "fk_payer_source_payer_id")) },
-            inverseJoinColumns = {
-                    @JoinColumn(
-                            name = "source_id",
-                            foreignKey = @ForeignKey(name = "fk_payer_source_source_id")) }
+    @JoinTable(name = "payer_source",
+            joinColumns = { @JoinColumn(name = "payer_id") },
+            inverseJoinColumns = { @JoinColumn(name = "source_id") }
     )
-    private Set<Source> sources = new HashSet<>();
+    private Set<Source> sources;
 
     public String getAddress() {
         return address;
@@ -104,6 +89,9 @@ public class Payer extends AbstractEntity {
     }
 
     public Set<Source> getSources() {
+        if (sources == null) {
+            sources = new HashSet<>();
+        }
         return sources;
     }
 

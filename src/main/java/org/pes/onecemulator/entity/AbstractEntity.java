@@ -1,16 +1,16 @@
 package org.pes.onecemulator.entity;
 
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -31,12 +31,12 @@ public abstract class AbstractEntity {
     private UUID id;
 
     @Column(name = "created_time")
-    @Generated(GenerationTime.INSERT)
-    private LocalDateTime createdTime;
+    @CreationTimestamp
+    private ZonedDateTime createdTime;
 
     @Column(name = "updated_time")
-    @Generated(GenerationTime.ALWAYS)
-    private LocalDateTime updatedTime;
+    @UpdateTimestamp
+    private ZonedDateTime updatedTime;
 
     @Version
     private Long version;
@@ -49,19 +49,19 @@ public abstract class AbstractEntity {
         this.id = id;
     }
 
-    public LocalDateTime getCreatedTime() {
+    public ZonedDateTime getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(LocalDateTime createdTime) {
+    public void setCreatedTime(ZonedDateTime createdTime) {
         this.createdTime = createdTime;
     }
 
-    public LocalDateTime getUpdatedTime() {
+    public ZonedDateTime getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(LocalDateTime updatedTime) {
+    public void setUpdatedTime(ZonedDateTime updatedTime) {
         this.updatedTime = updatedTime;
     }
 

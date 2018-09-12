@@ -1,7 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
-import com.google.common.eventbus.AsyncEventBus;
-import org.pes.onecemulator.bus.event.UINotificationEvent;
+import org.pes.onecemulator.event.ui.UINotificationEvent;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
@@ -14,6 +13,7 @@ import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +39,13 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     private final SourceRepository sourceRepository;
 
-    private final AsyncEventBus asyncEventBus;
+    private final ApplicationEventPublisher publisher;
 
     @Autowired
-    public CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository, AsyncEventBus asyncEventBus) {
+    public CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository, ApplicationEventPublisher publisher) {
         this.invoiceRepository = invoiceRepository;
         this.sourceRepository = sourceRepository;
-        this.asyncEventBus = asyncEventBus;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -98,15 +98,11 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     private void postExpenseRequestInfoToUI(String uri) {
-        asyncEventBus.post(
-                new UINotificationEvent(
-                        this, "Запрос: " + uri + " отправлен в CRM.", false));
+        publisher.publishEvent(new UINotificationEvent(this, "Запрос: " + uri + " отправлен в CRM.", false));
     }
 
     private void postExpenseRequestErrorToUI(Exception e) {
-        asyncEventBus.post(
-                new UINotificationEvent(
-                        this, "Ошибка отправки запроса в CRM: " + e.getMessage(), true));
+        publisher.publishEvent(new UINotificationEvent(this, "Ошибка отправки запроса в CRM: " + e.getMessage(), true));
     }
 
     private DocumentCrm getDocumentCrm(final Invoice entity) {

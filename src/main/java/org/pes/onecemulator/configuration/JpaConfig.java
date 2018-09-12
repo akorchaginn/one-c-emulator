@@ -2,11 +2,13 @@ package org.pes.onecemulator.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,8 +23,11 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "org.pes.onecemulator")
-@PropertySource(value = { "classpath:application.properties" })
+@EntityScan(basePackages = "org.pes.onecemulator.entity")
+@PropertySources({
+        @PropertySource(value = "classpath:database.properties"),
+        @PropertySource(value = "file:/etc/one-c/database.properties", ignoreResourceNotFound = true)
+})
 @EnableTransactionManagement
 @EnableJpaRepositories("org.pes.onecemulator.repository")
 public class JpaConfig implements TransactionManagementConfigurer {
@@ -32,6 +37,14 @@ public class JpaConfig implements TransactionManagementConfigurer {
     @Autowired
     public JpaConfig(Environment env) {
         this.env = env;
+    }
+
+    @Bean
+    public SpringLiquibase liquibase() {
+        final SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setChangeLog("classpath:migrations/changelog.xml");
+        liquibase.setDataSource(configureDataSource());
+        return liquibase;
     }
 
     @Bean

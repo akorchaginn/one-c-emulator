@@ -1,0 +1,317 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="18091211610_01" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="source"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="source">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="source" columnNames="id"/>
+
+        <addUniqueConstraint tableName="source" columnNames="name" constraintName="uk_source_name"/>
+
+        <createIndex tableName="source" indexName="i_source_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="18091211610_02" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="payer"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="payer">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="address" type="varchar(255)"/>
+            <column name="code" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(255)"/>
+            <column name="inn" type="varchar(255)"/>
+            <column name="kpp" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey tableName="payer" columnNames="id"/>
+
+        <addUniqueConstraint tableName="payer" columnNames="code" constraintName="uk_payer_code"/>
+
+        <createIndex tableName="payer" indexName="i_payer_code">
+            <column name="code"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="18091211610_03" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="source"/>
+            <tableExists tableName="payer"/>
+            <not>
+                <tableExists tableName="payer_source"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="payer_source">
+            <column name="source_id" type="uuid"/>
+            <column name="payer_id" type="uuid"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="payer_source"
+                                 baseColumnNames="source_id"
+                                 constraintName="fk_payer_source_source_id"
+                                 referencedTableName="source"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="payer_source"
+                                 baseColumnNames="payer_id"
+                                 constraintName="fk_payer_source_payer_id"
+                                 referencedTableName="payer"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="18091211610_04" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="invoice"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="invoice">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="date" type="timestamp without time zone"/>
+            <column name="number" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_oq" type="varchar(255)"/>
+            <column name="payment_date" type="timestamp without time zone"/>
+            <column name="payment_sum" type="varchar(255)"/>
+            <column name="payment_sum_rub" type="varchar(255)"/>
+            <column name="payment_currency" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
+            <column name="sum" type="varchar(255)"/>
+            <column name="sum_rub" type="varchar(255)"/>
+            <column name="currency" type="varchar(255)"/>
+            <column name="external_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payer_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="invoice" columnNames="id"/>
+
+        <addUniqueConstraint tableName="invoice" columnNames="number" constraintName="uk_invoice_number"/>
+
+        <addUniqueConstraint tableName="invoice" columnNames="external_id" constraintName="uk_invoice_external_id"/>
+
+        <createIndex tableName="invoice" indexName="i_invoice_external_id">
+            <column name="external_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="18091211610_05" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="expense_request"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="expense_request">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="currency" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_confirm" type="boolean"/>
+            <column name="is_paid" type="boolean"/>
+            <column name="number" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sum" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="expense_request" columnNames="id"/>
+
+        <addUniqueConstraint tableName="expense_request" columnNames="number" constraintName="uk_expense_request_number"/>
+
+        <addForeignKeyConstraint baseTableName="expense_request"
+                                 baseColumnNames="source_id"
+                                 constraintName="fk_expense_request_source_id"
+                                 referencedTableName="source"
+                                 referencedColumnNames="id"/>
+
+        <createIndex tableName="expense_request" indexName="i_expense_request_number">
+            <column name="number"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="18091211610_06" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="accounting_entry"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="accounting_entry">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="code" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="timestamp without time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="document_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sum" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expense_request_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="accounting_entry" columnNames="id"/>
+
+        <addUniqueConstraint tableName="accounting_entry" columnNames="code" constraintName="uk_accounting_entry_code"/>
+
+        <addForeignKeyConstraint baseTableName="accounting_entry"
+                                 baseColumnNames="expense_request_id"
+                                 constraintName="fk_accounting_entry_expense_request_id"
+                                 referencedTableName="expense_request"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="18091211610_02" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="payer"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="payer">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="address" type="varchar(255)"/>
+            <column name="code" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(255)"/>
+            <column name="inn" type="varchar(255)"/>
+            <column name="kpp" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey tableName="payer" columnNames="id"/>
+
+        <addUniqueConstraint tableName="payer" columnNames="code" constraintName="uk_payer_code"/>
+
+        <createIndex tableName="payer" indexName="i_payer_code">
+            <column name="code"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="18091211610_07" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="employee"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="employee">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="external_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(255)"/>
+            <column name="gender" type="varchar(255)"/>
+            <column name="birthday" type="timestamp without time zone"/>
+            <column name="start_date" type="timestamp without time zone"/>
+            <column name="end_date" type="timestamp without time zone"/>
+            <column name="fiz_id" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey tableName="employee" columnNames="id"/>
+
+        <addUniqueConstraint tableName="employee" columnNames="external_id" constraintName="uk_employee_external_id"/>
+
+        <createIndex tableName="employee" indexName="i_employee_external_id">
+            <column name="external_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="18091211610_08" author="marker91" runOnChange="true" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="source"/>
+            <tableExists tableName="employee"/>
+            <not>
+                <tableExists tableName="employee_source"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="employee_source">
+            <column name="source_id" type="uuid"/>
+            <column name="employee_id" type="uuid"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="employee_source"
+                                 baseColumnNames="source_id"
+                                 constraintName="fk_employee_source_source_id"
+                                 referencedTableName="source"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="employee_source"
+                                 baseColumnNames="employee_id"
+                                 constraintName="fk_employee_source_employee_id"
+                                 referencedTableName="payer"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

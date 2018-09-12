@@ -3,26 +3,13 @@ package org.pes.onecemulator.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
 
 @Entity
-@Table(
-        name = "invoice",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames = "number",
-                        name = "uk_invoice_number"),
-                @UniqueConstraint(
-                        columnNames = "external_id",
-                        name = "uk_invoice_external_id"
-                )
-        }
-)
+@Table(name = "invoice")
 public class Invoice extends AbstractEntity {
 
     @Column(name = "date")
@@ -62,11 +49,11 @@ public class Invoice extends AbstractEntity {
     private String externalId;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "payer_id", foreignKey = @ForeignKey(name = "fk_invoice_payer_id"))
+    @JoinColumn(name = "payer_id")
     private Payer payer;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "source_id", foreignKey = @ForeignKey(name = "fk_invoice_source_id"))
+    @JoinColumn(name = "source_id")
     private Source source;
 
     public LocalDate getDate() {

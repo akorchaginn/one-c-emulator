@@ -2,21 +2,13 @@ package org.pes.onecemulator.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
 
 @Entity
-@Table(
-        name = "accounting_entry",
-        uniqueConstraints = @UniqueConstraint(
-                columnNames = "code",
-                name = "uk_accounting_entry_code"
-        )
-)
+@Table(name = "accounting_entry")
 public class AccountingEntry extends AbstractEntity {
 
     @Column(name = "code", nullable = false)
@@ -32,9 +24,7 @@ public class AccountingEntry extends AbstractEntity {
     private String sum;
 
     @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "expense_request_id",
-            foreignKey = @ForeignKey(name = "fk_accounting_entry_expense_request_id"))
+    @JoinColumn(name = "expense_request_id")
     private ExpenseRequest expenseRequest;
 
     public String getCode() {

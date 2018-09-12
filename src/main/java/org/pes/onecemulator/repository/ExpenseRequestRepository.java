@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public interface ExpenseRequestRepository extends JpaRepository<ExpenseRequest, UUID> {
 
-    @Query("select e from ExpenseRequest e where e.number = :number")
+    @Query("select er from ExpenseRequest er where er.number = :number")
     Optional<ExpenseRequest> findByNumber(@Param(value = "number") String number);
 }
