@@ -329,7 +329,7 @@
         <addForeignKeyConstraint baseTableName="employee_source"
                                  baseColumnNames="employee_id"
                                  constraintName="fk_employee_source_employee_id"
-                                 referencedTableName="payer"
+                                 referencedTableName="employee"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
     </changeSet>

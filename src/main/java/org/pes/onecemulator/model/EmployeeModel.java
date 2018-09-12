@@ -1,35 +1,55 @@
 package org.pes.onecemulator.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 public class EmployeeModel {
 
-    @JsonProperty(value = "id")
+    @JsonProperty("id")
+    private UUID id;
+
+    @JsonProperty(value = "externalId")
     private String externalId;
 
-    @JsonProperty(value = "name")
+    @JsonProperty(value = "fullName")
     private String fullName;
 
-    @JsonProperty(value = "sex")
+    @JsonProperty(value = "gender")
     private String gender;
 
     @JsonProperty(value = "birthday")
     private LocalDate birthday;
 
-    @JsonProperty(value = "work_begin")
+    @JsonProperty(value = "startDate")
     private LocalDate startDate;
 
-    @JsonProperty(value = "dismiss_date")
+    @JsonProperty(value = "endDate")
     private LocalDate endDate;
 
-    @JsonProperty(value = "id_fiz")
+    @JsonProperty(value = "fizId")
     private String fizId;
+
+    @JsonProperty("source")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @Setter(value = AccessLevel.NONE)
+    private Set<String> sources = new HashSet<>();
+
+    public boolean containsWithIgnoreCase(String text) {
+        return externalId.toLowerCase().contains(text)
+                || fizId.toLowerCase().contains(text)
+                || fullName.toLowerCase().contains(text)
+                || sources.stream().anyMatch(s -> s.toLowerCase().contains(text));
+    }
 }

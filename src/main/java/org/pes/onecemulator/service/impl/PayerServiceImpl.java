@@ -8,6 +8,7 @@ import org.pes.onecemulator.model.PayerModel;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.PayerService;
+import org.pes.onecemulator.service.SourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +26,13 @@ public class PayerServiceImpl implements PayerService {
 
     private final SourceRepository sourceRepository;
 
+    private final SourceService sourceService;
+
     @Autowired
-    public PayerServiceImpl(PayerRepository payerRepository, SourceRepository sourceRepository) {
+    public PayerServiceImpl(PayerRepository payerRepository, SourceRepository sourceRepository, SourceService sourceService) {
         this.payerRepository = payerRepository;
         this.sourceRepository = sourceRepository;
+        this.sourceService = sourceService;
     }
 
     @Transactional
@@ -75,7 +79,7 @@ public class PayerServiceImpl implements PayerService {
             throw new ValidationException("Source list is empty.");
         }
 
-        final Set<Source> newSources = updateOrCreateSources(model.getSources());
+        final Set<Source> newSources = sourceService.updateOrCreate(model.getSources());
 
         if (newSources.isEmpty()) {
             throw new ValidationException("New source list is empty.");
@@ -114,7 +118,7 @@ public class PayerServiceImpl implements PayerService {
             throw new ValidationException("Source list is empty.");
         }
 
-        final Set<Source> newSources = updateOrCreateSources(model.getSources());
+        final Set<Source> newSources = sourceService.updateOrCreate(model.getSources());
 
         if (newSources.isEmpty()) {
             throw new ValidationException("New source list is empty.");
@@ -139,22 +143,6 @@ public class PayerServiceImpl implements PayerService {
     @Override
     public void delete(final UUID id) {
         payerRepository.deleteById(id);
-    }
-
-    private Set<Source> updateOrCreateSources(final Set<String> sources) {
-        final Set<Source> newSources = new HashSet<>();
-        sources.forEach(s -> {
-            final Source source = sourceRepository.findByName(s)
-                    .orElseGet(() ->
-                    {
-                        final Source newSource = new Source();
-                        newSource.setName(s);
-                        return newSource;
-                    });
-            newSources.add(source);
-        });
-
-        return newSources;
     }
 
     private PayerModel getModel(final Payer entity) {

@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
+import org.pes.onecemulator.entity.Employee;
 import org.pes.onecemulator.event.ui.UINotificationEvent;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.Invoice;
@@ -7,7 +8,9 @@ import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.httpclient.ExpenseRequestHttp;
 import org.pes.onecemulator.model.DocumentCrm;
+import org.pes.onecemulator.model.EmployeeCrm;
 import org.pes.onecemulator.model.PayerCrm;
+import org.pes.onecemulator.repository.EmployeeRepository;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
@@ -39,12 +42,15 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
 
     private final SourceRepository sourceRepository;
 
+    private final EmployeeRepository employeeRepository;
+
     private final ApplicationEventPublisher publisher;
 
     @Autowired
-    public CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository, ApplicationEventPublisher publisher) {
+    public CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository, EmployeeRepository employeeRepository, ApplicationEventPublisher publisher) {
         this.invoiceRepository = invoiceRepository;
         this.sourceRepository = sourceRepository;
+        this.employeeRepository = employeeRepository;
         this.publisher = publisher;
     }
 
@@ -82,6 +88,18 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .orElse(new HashSet<>())
                 .stream()
                 .map(this::getPayerCrm)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public List<EmployeeCrm> getAllEmployeesCrmBySourceAndExternalIds(final String sourceName, final List<String> externalIds) {
+        return externalIds.stream()
+                .map(employeeRepository::findByExternalId)
+                .map(oe -> oe.orElse(null))
+                .filter(Objects::nonNull)
+                .filter(e -> e.getSources().stream().anyMatch(s -> s.getName().equals(sourceName)))
+                .map(this::getEmployeeCrm)
                 .collect(Collectors.toList());
     }
 
@@ -134,6 +152,19 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         model.setInn(entity.getInn());
         model.setKpp(entity.getKpp());
         model.setAddress(entity.getAddress());
+
+        return model;
+    }
+
+    private EmployeeCrm getEmployeeCrm(final Employee entity) {
+        final EmployeeCrm model = new EmployeeCrm();
+        model.setExternalId(entity.getExternalId());
+        model.setFullName(entity.getFullName());
+        model.setGender(entity.getGender());
+        model.setBirthday(entity.getBirthday());
+        model.setStartDate(entity.getStartDate());
+        model.setEndDate(entity.getEndDate());
+        model.setFizId(entity.getFizId());
 
         return model;
     }

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -98,6 +100,24 @@ public class SourceServiceImpl implements SourceService {
         source = sourceRepository.save(source);
 
         return getModel(source);
+    }
+
+    @Transactional
+    @Override
+    public Set<Source> updateOrCreate(final Set<String> sources) {
+        final Set<Source> newSources = new HashSet<>();
+        sources.forEach(s -> {
+            final Source source = sourceRepository.findByName(s)
+                    .orElseGet(() ->
+                    {
+                        final Source newSource = new Source();
+                        newSource.setName(s);
+                        return newSource;
+                    });
+            newSources.add(source);
+        });
+
+        return newSources;
     }
 
     @Transactional
