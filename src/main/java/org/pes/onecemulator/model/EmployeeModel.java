@@ -41,6 +41,15 @@ public class EmployeeModel {
     @JsonProperty(value = "fizId")
     private String fizId;
 
+    @JsonProperty(value = "position")
+    private String position;
+
+    @JsonProperty(value = "unit")
+    private String unit;
+
+    @JsonProperty(value = "period")
+    private String period;
+
     @JsonProperty("source")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @Setter(value = AccessLevel.NONE)

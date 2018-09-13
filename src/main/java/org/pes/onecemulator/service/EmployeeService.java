@@ -8,8 +8,6 @@ import java.util.UUID;
 
 public interface EmployeeService {
 
-    EmployeeModel getByExternalId(String externalId) throws NotFoundException;
-
     EmployeeModel getById(UUID id) throws NotFoundException;
 
     List<EmployeeModel> list();

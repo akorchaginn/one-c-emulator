@@ -32,4 +32,13 @@ public class EmployeeCrm {
 
     @JsonProperty(value = "id_fiz")
     private String fizId;
+
+    @JsonProperty(value = "position")
+    private String position;
+
+    @JsonProperty(value = "unit")
+    private String unit;
+
+    @JsonProperty(value = "Period")
+    private String period;
 }

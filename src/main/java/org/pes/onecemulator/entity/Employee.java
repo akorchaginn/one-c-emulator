@@ -37,6 +37,15 @@ public class Employee extends AbstractEntity {
     @Column(name = "fiz_id")
     private String fizId;
 
+    @Column(name = "position")
+    private String position;
+
+    @Column(name = "unit")
+    private String unit;
+
+    @Column(name = "period")
+    private String period;
+
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "employee_source",
             joinColumns = { @JoinColumn(name = "employee_id") },
@@ -98,6 +107,30 @@ public class Employee extends AbstractEntity {
 
     public void setFizId(String fizId) {
         this.fizId = fizId;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
     }
 
     public Set<Source> getSources() {

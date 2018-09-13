@@ -165,6 +165,9 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         model.setStartDate(entity.getStartDate());
         model.setEndDate(entity.getEndDate());
         model.setFizId(entity.getFizId());
+        model.setPosition(entity.getPosition());
+        model.setUnit(entity.getUnit());
+        model.setPeriod(entity.getPeriod());
 
         return model;
     }

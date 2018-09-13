@@ -30,13 +30,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeModel getByExternalId(String externalId) throws NotFoundException {
-        return employeeRepository.findByExternalId(externalId)
-                .map(this::getModel)
-                .orElseThrow(() -> new NotFoundException(Employee.class, "externalId: " + externalId));
-    }
-
-    @Override
     public EmployeeModel getById(UUID id) throws NotFoundException {
         return employeeRepository.findById(id)
                 .map(this::getModel)
@@ -79,6 +72,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStartDate(model.getStartDate());
         employee.setEndDate(model.getEndDate());
         employee.setFizId(model.getFizId());
+        employee.setPosition(model.getPosition());
+        employee.setUnit(model.getUnit());
+        employee.setPeriod(model.getPeriod());
         employee.setSources(newSources);
         employee = employeeRepository.save(employee);
 
@@ -115,6 +111,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStartDate(model.getStartDate());
         employee.setEndDate(model.getEndDate());
         employee.setFizId(model.getFizId());
+        employee.setPosition(model.getPosition());
+        employee.setUnit(model.getUnit());
+        employee.setPeriod(model.getPeriod());
         employee.setSources(newSources);
         employee = employeeRepository.save(employee);
 
@@ -136,6 +135,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         model.setStartDate(entity.getStartDate());
         model.setEndDate(entity.getEndDate());
         model.setFizId(entity.getFizId());
+        model.setPosition(entity.getPosition());
+        model.setUnit(entity.getUnit());
+        model.setPeriod(entity.getPeriod());
         model.getSources().addAll(entity.getSources().stream()
                 .map(Source::getName)
                 .collect(Collectors.toSet()));
