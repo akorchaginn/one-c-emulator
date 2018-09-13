@@ -4,6 +4,5 @@
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <include file="1809121161_postgresql.xml" relativeToChangelogFile="true"/>
-    <include file="1809130926_postgresql.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

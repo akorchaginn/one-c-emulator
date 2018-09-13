@@ -294,6 +294,9 @@
             <column name="start_date" type="timestamp without time zone"/>
             <column name="end_date" type="timestamp without time zone"/>
             <column name="fiz_id" type="varchar(255)"/>
+            <column name="position" type="varchar(255)"/>
+            <column name="unit" type="varchar(255)"/>
+            <column name="period" type="varchar(255)"/>
         </createTable>
 
         <addPrimaryKey tableName="employee" columnNames="id"/>
