@@ -103,6 +103,12 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public List<EmployeeCrm> getAllEmployeesCrm() {
+        return employeeRepository.findAll().stream().map(this::getEmployeeCrm).collect(Collectors.toList());
+    }
+
     @Async
     @Override
     public void sendAccountingEntryToCrm(final AccountingEntry accountingEntry) {
@@ -165,6 +171,9 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
         model.setStartDate(entity.getStartDate());
         model.setEndDate(entity.getEndDate());
         model.setFizId(entity.getFizId());
+        model.setPosition(entity.getPosition());
+        model.setUnit(entity.getUnit());
+        model.setPeriod(entity.getPeriod());
 
         return model;
     }

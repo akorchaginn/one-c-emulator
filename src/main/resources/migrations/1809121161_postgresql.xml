@@ -3,7 +3,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-    <changeSet id="18091211610_01" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_01" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="source"/>
@@ -30,7 +30,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="18091211610_02" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_02" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="payer"/>
@@ -62,7 +62,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="18091211610_03" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_03" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="source"/>
             <tableExists tableName="payer"/>
@@ -91,7 +91,7 @@
                                  onDelete="CASCADE"/>
     </changeSet>
 
-    <changeSet id="18091211610_04" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_04" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="invoice"/>
@@ -153,7 +153,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="18091211610_05" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_05" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="expense_request"/>
@@ -198,7 +198,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="18091211610_06" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_06" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="accounting_entry"/>
@@ -240,7 +240,7 @@
                                  onDelete="CASCADE"/>
     </changeSet>
 
-    <changeSet id="18091211610_02" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_02" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="payer"/>
@@ -272,7 +272,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="18091211610_07" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_07" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="employee"/>
@@ -294,6 +294,9 @@
             <column name="start_date" type="timestamp without time zone"/>
             <column name="end_date" type="timestamp without time zone"/>
             <column name="fiz_id" type="varchar(255)"/>
+            <column name="position" type="varchar(255)"/>
+            <column name="unit" type="varchar(255)"/>
+            <column name="period" type="varchar(255)"/>
         </createTable>
 
         <addPrimaryKey tableName="employee" columnNames="id"/>
@@ -305,7 +308,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="18091211610_08" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121161_08" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="source"/>
             <tableExists tableName="employee"/>

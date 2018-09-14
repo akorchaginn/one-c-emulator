@@ -2,10 +2,14 @@ package org.pes.onecemulator.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.pes.onecemulator.model.api.LocalDateDeserializer;
+import org.pes.onecemulator.model.api.LocalDateSerializer;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -30,16 +34,31 @@ public class EmployeeModel {
     private String gender;
 
     @JsonProperty(value = "birthday")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate birthday;
 
     @JsonProperty(value = "startDate")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate startDate;
 
     @JsonProperty(value = "endDate")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate endDate;
 
     @JsonProperty(value = "fizId")
     private String fizId;
+
+    @JsonProperty(value = "position")
+    private String position;
+
+    @JsonProperty(value = "unit")
+    private String unit;
+
+    @JsonProperty(value = "period")
+    private String period;
 
     @JsonProperty("source")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
