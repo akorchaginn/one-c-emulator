@@ -1,9 +1,12 @@
 package org.pes.onecemulator.service.impl;
 
+import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.Employee;
+import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
+import org.pes.onecemulator.httpclient.ExpenseRequestHttp;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.EmployeeCrm;
 import org.pes.onecemulator.model.PayerCrm;
@@ -12,9 +15,12 @@ import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +28,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class CrmInteractionServiceImpl implements CrmInteractionService {
+
+    @Value("${crm.interaction.host:#{null}}")
+    private String crmHost;
+
+    @Value("${crm.interaction.uri:#{null}}")
+    private String crmUri;
+
+    @Value("${crm.interaction.token:#{null}}")
+    private String crmToken;
 
     private final InvoiceRepository invoiceRepository;
 
@@ -91,6 +106,24 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Override
     public List<EmployeeCrm> getAllEmployeesCrm() {
         return employeeRepository.findAll().stream().map(this::getEmployeeCrm).collect(Collectors.toList());
+    }
+
+    @Async
+    public void sendAccountingEntryToCrm(final AccountingEntry accountingEntry) throws Exception {
+        final ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
+        final ExpenseRequestHttp expenseRequestHttp =
+                new ExpenseRequestHttp(crmHost, crmUri, crmToken,
+                        expenseRequest.getNumber(),
+                        accountingEntry.getSum(),
+                        Boolean.TRUE.equals(expenseRequest.getPaid()),
+                        expenseRequest.getCurrency(),
+                        accountingEntry.getCode(),
+                        accountingEntry.getDocumentName(),
+                        Boolean.TRUE.equals(expenseRequest.getConfirm()),
+                        accountingEntry.getDate(),
+                        expenseRequest.getSource().getName(),
+                        DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        expenseRequestHttp.call();
     }
 
     private DocumentCrm getDocumentCrm(final Invoice entity) {

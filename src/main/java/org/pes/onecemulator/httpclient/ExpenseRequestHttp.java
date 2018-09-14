@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class ExpenseRequestHttp {
@@ -43,14 +44,16 @@ public class ExpenseRequestHttp {
 
     private DateTimeFormatter formatter;
 
-    public void call() {
+    public void call() throws Exception {
         final String params =
                 String.join(",", number, sum, paid ? "1" : "0", currency, code, documentName, confirm ? "1" : "0");
         final HttpGet httpGet = new HttpGet(host + uri + "/" + params + "/" + date.format(formatter));
         httpGet.setHeader("crm-api-token", token);
         httpGet.setHeader("crm-1c-database-source", source);
 
-        LOGGER.info("Request to CRM: " + httpGet.toString() + " : " + Arrays.toString(httpGet.getAllHeaders()));
+        LOGGER.info("Start request: " + httpGet.toString() + " -> " + Arrays.stream(httpGet.getAllHeaders())
+                .map(h -> h.getName() + ": " + h.getValue())
+                .collect(Collectors.joining(", ")));
 
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             try (CloseableHttpResponse response = client.execute(httpGet)) {
@@ -59,7 +62,7 @@ public class ExpenseRequestHttp {
                 }
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            throw new Exception(e);
         }
     }
 }

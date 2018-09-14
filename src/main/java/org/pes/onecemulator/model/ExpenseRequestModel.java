@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -19,15 +20,18 @@ public class ExpenseRequestModel {
 
     @JsonProperty("source")
     @NotNull
+    @NotEmpty
     private String source;
 
     @JsonProperty("currency")
     @NotNull
+    @NotEmpty
     private String currency;
 
     @JsonProperty("isConfirm")
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     @NotNull
+    @NotEmpty
     private boolean isConfirm;
 
     @JsonProperty("isPaid")
@@ -37,10 +41,12 @@ public class ExpenseRequestModel {
 
     @JsonProperty("number")
     @NotNull
+    @NotEmpty
     private String number;
 
     @JsonProperty("sum")
     @NotNull
+    @NotEmpty
     private String sum;
 
     public boolean containsWithIgnoreCase(String text) {

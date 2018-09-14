@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.pes.onecemulator.model.api.LocalDateDeserializer;
 import org.pes.onecemulator.model.api.LocalDateSerializer;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class AccountingEntryModel {
 
     @JsonProperty("operationCode")
     @NotNull
+    @NotEmpty
     private String code;
 
     @JsonProperty("date")
@@ -32,14 +34,18 @@ public class AccountingEntryModel {
     private LocalDate date;
 
     @JsonProperty("docName")
+    @NotNull
+    @NotEmpty
     private String documentName;
 
     @JsonProperty("expenseNumber")
     @NotNull
+    @NotEmpty
     private String expenseNumber;
 
     @JsonProperty("sum")
     @NotNull
+    @NotEmpty
     private String sum;
 
     public boolean containsWithIgnoreCase(String text) {

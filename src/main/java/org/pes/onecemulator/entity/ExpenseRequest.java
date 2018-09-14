@@ -2,7 +2,6 @@ package org.pes.onecemulator.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -26,7 +25,7 @@ public class ExpenseRequest extends AbstractEntity {
     @Column(name = "sum", nullable = false)
     private String sum;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "source_id")
     private Source source;
 

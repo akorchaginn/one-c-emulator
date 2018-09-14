@@ -11,6 +11,7 @@ import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
+import org.pes.onecemulator.exception.util.ExceptionUtils;
 import org.pes.onecemulator.view.fundamentals.notification.ErrorNotification;
 
 @Push(transport = Transport.WEBSOCKET_XHR)
@@ -28,7 +29,7 @@ public class ApplicationUI extends UI implements ViewDisplay {
         UI.getCurrent().setErrorHandler(new DefaultErrorHandler() {
             @Override
             public void error(com.vaadin.server.ErrorEvent event) {
-                ErrorNotification.show(event.getThrowable().getMessage() +
+                ErrorNotification.show(ExceptionUtils.getCause(event.getThrowable()).getMessage() +
                         "\n -> "
                         + event.getThrowable());
                 doDefault(event);
