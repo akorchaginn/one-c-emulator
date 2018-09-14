@@ -24,7 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final SourceService sourceService;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, SourceService sourceService) {
+    public EmployeeServiceImpl(final EmployeeRepository employeeRepository,
+                               final SourceService sourceService) {
         this.employeeRepository = employeeRepository;
         this.sourceService = sourceService;
     }

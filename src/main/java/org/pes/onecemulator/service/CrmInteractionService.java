@@ -1,6 +1,5 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.EmployeeCrm;
 import org.pes.onecemulator.model.PayerCrm;
@@ -18,6 +17,4 @@ public interface CrmInteractionService {
     List<EmployeeCrm> getAllEmployeesCrmBySourceAndExternalIds(String source, List<String> externalIds);
 
     List<EmployeeCrm> getAllEmployeesCrm();
-
-    void sendAccountingEntryToCrm(AccountingEntry accountingEntry);
 }

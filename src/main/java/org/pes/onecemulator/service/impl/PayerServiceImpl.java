@@ -29,7 +29,9 @@ public class PayerServiceImpl implements PayerService {
     private final SourceService sourceService;
 
     @Autowired
-    public PayerServiceImpl(PayerRepository payerRepository, SourceRepository sourceRepository, SourceService sourceService) {
+    public PayerServiceImpl(final PayerRepository payerRepository,
+                            final SourceRepository sourceRepository,
+                            final SourceService sourceService) {
         this.payerRepository = payerRepository;
         this.sourceRepository = sourceRepository;
         this.sourceService = sourceService;

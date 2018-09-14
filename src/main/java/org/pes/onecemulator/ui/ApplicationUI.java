@@ -11,10 +11,7 @@ import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
-import org.pes.onecemulator.event.ui.UINotificationEvent;
 import org.pes.onecemulator.view.fundamentals.notification.ErrorNotification;
-import org.pes.onecemulator.view.fundamentals.notification.InfoNotification;
-import org.springframework.context.event.EventListener;
 
 @Push(transport = Transport.WEBSOCKET_XHR)
 @SpringUI
@@ -47,17 +44,5 @@ public class ApplicationUI extends UI implements ViewDisplay {
         }
         content.getSideMenu().selectedItemRelatedTo(view);
         content.getViewDisplay().setContent(view.getViewComponent());
-    }
-
-    @EventListener
-    @SuppressWarnings("unused")
-    public void processUINotification(final UINotificationEvent event) {
-        if (event.getDescription() != null) {
-            if (event.getError()) {
-                getSession().access(() -> ErrorNotification.show(event.getDescription()));
-            } else {
-                getSession().access(() -> InfoNotification.show(event.getDescription()));
-            }
-        }
     }
 }

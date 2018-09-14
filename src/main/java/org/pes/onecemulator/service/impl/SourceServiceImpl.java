@@ -22,7 +22,7 @@ public class SourceServiceImpl implements SourceService {
     private final SourceRepository sourceRepository;
 
     @Autowired
-    public SourceServiceImpl(SourceRepository sourceRepository) {
+    public SourceServiceImpl(final SourceRepository sourceRepository) {
         this.sourceRepository = sourceRepository;
     }
 
@@ -117,7 +117,7 @@ public class SourceServiceImpl implements SourceService {
             newSources.add(source);
         });
 
-        return newSources;
+        return new HashSet<>(sourceRepository.saveAll(newSources));
     }
 
     @Transactional

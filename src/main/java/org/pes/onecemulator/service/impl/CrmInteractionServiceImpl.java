@@ -1,12 +1,9 @@
 package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.Employee;
-import org.pes.onecemulator.event.ui.UINotificationEvent;
-import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
-import org.pes.onecemulator.httpclient.ExpenseRequestHttp;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.EmployeeCrm;
 import org.pes.onecemulator.model.PayerCrm;
@@ -15,9 +12,6 @@ import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,29 +23,19 @@ import java.util.stream.Collectors;
 @Service
 public class CrmInteractionServiceImpl implements CrmInteractionService {
 
-    @Value("${crm.interaction.host:#{null}}")
-    private String crmHost;
-
-    @Value("${crm.interaction.uri:#{null}}")
-    private String crmUri;
-
-    @Value("${crm.interaction.token:#{null}}")
-    private String crmToken;
-
     private final InvoiceRepository invoiceRepository;
 
     private final SourceRepository sourceRepository;
 
     private final EmployeeRepository employeeRepository;
 
-    private final ApplicationEventPublisher publisher;
-
     @Autowired
-    public CrmInteractionServiceImpl(InvoiceRepository invoiceRepository, SourceRepository sourceRepository, EmployeeRepository employeeRepository, ApplicationEventPublisher publisher) {
+    public CrmInteractionServiceImpl(final InvoiceRepository invoiceRepository,
+                                     final SourceRepository sourceRepository,
+                                     final EmployeeRepository employeeRepository) {
         this.invoiceRepository = invoiceRepository;
         this.sourceRepository = sourceRepository;
         this.employeeRepository = employeeRepository;
-        this.publisher = publisher;
     }
 
     @Transactional
@@ -107,26 +91,6 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Override
     public List<EmployeeCrm> getAllEmployeesCrm() {
         return employeeRepository.findAll().stream().map(this::getEmployeeCrm).collect(Collectors.toList());
-    }
-
-    @Async
-    @Override
-    public void sendAccountingEntryToCrm(final AccountingEntry accountingEntry) {
-        try {
-            final ExpenseRequestHttp expenseRequestHttp =
-                    new ExpenseRequestHttp(accountingEntry, crmHost, crmUri, crmToken);
-            postExpenseRequestInfoToUI(expenseRequestHttp.call());
-        } catch (Exception e) {
-            postExpenseRequestErrorToUI(e);
-        }
-    }
-
-    private void postExpenseRequestInfoToUI(String uri) {
-        publisher.publishEvent(new UINotificationEvent(this, "Запрос: " + uri + " отправлен в CRM.", false));
-    }
-
-    private void postExpenseRequestErrorToUI(Exception e) {
-        publisher.publishEvent(new UINotificationEvent(this, "Ошибка отправки запроса в CRM: " + e.getMessage(), true));
     }
 
     private DocumentCrm getDocumentCrm(final Invoice entity) {

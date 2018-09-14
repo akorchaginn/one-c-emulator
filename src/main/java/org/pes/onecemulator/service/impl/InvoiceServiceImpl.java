@@ -28,7 +28,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final SourceRepository sourceRepository;
 
     @Autowired
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, PayerRepository payerRepository, SourceRepository sourceRepository) {
+    public InvoiceServiceImpl(final InvoiceRepository invoiceRepository,
+                              final PayerRepository payerRepository,
+                              final SourceRepository sourceRepository) {
         this.invoiceRepository = invoiceRepository;
         this.payerRepository = payerRepository;
         this.sourceRepository = sourceRepository;

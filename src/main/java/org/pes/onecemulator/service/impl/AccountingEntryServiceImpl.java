@@ -4,15 +4,17 @@ import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
+import org.pes.onecemulator.httpclient.ExpenseRequestHttp;
 import org.pes.onecemulator.model.AccountingEntryModel;
 import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.service.AccountingEntryService;
-import org.pes.onecemulator.service.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,17 +22,25 @@ import java.util.stream.Collectors;
 @Service
 public class AccountingEntryServiceImpl implements AccountingEntryService {
 
+    @Value("${crm.interaction.host:#{null}}")
+    private String crmHost;
+
+    @Value("${crm.interaction.uri:#{null}}")
+    private String crmUri;
+
+    @Value("${crm.interaction.token:#{null}}")
+    private String crmToken;
+
     private final ExpenseRequestRepository expenseRequestRepository;
 
     private final AccountingEntryRepository accountingEntryRepository;
 
-    private final CrmInteractionService crmInteractionService;
 
     @Autowired
-    public AccountingEntryServiceImpl(ExpenseRequestRepository expenseRequestRepository, AccountingEntryRepository accountingEntryRepository, CrmInteractionService crmInteractionService) {
+    public AccountingEntryServiceImpl(final ExpenseRequestRepository expenseRequestRepository,
+                                      final AccountingEntryRepository accountingEntryRepository) {
         this.expenseRequestRepository = expenseRequestRepository;
         this.accountingEntryRepository = accountingEntryRepository;
-        this.crmInteractionService = crmInteractionService;
     }
 
     @Transactional
@@ -74,8 +84,8 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(model.getSum());
-        accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
-        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
+        accountingEntry = accountingEntryRepository.save(accountingEntry);
+        sendAccountingEntryToCrm(accountingEntry);
 
         return getModel(accountingEntry);
     }
@@ -105,9 +115,8 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(model.getSum());
-        accountingEntry = accountingEntryRepository.saveAndFlush(accountingEntry);
-
-        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
+        accountingEntry = accountingEntryRepository.save(accountingEntry);
+        sendAccountingEntryToCrm(accountingEntry);
 
         return getModel(accountingEntry);
     }
@@ -131,5 +140,22 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         model.setSum(entity.getSum());
 
         return model;
+    }
+
+    private void sendAccountingEntryToCrm(final AccountingEntry accountingEntry) {
+        final ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
+        final ExpenseRequestHttp expenseRequestHttp =
+                new ExpenseRequestHttp(crmHost, crmUri, crmToken,
+                        expenseRequest.getNumber(),
+                        accountingEntry.getSum(),
+                        Boolean.TRUE.equals(expenseRequest.getPaid()),
+                        expenseRequest.getCurrency(),
+                        accountingEntry.getCode(),
+                        accountingEntry.getDocumentName(),
+                        Boolean.TRUE.equals(expenseRequest.getConfirm()),
+                        accountingEntry.getDate(),
+                        expenseRequest.getSource().getName(),
+                        DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        expenseRequestHttp.call();
     }
 }

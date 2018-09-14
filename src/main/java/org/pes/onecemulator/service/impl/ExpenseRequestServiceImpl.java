@@ -24,7 +24,8 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     private final SourceRepository sourceRepository;
 
     @Autowired
-    public ExpenseRequestServiceImpl(ExpenseRequestRepository expenseRequestRepository, SourceRepository sourceRepository) {
+    public ExpenseRequestServiceImpl(final ExpenseRequestRepository expenseRequestRepository,
+                                     final SourceRepository sourceRepository) {
         this.expenseRequestRepository = expenseRequestRepository;
         this.sourceRepository = sourceRepository;
     }
