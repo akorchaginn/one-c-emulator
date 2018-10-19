@@ -17,7 +17,7 @@ public interface CrmInteractionService {
 
     List<EmployeeCrm> getAllEmployeesCrmBySourceAndExternalIds(String source, List<String> externalIds);
 
-    List<EmployeeCrm> getAllEmployeesCrm();
+    List<EmployeeCrm> getAllEmployeesCrmBySource(String source);
 
     void sendAccountingEntryToCrm(final AccountingEntry accountingEntry) throws Exception;
 }

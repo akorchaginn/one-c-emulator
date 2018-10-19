@@ -99,7 +99,7 @@ public class CrmInteractionController {
         }
 
         if (employees.stream().anyMatch(e -> e.getExternalId() == null || e.getExternalId().isEmpty())) {
-            return crmInteractionService.getAllEmployeesCrm();
+            return crmInteractionService.getAllEmployeesCrmBySource(source);
         }
 
         final List<EmployeeCrm> result = crmInteractionService.getAllEmployeesCrmBySourceAndExternalIds(source,
