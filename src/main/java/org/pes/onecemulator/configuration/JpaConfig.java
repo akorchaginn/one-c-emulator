@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -24,10 +23,7 @@ import java.util.Properties;
 
 @Configuration
 @EntityScan(basePackages = "org.pes.onecemulator.entity")
-@PropertySources({
-        @PropertySource(value = "classpath:database.properties"),
-        @PropertySource(value = "file:/etc/one-c/database.properties", ignoreResourceNotFound = true)
-})
+@PropertySource(value = {"classpath:database.properties", "file:/etc/one-c/database.properties"}, ignoreResourceNotFound = true)
 @EnableTransactionManagement
 @EnableJpaRepositories("org.pes.onecemulator.repository")
 public class JpaConfig implements TransactionManagementConfigurer {
