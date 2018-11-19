@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
+import org.pes.onecemulator.converter.AccountingEntryModelConverter;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.exception.NotFoundException;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class AccountingEntryServiceImpl implements AccountingEntryService {
 
+    private static final AccountingEntryModelConverter ACCOUNTING_ENTRY_MODEL_CONVERTER = new AccountingEntryModelConverter();
+
     private final ExpenseRequestRepository expenseRequestRepository;
 
     private final AccountingEntryRepository accountingEntryRepository;
@@ -35,20 +38,18 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         this.crmInteractionService = crmInteractionService;
     }
 
-    @Transactional
     @Override
     public AccountingEntryModel getById(final UUID id) throws NotFoundException {
-        final AccountingEntry accountingEntry = accountingEntryRepository.findById(id)
+        return accountingEntryRepository.findById(id)
+                .map(ACCOUNTING_ENTRY_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(AccountingEntryModel.class, id));
-        return getModel(accountingEntry);
     }
 
-    @Transactional
     @Override
     public List<AccountingEntryModel> list() {
         return accountingEntryRepository.findAll()
                 .stream()
-                .map(this::getModel)
+                .map(ACCOUNTING_ENTRY_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
@@ -79,7 +80,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry = accountingEntryRepository.save(accountingEntry);
         crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
-        return getModel(accountingEntry);
+        return ACCOUNTING_ENTRY_MODEL_CONVERTER.convert(accountingEntry);
     }
 
     @Transactional
@@ -110,27 +111,12 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry = accountingEntryRepository.save(accountingEntry);
         crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
 
-        return getModel(accountingEntry);
+        return ACCOUNTING_ENTRY_MODEL_CONVERTER.convert(accountingEntry);
     }
 
     @Transactional
     @Override
     public void delete(final UUID id) {
        accountingEntryRepository.deleteById(id);
-    }
-
-    private AccountingEntryModel getModel(final AccountingEntry entity) {
-        final AccountingEntryModel model = new AccountingEntryModel();
-        model.setId(entity.getId());
-        model.setCode(entity.getCode());
-        model.setDate(entity.getDate());
-        model.setDocumentName(entity.getDocumentName());
-        model.setExpenseNumber(entity.getExpenseRequest() != null
-                ? entity.getExpenseRequest().getNumber()
-                : null
-        );
-        model.setSum(entity.getSum());
-
-        return model;
     }
 }

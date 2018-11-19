@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
+import org.pes.onecemulator.converter.ExpenseRequestModelConverter;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @Service
 public class ExpenseRequestServiceImpl implements ExpenseRequestService {
 
+    private static final ExpenseRequestModelConverter EXPENSE_REQUEST_MODEL_CONVERTER = new ExpenseRequestModelConverter();
+
     private final ExpenseRequestRepository expenseRequestRepository;
 
     private final SourceRepository sourceRepository;
@@ -33,9 +36,9 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     @Transactional
     @Override
     public ExpenseRequestModel getById(final UUID id) throws NotFoundException {
-        final ExpenseRequest expenseRequest = expenseRequestRepository.findById(id)
+        return expenseRequestRepository.findById(id)
+                .map(EXPENSE_REQUEST_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, id));
-        return getModel(expenseRequest);
     }
 
     @Transactional
@@ -43,7 +46,7 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     public List<ExpenseRequestModel> list() {
         return expenseRequestRepository.findAll()
                 .stream()
-                .map(this::getModel)
+                .map(EXPENSE_REQUEST_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
@@ -75,7 +78,7 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         expenseRequest.setSum(model.getSum());
         expenseRequest = expenseRequestRepository.save(expenseRequest);
 
-        return getModel(expenseRequest);
+        return EXPENSE_REQUEST_MODEL_CONVERTER.convert(expenseRequest);
     }
 
     @Transactional
@@ -112,25 +115,12 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         expenseRequest.setSum(model.getSum());
         expenseRequest = expenseRequestRepository.save(expenseRequest);
 
-        return getModel(expenseRequest);
+        return EXPENSE_REQUEST_MODEL_CONVERTER.convert(expenseRequest);
     }
 
     @Transactional
     @Override
     public void delete(final UUID id) {
         expenseRequestRepository.deleteById(id);
-    }
-
-    private ExpenseRequestModel getModel(final ExpenseRequest entity) {
-        final ExpenseRequestModel model = new ExpenseRequestModel();
-        model.setId(entity.getId());
-        model.setSource(entity.getSource().getName());
-        model.setCurrency(entity.getCurrency());
-        model.setConfirm(Boolean.TRUE.equals(entity.getConfirm()));
-        model.setPaid(Boolean.TRUE.equals(entity.getPaid()));
-        model.setNumber(entity.getNumber());
-        model.setSum(entity.getSum());
-
-        return model;
     }
 }

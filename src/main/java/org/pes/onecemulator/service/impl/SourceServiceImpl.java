@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
+import org.pes.onecemulator.converter.SourceModelConverter;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @Service
 public class SourceServiceImpl implements SourceService {
 
+    private static final SourceModelConverter SOURCE_MODEL_CONVERTER = new SourceModelConverter();
+
     private final SourceRepository sourceRepository;
 
     @Autowired
@@ -26,28 +29,25 @@ public class SourceServiceImpl implements SourceService {
         this.sourceRepository = sourceRepository;
     }
 
-    @Transactional
     @Override
     public SourceModel getById(final UUID id) throws NotFoundException {
-        Source source = sourceRepository.findById(id)
+        return sourceRepository.findById(id)
+                .map(SOURCE_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Source.class, id));
-        return getModel(source);
     }
 
-    @Transactional
     @Override
     public SourceModel getByName(final String name) throws NotFoundException {
-        Source source = sourceRepository.findByName(name)
+        return sourceRepository.findByName(name)
+                .map(SOURCE_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Source.class, "name:" + name));
-        return getModel(source);
     }
 
-    @Transactional
     @Override
     public List<SourceModel> list() {
         return sourceRepository.findAll()
                 .stream()
-                .map(this::getModel)
+                .map(SOURCE_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
@@ -71,7 +71,7 @@ public class SourceServiceImpl implements SourceService {
         source.setName(model.getName());
         source = sourceRepository.save(source);
 
-        return getModel(source);
+        return SOURCE_MODEL_CONVERTER.convert(source);
     }
 
     @Transactional
@@ -99,7 +99,7 @@ public class SourceServiceImpl implements SourceService {
         source.setName(model.getName());
         source = sourceRepository.save(source);
 
-        return getModel(source);
+        return SOURCE_MODEL_CONVERTER.convert(source);
     }
 
     @Transactional
@@ -124,13 +124,5 @@ public class SourceServiceImpl implements SourceService {
     @Override
     public void delete(final UUID id) {
         sourceRepository.deleteById(id);
-    }
-
-    private SourceModel getModel(final Source entity) {
-        final SourceModel model = new SourceModel();
-        model.setId(entity.getId());
-        model.setName(entity.getName());
-
-        return model;
     }
 }

@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
+import org.pes.onecemulator.converter.PayerModelConverter;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 @Service
 public class PayerServiceImpl implements PayerService {
 
+    private static final PayerModelConverter PAYER_MODEL_CONVERTER = new PayerModelConverter();
+
     private final PayerRepository payerRepository;
 
     private final SourceRepository sourceRepository;
@@ -37,31 +40,28 @@ public class PayerServiceImpl implements PayerService {
         this.sourceService = sourceService;
     }
 
-    @Transactional
     @Override
     public PayerModel getById(final UUID id) throws NotFoundException {
-        final Payer payer = payerRepository.findById(id)
+        return payerRepository.findById(id)
+                .map(PAYER_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Payer.class, id));
-        return getModel(payer);
     }
 
-    @Transactional
     @Override
     public List<PayerModel> list() {
         return payerRepository.findAll()
                 .stream()
-                .map(this::getModel)
+                .map(PAYER_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
     public List<PayerModel> listBySource(final String source) {
         return sourceRepository.findByName(source)
                 .map(Source::getPayers)
                 .orElse(new HashSet<>())
                 .stream()
-                .map(this::getModel)
+                .map(PAYER_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
@@ -97,7 +97,7 @@ public class PayerServiceImpl implements PayerService {
         payer.setSources(newSources);
         payer = payerRepository.save(payer);
 
-        return getModel(payer);
+        return PAYER_MODEL_CONVERTER.convert(payer);
     }
 
     @Transactional
@@ -138,30 +138,12 @@ public class PayerServiceImpl implements PayerService {
         payer.setSources(newSources);
         payer = payerRepository.save(payer);
 
-        return getModel(payer);
+        return PAYER_MODEL_CONVERTER.convert(payer);
     }
 
     @Transactional
     @Override
     public void delete(final UUID id) {
         payerRepository.deleteById(id);
-    }
-
-    private PayerModel getModel(final Payer entity) {
-        final PayerModel model = new PayerModel();
-        model.setId(entity.getId());
-        model.setCode(entity.getCode());
-        model.setName(entity.getName());
-        model.setFullName(entity.getFullName());
-        model.setInn(entity.getInn());
-        model.setKpp(entity.getKpp());
-        model.setAddress(entity.getAddress());
-        final Set<String> sources = entity.getSources()
-                .stream()
-                .map(Source::getName)
-                .collect(Collectors.toSet());
-        model.getSources().addAll(sources);
-
-        return model;
     }
 }

@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
+import org.pes.onecemulator.converter.InvoiceModelConverter;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
 
+    private static final InvoiceModelConverter INVOICE_MODEL_CONVERTER = new InvoiceModelConverter();
+
     private final InvoiceRepository invoiceRepository;
 
     private final PayerRepository payerRepository;
@@ -36,20 +39,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         this.sourceRepository = sourceRepository;
     }
 
-    @Transactional
     @Override
     public InvoiceModel getById(final UUID id) throws NotFoundException {
-        final Invoice invoice = invoiceRepository.findById(id)
+        return invoiceRepository.findById(id)
+                .map(INVOICE_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Invoice.class, id));
-        return getModel(invoice);
     }
 
-    @Transactional
     @Override
     public List<InvoiceModel> list() {
         return invoiceRepository.findAll()
                 .stream()
-                .map(this::getModel)
+                .map(INVOICE_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
@@ -96,7 +97,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setSumRUB(model.getSumRUB());
         invoice = invoiceRepository.save(invoice);
 
-        return getModel(invoice);
+        return INVOICE_MODEL_CONVERTER.convert(invoice);
     }
 
     @Transactional
@@ -148,33 +149,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setSumRUB(model.getSumRUB());
         invoice = invoiceRepository.save(invoice);
 
-        return getModel(invoice);
+        return INVOICE_MODEL_CONVERTER.convert(invoice);
     }
 
     @Transactional
     @Override
     public void delete(final UUID id) {
         invoiceRepository.deleteById(id);
-    }
-
-    private InvoiceModel getModel(final Invoice entity) {
-        final InvoiceModel model = new InvoiceModel();
-        model.setId(entity.getId());
-        model.setSource(entity.getSource().getName());
-        model.setDate(entity.getDate());
-        model.setNumber(entity.getNumber());
-        model.setNumberOq(entity.getNumberOq());
-        model.setPayerCode(entity.getPayer().getCode());
-        model.setPaymentDate(entity.getPaymentDate());
-        model.setPaymentSumRUB(entity.getPaymentSumRUB());
-        model.setStatus(entity.getStatus());
-        model.setSum(entity.getSum());
-        model.setExternalId(entity.getExternalId());
-        model.setPaymentCurrency(entity.getPaymentCurrency());
-        model.setCurrency(entity.getCurrency());
-        model.setPaymentSum(entity.getPaymentSum());
-        model.setSumRUB(entity.getSumRUB());
-
-        return model;
     }
 }
