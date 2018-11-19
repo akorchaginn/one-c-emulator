@@ -33,7 +33,6 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         this.sourceRepository = sourceRepository;
     }
 
-    @Transactional
     @Override
     public ExpenseRequestModel getById(final UUID id) throws NotFoundException {
         return expenseRequestRepository.findById(id)
@@ -41,7 +40,6 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
                 .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, id));
     }
 
-    @Transactional
     @Override
     public List<ExpenseRequestModel> list() {
         return expenseRequestRepository.findAll()
