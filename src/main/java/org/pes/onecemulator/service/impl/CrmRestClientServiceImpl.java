@@ -57,11 +57,14 @@ public class CrmRestClientServiceImpl implements CrmRestClientService {
                 .setHeader(CRM_1C_DATABASE_SOURCE, expenseRequest.getSource().getName())
                 .build();
 
-        LOGGER.info("Request: " + request.toString() + " -> " + request.headers());
+        LOGGER.info("Request: " + request + " headers = " + request.headers());
 
         final HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
-        LOGGER.info("Response: " + response.statusCode() + " " + response.body() + " " + response.headers());
+        LOGGER.info("Response:" +
+                " status code = " + response.statusCode() +
+                " body = " + response.body() +
+                " headers = " + response.headers());
 
         if (response.statusCode() != 200) {
             throw new Exception("Status code not equal 200.");
