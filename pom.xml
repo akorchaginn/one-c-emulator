@@ -5,7 +5,7 @@
 
 	<groupId>org.pes.onecemulator</groupId>
 	<artifactId>one-c-emulator</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>one-c-emulator</name>
@@ -21,10 +21,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<HikariCP.version>3.2.0</HikariCP.version>
 		<springfox.version>2.9.2</springfox.version>
-		<httpclient.version>4.5.6</httpclient.version>
 		<vaadin.version>3.0.1</vaadin.version>
 		<vaadin-push.version>8.4.5</vaadin-push.version>
 		<h2.version>1.4.197</h2.version>
@@ -67,12 +66,6 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${springfox.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>${httpclient.version}</version>
 		</dependency>
 
 		<dependency>

@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.ExpenseRequestModel;
 public class ExpenseRequestModelConverter implements Converter<ExpenseRequest, ExpenseRequestModel> {
 
     @Override
-    public ExpenseRequestModel convert(ExpenseRequest entity) {
+    public ExpenseRequestModel convert(final ExpenseRequest entity) {
         final ExpenseRequestModel model = new ExpenseRequestModel();
         model.setId(entity.getId());
         model.setSource(entity.getSource().getName());

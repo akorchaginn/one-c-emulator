@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class EmployeeModelConverter implements Converter<Employee, EmployeeModel> {
 
     @Override
-    public EmployeeModel convert(Employee entity) {
+    public EmployeeModel convert(final Employee entity) {
         final EmployeeModel model = new EmployeeModel();
         model.setId(entity.getId());
         model.setExternalId(entity.getExternalId());

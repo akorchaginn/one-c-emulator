@@ -1,8 +1,10 @@
 package org.pes.onecemulator.converter;
 
-import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.Invoice;
+import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.model.DocumentCrm;
+
+import java.util.Optional;
 
 public class DocumentCrmConverter implements Converter<Invoice, DocumentCrm> {
 
@@ -12,7 +14,9 @@ public class DocumentCrmConverter implements Converter<Invoice, DocumentCrm> {
         model.setId(entity.getId());
         model.setNumber(entity.getNumber());
         model.setNumberOq(entity.getNumberOq());
-        model.setPayerName(entity.getPayer() != null ? entity.getPayer().getName() : null);
+        model.setPayerName(Optional.ofNullable(entity.getPayer())
+                .map(Payer::getName)
+                .orElse(null));
         model.setInvoiceSum(entity.getSum());
         model.setDate(entity.getDate());
         model.setStatus(entity.getStatus());

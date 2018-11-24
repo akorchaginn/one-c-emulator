@@ -6,7 +6,7 @@ import org.pes.onecemulator.model.InvoiceModel;
 public class InvoiceModelConverter implements Converter<Invoice, InvoiceModel> {
 
     @Override
-    public InvoiceModel convert(Invoice entity) {
+    public InvoiceModel convert(final Invoice entity) {
         final InvoiceModel model = new InvoiceModel();
         model.setId(entity.getId());
         model.setSource(entity.getSource().getName());

@@ -9,7 +9,7 @@ import org.pes.onecemulator.model.AccountingEntryModel;
 import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.service.AccountingEntryService;
-import org.pes.onecemulator.service.CrmInteractionService;
+import org.pes.onecemulator.service.CrmRestClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +27,15 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
 
     private final AccountingEntryRepository accountingEntryRepository;
 
-    private final CrmInteractionService crmInteractionService;
+    private final CrmRestClientService crmRestClientService;
 
     @Autowired
     public AccountingEntryServiceImpl(final ExpenseRequestRepository expenseRequestRepository,
                                       final AccountingEntryRepository accountingEntryRepository,
-                                      final CrmInteractionService crmInteractionService) {
+                                      final CrmRestClientService crmRestClientService) {
         this.expenseRequestRepository = expenseRequestRepository;
         this.accountingEntryRepository = accountingEntryRepository;
-        this.crmInteractionService = crmInteractionService;
+        this.crmRestClientService = crmRestClientService;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(model.getSum());
         accountingEntry = accountingEntryRepository.save(accountingEntry);
-        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
+        crmRestClientService.sendExpenseRequest(accountingEntry);
 
         return ACCOUNTING_ENTRY_MODEL_CONVERTER.convert(accountingEntry);
     }
@@ -109,7 +109,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(model.getSum());
         accountingEntry = accountingEntryRepository.save(accountingEntry);
-        crmInteractionService.sendAccountingEntryToCrm(accountingEntry);
+        crmRestClientService.sendExpenseRequest(accountingEntry);
 
         return ACCOUNTING_ENTRY_MODEL_CONVERTER.convert(accountingEntry);
     }

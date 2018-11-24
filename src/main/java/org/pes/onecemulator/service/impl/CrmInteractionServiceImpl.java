@@ -3,10 +3,7 @@ package org.pes.onecemulator.service.impl;
 import org.pes.onecemulator.converter.DocumentCrmConverter;
 import org.pes.onecemulator.converter.EmployeeCrmConverter;
 import org.pes.onecemulator.converter.PayerCrmConverter;
-import org.pes.onecemulator.entity.AccountingEntry;
-import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Source;
-import org.pes.onecemulator.httpclient.ExpenseRequestHttp;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.EmployeeCrm;
 import org.pes.onecemulator.model.PayerCrm;
@@ -15,8 +12,6 @@ import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -32,15 +27,6 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     private static final PayerCrmConverter PAYER_CRM_CONVERTER = new PayerCrmConverter();
 
     private static final EmployeeCrmConverter EMPLOYEE_CRM_CONVERTER = new EmployeeCrmConverter();
-
-    @Value("${crm.interaction.host:#{null}}")
-    private String crmHost;
-
-    @Value("${crm.interaction.uri:#{null}}")
-    private String crmUri;
-
-    @Value("${crm.interaction.token:#{null}}")
-    private String crmToken;
 
     private final InvoiceRepository invoiceRepository;
 
@@ -110,24 +96,5 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .stream()
                 .map(EMPLOYEE_CRM_CONVERTER::convert)
                 .collect(Collectors.toList());
-    }
-
-    @Async
-    public void sendAccountingEntryToCrm(final AccountingEntry accountingEntry) throws Exception {
-        final ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
-        new ExpenseRequestHttp()
-                .setHost(crmHost)
-                .setUri(crmUri)
-                .setToken(crmToken)
-                .setNumber(expenseRequest.getNumber())
-                .setSum(accountingEntry.getSum())
-                .setPaid(Boolean.TRUE.equals(expenseRequest.getPaid()))
-                .setCurrency(expenseRequest.getCurrency())
-                .setCode(accountingEntry.getCode())
-                .setDocumentName(accountingEntry.getDocumentName())
-                .setConfirm(Boolean.TRUE.equals(expenseRequest.getConfirm()))
-                .setDate(accountingEntry.getDate())
-                .setSource(expenseRequest.getSource().getName())
-        .call();
     }
 }

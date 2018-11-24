@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class PayerModelConverter implements Converter<Payer, PayerModel> {
 
     @Override
-    public PayerModel convert(Payer entity) {
+    public PayerModel convert(final Payer entity) {
         final PayerModel model = new PayerModel();
         model.setId(entity.getId());
         model.setCode(entity.getCode());

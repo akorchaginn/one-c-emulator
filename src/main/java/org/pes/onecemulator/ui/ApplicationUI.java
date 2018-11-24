@@ -26,10 +26,11 @@ public class ApplicationUI extends UI implements ViewDisplay {
         setContent(content);
         setSizeFull();
         addStyleName(ValoTheme.UI_WITH_MENU);
-        UI.getCurrent().setErrorHandler(new DefaultErrorHandler() {
+        getCurrent().setErrorHandler(new DefaultErrorHandler() {
             @Override
             public void error(com.vaadin.server.ErrorEvent event) {
-                ErrorNotification.show(ExceptionUtils.getCause(event.getThrowable()).getMessage() +
+                ErrorNotification.show(
+                        ExceptionUtils.getCause(event.getThrowable()).getMessage() +
                         "\n -> "
                         + event.getThrowable());
                 doDefault(event);

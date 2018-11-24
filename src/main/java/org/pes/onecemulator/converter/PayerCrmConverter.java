@@ -1,6 +1,5 @@
 package org.pes.onecemulator.converter;
 
-import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.model.PayerCrm;
 
