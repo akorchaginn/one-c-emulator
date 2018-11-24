@@ -1,7 +1,6 @@
 package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.AccountingEntry;
-import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.service.CrmRestClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +25,6 @@ public class CrmRestClientServiceImpl implements CrmRestClientService {
 
     private static final String CRM_1C_DATABASE_SOURCE = "crm-1c-database-source";
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
     @Value("${crm.interaction.host:#{null}}")
     private String crmHost;
 
@@ -40,21 +37,10 @@ public class CrmRestClientServiceImpl implements CrmRestClientService {
     @Async
     @Override
     public void sendExpenseRequest(final AccountingEntry accountingEntry) throws Exception {
-        final ExpenseRequest expenseRequest = accountingEntry.getExpenseRequest();
-
-        final String uriString = getBaseCrmUri() + String.join(",",
-                expenseRequest.getNumber(),
-                accountingEntry.getSum(),
-                toCrmString(Boolean.TRUE.equals(expenseRequest.getPaid())),
-                expenseRequest.getCurrency(),
-                accountingEntry.getCode(),
-                accountingEntry.getDocumentName(),
-                toCrmString(Boolean.TRUE.equals(expenseRequest.getConfirm())))
-                + "/" + accountingEntry.getDate().format(DATE_FORMATTER);
-
-        final HttpRequest request = HttpRequest.newBuilder(URI.create(uriString))
+        final HttpRequest request = HttpRequest.newBuilder()
+                .uri(prepareExpenseRequestURI(accountingEntry))
                 .setHeader(CRM_API_TOKEN, crmToken)
-                .setHeader(CRM_1C_DATABASE_SOURCE, expenseRequest.getSource().getName())
+                .setHeader(CRM_1C_DATABASE_SOURCE, accountingEntry.getExpenseRequest().getSource().getName())
                 .build();
 
         LOGGER.info("Request: " + request + " headers = " + request.headers());
@@ -69,6 +55,20 @@ public class CrmRestClientServiceImpl implements CrmRestClientService {
         if (response.statusCode() != 200) {
             throw new Exception("Status code not equal 200.");
         }
+    }
+
+    private URI prepareExpenseRequestURI(final AccountingEntry accountingEntry) {
+        final String uriString =  getBaseCrmUri() + String.join(",",
+                accountingEntry.getExpenseRequest().getNumber(),
+                accountingEntry.getSum(),
+                toCrmString(Boolean.TRUE.equals(accountingEntry.getExpenseRequest().getPaid())),
+                accountingEntry.getExpenseRequest().getCurrency(),
+                accountingEntry.getCode(),
+                accountingEntry.getDocumentName(),
+                toCrmString(Boolean.TRUE.equals(accountingEntry.getExpenseRequest().getConfirm())))
+                + "/" + accountingEntry.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+        return URI.create(uriString);
     }
 
     private String getBaseCrmUri() {
