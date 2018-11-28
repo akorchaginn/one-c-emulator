@@ -38,16 +38,6 @@ public class EmployeeModel {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate birthday;
 
-    @JsonProperty(value = "startDate")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate startDate;
-
-    @JsonProperty(value = "endDate")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate endDate;
-
     @JsonProperty(value = "fizId")
     private String fizId;
 
@@ -63,12 +53,11 @@ public class EmployeeModel {
     @JsonProperty("source")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @Setter(value = AccessLevel.NONE)
-    private Set<String> sources = new HashSet<>();
+    private Set<EmployeeSourceModel> employeeSources = new HashSet<>();
 
     public boolean containsWithIgnoreCase(String text) {
         return externalId.toLowerCase().contains(text)
                 || fizId.toLowerCase().contains(text)
-                || fullName.toLowerCase().contains(text)
-                || sources.stream().anyMatch(s -> s.toLowerCase().contains(text));
+                || fullName.toLowerCase().contains(text);
     }
 }

@@ -51,74 +51,60 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     @Transactional
     @Override
     public ExpenseRequestModel create(final ExpenseRequestModel model) throws Exception {
+        validateModel(model);
 
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
-
-        if (model.getNumber() == null) {
-            throw new ValidationException("Number is null.");
-        }
-
-        if (model.getSource() == null) {
-            throw new ValidationException("Source is null.");
-        }
-
-        final Source source = sourceRepository.findByName(model.getSource())
-                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
-
-        ExpenseRequest expenseRequest = new ExpenseRequest();
-        expenseRequest.setSource(source);
-        expenseRequest.setCurrency(model.getCurrency());
-        expenseRequest.setConfirm(model.isConfirm());
-        expenseRequest.setPaid(model.isPaid());
-        expenseRequest.setNumber(model.getNumber());
-        expenseRequest.setSum(model.getSum());
-        expenseRequest = expenseRequestRepository.save(expenseRequest);
-
-        return EXPENSE_REQUEST_MODEL_CONVERTER.convert(expenseRequest);
+        return EXPENSE_REQUEST_MODEL_CONVERTER.convert(updateOrCreate(model, new ExpenseRequest()));
     }
 
     @Transactional
     @Override
     public ExpenseRequestModel update(final ExpenseRequestModel model) throws Exception {
+        validateModelForUpdate(model);
 
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
-
-        if (model.getId() == null) {
-            throw new ValidationException("Id is null.");
-        }
-
-        if (model.getNumber() == null) {
-            throw new ValidationException("Number is null.");
-        }
-
-        if (model.getSource() == null) {
-            throw new ValidationException("Source is null.");
-        }
-
-        final Source source = sourceRepository.findByName(model.getSource())
-                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
-
-        ExpenseRequest expenseRequest = expenseRequestRepository.findById(model.getId())
+        final ExpenseRequest expenseRequest = expenseRequestRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, model.getId()));
 
-        expenseRequest.setSource(source);
-        expenseRequest.setCurrency(model.getCurrency());
-        expenseRequest.setConfirm(model.isConfirm());
-        expenseRequest.setPaid(model.isPaid());
-        expenseRequest.setNumber(model.getNumber());
-        expenseRequest.setSum(model.getSum());
-        expenseRequest = expenseRequestRepository.save(expenseRequest);
-
-        return EXPENSE_REQUEST_MODEL_CONVERTER.convert(expenseRequest);
+        return EXPENSE_REQUEST_MODEL_CONVERTER.convert(updateOrCreate(model, expenseRequest));
     }
 
     @Transactional
     @Override
     public void delete(final UUID id) {
         expenseRequestRepository.deleteById(id);
+    }
+
+    private ExpenseRequest updateOrCreate(final ExpenseRequestModel model, final ExpenseRequest expenseRequest) throws NotFoundException {
+        final Source source = sourceRepository.findByName(model.getSource())
+                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
+
+        expenseRequest.setSource(source);
+        expenseRequest.setCurrency(model.getCurrency());
+        expenseRequest.setConfirm(model.isConfirm());
+        expenseRequest.setPaid(model.isPaid());
+        expenseRequest.setNumber(model.getNumber());
+        expenseRequest.setSum(model.getSum());
+        return expenseRequestRepository.save(expenseRequest);
+    }
+
+    private void validateModel(final ExpenseRequestModel model) throws ValidationException {
+        if (model == null) {
+            throw new ValidationException("Model is null.");
+        }
+
+        if (model.getNumber() == null) {
+            throw new ValidationException("Number is null.");
+        }
+
+        if (model.getSource() == null) {
+            throw new ValidationException("Source is null.");
+        }
+    }
+
+    private void validateModelForUpdate(final ExpenseRequestModel model) throws ValidationException {
+        validateModel(model);
+
+        if (model.getId() == null) {
+            throw new ValidationException("Id is null.");
+        }
     }
 }

@@ -3,7 +3,6 @@ package org.pes.onecemulator.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
@@ -48,7 +47,7 @@ public class SourceServiceTest {
         Source source3 = new Source();
         source3.setId(UUID.fromString("2cebf1c0-e209-4306-9d3c-00a6bf4c19a9"));
         source3.setName("3db");
-        source3.getPayers().add(new Payer());
+        //source3.getPayers().add(new Payer());
 
         when(repository.findById(source1.getId()))
                 .thenReturn(Optional.empty());

@@ -4,12 +4,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "payer")
@@ -33,12 +31,8 @@ public class Payer extends AbstractEntity {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinTable(name = "payer_source",
-            joinColumns = { @JoinColumn(name = "payer_id") },
-            inverseJoinColumns = { @JoinColumn(name = "source_id") }
-    )
-    private Set<Source> sources;
+    @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<PayerSource> payerSources;
 
     public String getAddress() {
         return address;
@@ -88,14 +82,14 @@ public class Payer extends AbstractEntity {
         this.name = name;
     }
 
-    public Set<Source> getSources() {
-        if (sources == null) {
-            sources = new HashSet<>();
+    public List<PayerSource> getPayerSources() {
+        if (payerSources == null) {
+            payerSources = new ArrayList<>();
         }
-        return sources;
+        return payerSources;
     }
 
-    public void setSources(Set<Source> sources) {
-        this.sources = sources;
+    public void setPayerSources(List<PayerSource> payerSources) {
+        this.payerSources = payerSources;
     }
 }

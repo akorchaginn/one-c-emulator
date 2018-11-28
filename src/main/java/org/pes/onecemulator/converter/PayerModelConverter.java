@@ -1,10 +1,10 @@
 package org.pes.onecemulator.converter;
 
 import org.pes.onecemulator.entity.Payer;
+import org.pes.onecemulator.entity.PayerSource;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.model.PayerModel;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class PayerModelConverter implements Converter<Payer, PayerModel> {
@@ -19,11 +19,11 @@ public class PayerModelConverter implements Converter<Payer, PayerModel> {
         model.setInn(entity.getInn());
         model.setKpp(entity.getKpp());
         model.setAddress(entity.getAddress());
-        final Set<String> sources = entity.getSources()
+        model.getSources().addAll(entity.getPayerSources()
                 .stream()
+                .map(PayerSource::getSource)
                 .map(Source::getName)
-                .collect(Collectors.toSet());
-        model.getSources().addAll(sources);
+                .collect(Collectors.toSet()));
 
         return model;
     }

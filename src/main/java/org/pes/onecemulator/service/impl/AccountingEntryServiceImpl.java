@@ -56,28 +56,9 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Transactional
     @Override
     public AccountingEntryModel create(final AccountingEntryModel model) throws Exception {
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
+        validateModel(model);
 
-        if (model.getExpenseNumber() == null) {
-            throw new ValidationException("Expense number is null.");
-        }
-
-        if (model.getDate() == null) {
-            throw new ValidationException("Date is null.");
-        }
-
-        final ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
-                .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, "number:" + model.getExpenseNumber()));
-
-        AccountingEntry accountingEntry = new AccountingEntry();
-        accountingEntry.setCode(model.getCode());
-        accountingEntry.setDate(model.getDate());
-        accountingEntry.setDocumentName(model.getDocumentName());
-        accountingEntry.setExpenseRequest(expenseRequest);
-        accountingEntry.setSum(model.getSum());
-        accountingEntry = accountingEntryRepository.save(accountingEntry);
+        final AccountingEntry accountingEntry = updateOrCreate(model, new AccountingEntry());
         crmRestClientService.sendExpenseRequest(accountingEntry);
 
         return ACCOUNTING_ENTRY_MODEL_CONVERTER.convert(accountingEntry);
@@ -86,29 +67,12 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Transactional
     @Override
     public AccountingEntryModel update(final AccountingEntryModel model) throws Exception {
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
-
-        if (model.getExpenseNumber() == null) {
-            throw new ValidationException("Expense number is null.");
-        }
-
-        if (model.getDate() == null) {
-            throw new ValidationException("Date is null.");
-        }
-
-        final ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
-                .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, "number: " + model.getExpenseNumber()));
+        validateModelForUpdate(model);
 
         AccountingEntry accountingEntry = accountingEntryRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(AccountingEntry.class, model.getId()));
-        accountingEntry.setCode(model.getCode());
-        accountingEntry.setDate(model.getDate());
-        accountingEntry.setDocumentName(model.getDocumentName());
-        accountingEntry.setExpenseRequest(expenseRequest);
-        accountingEntry.setSum(model.getSum());
-        accountingEntry = accountingEntryRepository.save(accountingEntry);
+
+        accountingEntry = updateOrCreate(model, accountingEntry);
         crmRestClientService.sendExpenseRequest(accountingEntry);
 
         return ACCOUNTING_ENTRY_MODEL_CONVERTER.convert(accountingEntry);
@@ -118,5 +82,39 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Override
     public void delete(final UUID id) {
        accountingEntryRepository.deleteById(id);
+    }
+
+    private AccountingEntry updateOrCreate(final AccountingEntryModel model, final AccountingEntry accountingEntry) throws NotFoundException {
+        final ExpenseRequest expenseRequest = expenseRequestRepository.findByNumber(model.getExpenseNumber())
+                .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, "number:" + model.getExpenseNumber()));
+
+        accountingEntry.setCode(model.getCode());
+        accountingEntry.setDate(model.getDate());
+        accountingEntry.setDocumentName(model.getDocumentName());
+        accountingEntry.setExpenseRequest(expenseRequest);
+        accountingEntry.setSum(model.getSum());
+        return accountingEntryRepository.save(accountingEntry);
+    }
+
+    private void validateModelForUpdate(final AccountingEntryModel model) throws ValidationException {
+        validateModel(model);
+
+        if (model.getId() == null) {
+            throw new ValidationException("Id is null.");
+        }
+    }
+
+    private void validateModel(final AccountingEntryModel model) throws ValidationException {
+        if (model == null) {
+            throw new ValidationException("Model is null.");
+        }
+
+        if (model.getExpenseNumber() == null) {
+            throw new ValidationException("Expense number is null.");
+        }
+
+        if (model.getDate() == null) {
+            throw new ValidationException("Date is null.");
+        }
     }
 }

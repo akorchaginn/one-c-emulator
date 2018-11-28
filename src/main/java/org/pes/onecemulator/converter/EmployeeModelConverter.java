@@ -1,9 +1,10 @@
 package org.pes.onecemulator.converter;
 
 import org.pes.onecemulator.entity.Employee;
-import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.model.EmployeeModel;
+import org.pes.onecemulator.model.EmployeeSourceModel;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class EmployeeModelConverter implements Converter<Employee, EmployeeModel> {
@@ -16,16 +17,24 @@ public class EmployeeModelConverter implements Converter<Employee, EmployeeModel
         model.setFullName(entity.getFullName());
         model.setGender(entity.getGender());
         model.setBirthday(entity.getBirthday());
-        model.setStartDate(entity.getStartDate());
-        model.setEndDate(entity.getEndDate());
         model.setFizId(entity.getFizId());
         model.setPosition(entity.getPosition());
         model.setUnit(entity.getUnit());
         model.setPeriod(entity.getPeriod());
-        model.getSources().addAll(entity.getSources().stream()
-                .map(Source::getName)
-                .collect(Collectors.toSet()));
+        model.getEmployeeSources().addAll(getEmployeeSources(entity));
 
         return model;
+    }
+
+    private List<EmployeeSourceModel> getEmployeeSources(final Employee entity) {
+        return entity.getEmployeeSources().stream()
+                .map(es -> {
+                    final EmployeeSourceModel model = new EmployeeSourceModel();
+                    model.setStartDate(es.getStartDate());
+                    model.setEndDate(es.getEndDate());
+                    model.setSource(es.getSource().getName());
+                    return model;
+                })
+                .collect(Collectors.toList());
     }
 }

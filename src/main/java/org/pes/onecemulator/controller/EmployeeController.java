@@ -40,10 +40,7 @@ public class EmployeeController {
     @PostMapping(value = "/create")
     public @ResponseBody
     List<EmployeeModel> create(@RequestBody List<EmployeeModel> modelList) throws Exception {
-        for (EmployeeModel model: modelList) {
-            employeeService.create(model);
-        }
-        return employeeService.list();
+        return employeeService.create(modelList);
     }
 
     @PostMapping(value = "/update")

@@ -4,10 +4,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "source")
@@ -16,11 +16,11 @@ public class Source extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "sources", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Payer> payers;
+    @OneToMany(mappedBy = "source", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<PayerSource> payerSources;
 
-    @ManyToMany(mappedBy = "sources", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Employee> employees;
+    @OneToMany(mappedBy = "source", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<EmployeeSource> employeeSources;
 
     public String getName() {
         return name;
@@ -30,25 +30,25 @@ public class Source extends AbstractEntity {
         this.name = name;
     }
 
-    public Set<Payer> getPayers() {
-        if (payers == null) {
-            payers = new HashSet<>();
+    public List<PayerSource> getPayerSources() {
+        if (payerSources == null) {
+            payerSources = new ArrayList<>();
         }
-        return payers;
+        return payerSources;
     }
 
-    public void setPayers(Set<Payer> payers) {
-        this.payers = payers;
+    public void setPayerSources(List<PayerSource> payerSources) {
+        this.payerSources = payerSources;
     }
 
-    public Set<Employee> getEmployees() {
-        if (employees == null) {
-            employees = new HashSet<>();
+    public List<EmployeeSource> getEmployeeSources() {
+        if (employeeSources == null) {
+            employeeSources = new ArrayList<>();
         }
-        return employees;
+        return employeeSources;
     }
 
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
+    public void setEmployeeSources(List<EmployeeSource> employeeSources) {
+        this.employeeSources = employeeSources;
     }
 }

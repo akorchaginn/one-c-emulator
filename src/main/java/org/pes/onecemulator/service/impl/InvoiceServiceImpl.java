@@ -57,104 +57,75 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     @Override
     public InvoiceModel create(final InvoiceModel model) throws Exception {
+        validateModel(model);
 
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
-
-        if (model.getSource() == null) {
-            throw new ValidationException("Source is null.");
-        }
-
-        if (model.getPayerCode() == null) {
-            throw new ValidationException("Payer code is null.");
-        }
-
-        final Source source = sourceRepository.findByName(model.getSource())
-                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
-
-        final Payer payer = payerRepository.findByCode(model.getPayerCode())
-                .orElseThrow(() -> new NotFoundException(Payer.class, "code: " + model.getPayerCode()));
-
-        if (!payer.getSources().contains(source)) {
-            throw new ValidationException("Invoice source not equal payer source.");
-        }
-
-        Invoice invoice = new Invoice();
-        invoice.setSource(source);
-        invoice.setDate(model.getDate());
-        invoice.setNumber(model.getNumber());
-        invoice.setNumberOq(model.getNumberOq());
-        invoice.setPayer(payer);
-        invoice.setPaymentDate(model.getPaymentDate());
-        invoice.setPaymentSum(model.getPaymentSum());
-        invoice.setStatus(model.getStatus());
-        invoice.setSum(model.getSum());
-        invoice.setExternalId(model.getExternalId());
-        invoice.setPaymentCurrency(model.getPaymentCurrency());
-        invoice.setCurrency(model.getCurrency());
-        invoice.setPaymentSumRUB(model.getPaymentSumRUB());
-        invoice.setSumRUB(model.getSumRUB());
-        invoice = invoiceRepository.save(invoice);
-
-        return INVOICE_MODEL_CONVERTER.convert(invoice);
+        return INVOICE_MODEL_CONVERTER.convert(updateOrCreate(model, new Invoice()));
     }
 
     @Transactional
     @Override
     public InvoiceModel update(final InvoiceModel model) throws Exception {
+        validateModelForUpdate(model);
 
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
-
-        if (model.getId() == null) {
-            throw new ValidationException("Id is null.");
-        }
-
-        if (model.getSource() == null) {
-            throw new ValidationException("Source is null.");
-        }
-
-        if (model.getPayerCode() == null) {
-            throw new ValidationException("Payer code is null.");
-        }
-
-        final Source source = sourceRepository.findByName(model.getSource())
-                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
-
-        final Payer payer = payerRepository.findByCode(model.getPayerCode())
-                .orElseThrow(() -> new NotFoundException(Payer.class, "code: " + model.getPayerCode()));
-
-        if (!payer.getSources().contains(source)) {
-            throw new ValidationException("Invoice source not equal payer source.");
-        }
-
-        Invoice invoice = invoiceRepository.findById(model.getId())
+        final Invoice invoice = invoiceRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(Invoice.class, model.getId()));
 
-        invoice.setSource(source);
-        invoice.setDate(model.getDate());
-        invoice.setNumber(model.getNumber());
-        invoice.setNumberOq(model.getNumberOq());
-        invoice.setPayer(payer);
-        invoice.setPaymentDate(model.getPaymentDate());
-        invoice.setPaymentSum(model.getPaymentSum());
-        invoice.setStatus(model.getStatus());
-        invoice.setSum(model.getSum());
-        invoice.setExternalId(model.getExternalId());
-        invoice.setPaymentCurrency(model.getPaymentCurrency());
-        invoice.setCurrency(model.getCurrency());
-        invoice.setPaymentSumRUB(model.getPaymentSumRUB());
-        invoice.setSumRUB(model.getSumRUB());
-        invoice = invoiceRepository.save(invoice);
-
-        return INVOICE_MODEL_CONVERTER.convert(invoice);
+        return INVOICE_MODEL_CONVERTER.convert(updateOrCreate(model, invoice));
     }
 
     @Transactional
     @Override
     public void delete(final UUID id) {
         invoiceRepository.deleteById(id);
+    }
+
+    private Invoice updateOrCreate(final InvoiceModel model, final Invoice invoice) throws ValidationException, NotFoundException {
+        final Source source = sourceRepository.findByName(model.getSource())
+                .orElseThrow(() -> new NotFoundException(Source.class, "name: " + model.getSource()));
+
+        final Payer payer = payerRepository.findByCode(model.getPayerCode())
+                .orElseThrow(() -> new NotFoundException(Payer.class, "code: " + model.getPayerCode()));
+
+        if (payer.getPayerSources().stream().noneMatch(ps -> ps.getSource().equals(source))) {
+            throw new ValidationException("Invoice source not equal payer source.");
+        }
+
+        invoice.setSource(source);
+        invoice.setDate(model.getDate());
+        invoice.setNumber(model.getNumber());
+        invoice.setNumberOq(model.getNumberOq());
+        invoice.setPayer(payer);
+        invoice.setPaymentDate(model.getPaymentDate());
+        invoice.setPaymentSum(model.getPaymentSum());
+        invoice.setStatus(model.getStatus());
+        invoice.setSum(model.getSum());
+        invoice.setExternalId(model.getExternalId());
+        invoice.setPaymentCurrency(model.getPaymentCurrency());
+        invoice.setCurrency(model.getCurrency());
+        invoice.setPaymentSumRUB(model.getPaymentSumRUB());
+        invoice.setSumRUB(model.getSumRUB());
+        return invoiceRepository.save(invoice);
+    }
+
+    private void validateModelForUpdate(final InvoiceModel model) throws ValidationException {
+        validateModel(model);
+
+        if (model.getId() == null) {
+            throw new ValidationException("Id is null.");
+        }
+    }
+
+    private void validateModel(final InvoiceModel model) throws ValidationException {
+        if (model == null) {
+            throw new ValidationException("Model is null.");
+        }
+
+        if (model.getSource() == null) {
+            throw new ValidationException("Source is null.");
+        }
+
+        if (model.getPayerCode() == null) {
+            throw new ValidationException("Payer code is null.");
+        }
     }
 }

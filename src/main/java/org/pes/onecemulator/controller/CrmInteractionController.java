@@ -39,7 +39,7 @@ public class CrmInteractionController {
         try {
             LOGGER.info("Request: " + source + "/hs/DocID " + mapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("Request error: ", e);
         }
 
         final List<DocumentCrm> documentList =
@@ -48,7 +48,7 @@ public class CrmInteractionController {
         try {
             LOGGER.info("Response: " + mapper.writeValueAsString(documentList));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("Response error: ", e);
         }
 
         return documentList;
@@ -61,7 +61,7 @@ public class CrmInteractionController {
         try {
             LOGGER.info("Request: " + source + "/hs/NewDoc " + mapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("Request error: ", e);
         }
 
         final List<DocumentCrm> documentList =
@@ -70,7 +70,7 @@ public class CrmInteractionController {
         try {
             LOGGER.info("Response: " + mapper.writeValueAsString(documentList));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("Response error: ", e);
         }
 
         return documentList;
@@ -95,7 +95,7 @@ public class CrmInteractionController {
         try {
             LOGGER.info("Request: source=" + source + " ids= " + mapper.writeValueAsString(employees));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("Request error: ", e);
         }
 
         if (employees.stream().anyMatch(e -> e.getExternalId() == null || e.getExternalId().isEmpty())) {
@@ -110,7 +110,7 @@ public class CrmInteractionController {
         try {
             LOGGER.info("Response: " + mapper.writeValueAsString(result));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("Response error: ", e);
         }
 
         return result;
