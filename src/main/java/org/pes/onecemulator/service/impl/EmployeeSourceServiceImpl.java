@@ -47,13 +47,22 @@ public class EmployeeSourceServiceImpl implements EmployeeSourceService {
                         return newSource;
                     });
 
-            final EmployeeSource employeeSource = new EmployeeSource();
-            employeeSource.setEmployee(employee);
-            employeeSource.setSource(source);
-            employeeSource.setStartDate(model.getStartDate());
-            employeeSource.setEndDate(model.getEndDate());
+            final EmployeeSource employeeSource = employeeSourceRepository.findById(model.getId())
+                    .orElseGet(EmployeeSource::new);
 
-            employeeSourceRepository.save(employeeSource);
+            updateOrCreate(model, employeeSource, employee, source);
         }
+    }
+
+    private void updateOrCreate(final EmployeeSourceModel model,
+                                          final EmployeeSource employeeSource,
+                                          final Employee employee,
+                                          final Source source) {
+        employeeSource.setEmployee(employee);
+        employeeSource.setSource(source);
+        employeeSource.setStartDate(model.getStartDate());
+        employeeSource.setEndDate(model.getEndDate());
+
+        employeeSourceRepository.save(employeeSource);
     }
 }

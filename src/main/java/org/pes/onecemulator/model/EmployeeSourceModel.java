@@ -17,6 +17,9 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class EmployeeSourceModel {
 
+    @JsonProperty("id")
+    private UUID id;
+
     @JsonProperty(value = "startDate")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
