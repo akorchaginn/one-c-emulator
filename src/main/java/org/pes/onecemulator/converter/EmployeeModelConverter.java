@@ -30,6 +30,7 @@ public class EmployeeModelConverter implements Converter<Employee, EmployeeModel
         return entity.getEmployeeSources().stream()
                 .map(es -> {
                     final EmployeeSourceModel model = new EmployeeSourceModel();
+                    model.setId(es.getId());
                     model.setStartDate(es.getStartDate());
                     model.setEndDate(es.getEndDate());
                     model.setSource(es.getSource().getName());

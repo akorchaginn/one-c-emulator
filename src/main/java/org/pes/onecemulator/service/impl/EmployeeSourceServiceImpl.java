@@ -36,7 +36,7 @@ public class EmployeeSourceServiceImpl implements EmployeeSourceService {
         }
 
         if (sourceModels == null || sourceModels.isEmpty()) {
-            throw new ValidationException("EmployeeSourceModel list is null or emplty.");
+            throw new ValidationException("EmployeeSourceModel list is null or empty.");
         }
 
         for (EmployeeSourceModel model : sourceModels) {
