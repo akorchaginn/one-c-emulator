@@ -67,7 +67,11 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
     @Transactional
     @Override
     public AccountingEntryModel update(final AccountingEntryModel model) throws Exception {
-        validateModelForUpdate(model);
+        validateModel(model);
+
+        if (model.getId() == null) {
+            throw new ValidationException("Id is null.");
+        }
 
         AccountingEntry accountingEntry = accountingEntryRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(AccountingEntry.class, model.getId()));
@@ -94,14 +98,6 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(model.getSum());
         return accountingEntryRepository.save(accountingEntry);
-    }
-
-    private void validateModelForUpdate(final AccountingEntryModel model) throws ValidationException {
-        validateModel(model);
-
-        if (model.getId() == null) {
-            throw new ValidationException("Id is null.");
-        }
     }
 
     private void validateModel(final AccountingEntryModel model) throws ValidationException {

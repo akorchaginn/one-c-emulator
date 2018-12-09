@@ -65,7 +65,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     @Override
     public InvoiceModel update(final InvoiceModel model) throws Exception {
-        validateModelForUpdate(model);
+        validateModel(model);
+
+        if (model.getId() == null) {
+            throw new ValidationException("Id is null.");
+        }
 
         final Invoice invoice = invoiceRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(Invoice.class, model.getId()));
@@ -104,15 +108,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setCurrency(model.getCurrency());
         invoice.setPaymentSumRUB(model.getPaymentSumRUB());
         invoice.setSumRUB(model.getSumRUB());
+
         return invoiceRepository.save(invoice);
-    }
-
-    private void validateModelForUpdate(final InvoiceModel model) throws ValidationException {
-        validateModel(model);
-
-        if (model.getId() == null) {
-            throw new ValidationException("Id is null.");
-        }
     }
 
     private void validateModel(final InvoiceModel model) throws ValidationException {

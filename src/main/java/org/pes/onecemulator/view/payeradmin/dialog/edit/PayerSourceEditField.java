@@ -18,7 +18,7 @@ class PayerSourceEditField extends CheckBoxGroup<String> {
         super("БД 1С");
         this.old = old;
         setItems(origin);
-        select(old.toArray(new String[old.size()]));
+        select(old.toArray(new String[0]));
         setSizeFull();
         binder.bind(this, "sources");
     }

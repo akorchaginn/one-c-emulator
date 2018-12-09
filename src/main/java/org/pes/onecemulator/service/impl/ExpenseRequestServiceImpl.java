@@ -59,7 +59,11 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     @Transactional
     @Override
     public ExpenseRequestModel update(final ExpenseRequestModel model) throws Exception {
-        validateModelForUpdate(model);
+        validateModel(model);
+
+        if (model.getId() == null) {
+            throw new ValidationException("Id is null.");
+        }
 
         final ExpenseRequest expenseRequest = expenseRequestRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, model.getId()));
@@ -97,14 +101,6 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
 
         if (model.getSource() == null) {
             throw new ValidationException("Source is null.");
-        }
-    }
-
-    private void validateModelForUpdate(final ExpenseRequestModel model) throws ValidationException {
-        validateModel(model);
-
-        if (model.getId() == null) {
-            throw new ValidationException("Id is null.");
         }
     }
 }
