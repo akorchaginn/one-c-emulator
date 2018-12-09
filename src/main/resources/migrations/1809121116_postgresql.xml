@@ -3,7 +3,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-    <changeSet id="1809121161_01" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121116_01" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="source"/>
@@ -30,7 +30,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121161_02" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121116_02" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="payer"/>
@@ -62,7 +62,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121161_03" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121116_03" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="source"/>
             <tableExists tableName="payer"/>
@@ -72,26 +72,37 @@
         </preConditions>
 
         <createTable tableName="payer_source">
-            <column name="source_id" type="uuid"/>
-            <column name="payer_id" type="uuid"/>
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="source_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payer_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+
+        <addPrimaryKey tableName="payer_source" columnNames="id"/>
 
         <addForeignKeyConstraint baseTableName="payer_source"
                                  baseColumnNames="source_id"
                                  constraintName="fk_payer_source_source_id"
                                  referencedTableName="source"
                                  referencedColumnNames="id"
-                                 onDelete="CASCADE"/>
+                                 onDelete="NO ACTION"/>
 
         <addForeignKeyConstraint baseTableName="payer_source"
                                  baseColumnNames="payer_id"
                                  constraintName="fk_payer_source_payer_id"
                                  referencedTableName="payer"
                                  referencedColumnNames="id"
-                                 onDelete="CASCADE"/>
+                                 onDelete="NO ACTION"/>
     </changeSet>
 
-    <changeSet id="1809121161_04" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121116_04" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="invoice"/>
@@ -153,7 +164,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121161_05" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121116_05" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="expense_request"/>
@@ -198,7 +209,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121161_06" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121116_06" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="accounting_entry"/>
@@ -240,39 +251,7 @@
                                  onDelete="CASCADE"/>
     </changeSet>
 
-    <changeSet id="1809121161_02" author="marker91" runOnChange="true" dbms="postgresql">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="payer"/>
-            </not>
-        </preConditions>
-
-        <createTable tableName="payer">
-            <column name="id" type="uuid"/>
-            <column name="created_time" type="timestamp with time zone"/>
-            <column name="updated_time" type="timestamp with time zone"/>
-            <column name="version" type="bigint"/>
-
-            <column name="address" type="varchar(255)"/>
-            <column name="code" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="full_name" type="varchar(255)"/>
-            <column name="inn" type="varchar(255)"/>
-            <column name="kpp" type="varchar(255)"/>
-            <column name="name" type="varchar(255)"/>
-        </createTable>
-
-        <addPrimaryKey tableName="payer" columnNames="id"/>
-
-        <addUniqueConstraint tableName="payer" columnNames="code" constraintName="uk_payer_code"/>
-
-        <createIndex tableName="payer" indexName="i_payer_code">
-            <column name="code"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="1809121161_07" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121116_08" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="employee"/>
@@ -291,8 +270,6 @@
             <column name="full_name" type="varchar(255)"/>
             <column name="gender" type="varchar(255)"/>
             <column name="birthday" type="timestamp without time zone"/>
-            <column name="start_date" type="timestamp without time zone"/>
-            <column name="end_date" type="timestamp without time zone"/>
             <column name="fiz_id" type="varchar(255)"/>
             <column name="position" type="varchar(255)"/>
             <column name="unit" type="varchar(255)"/>
@@ -308,7 +285,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121161_08" author="marker91" runOnChange="true" dbms="postgresql">
+    <changeSet id="1809121116_09" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="source"/>
             <tableExists tableName="employee"/>
@@ -318,23 +295,36 @@
         </preConditions>
 
         <createTable tableName="employee_source">
-            <column name="source_id" type="uuid"/>
-            <column name="employee_id" type="uuid"/>
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp with time zone"/>
+            <column name="updated_time" type="timestamp with time zone"/>
+            <column name="version" type="bigint"/>
+
+            <column name="source_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="employee_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="timestamp without time zone"/>
+            <column name="end_date" type="timestamp without time zone"/>
         </createTable>
+
+        <addPrimaryKey tableName="employee_source" columnNames="id"/>
 
         <addForeignKeyConstraint baseTableName="employee_source"
                                  baseColumnNames="source_id"
                                  constraintName="fk_employee_source_source_id"
                                  referencedTableName="source"
                                  referencedColumnNames="id"
-                                 onDelete="CASCADE"/>
+                                 onDelete="NO ACTION"/>
 
         <addForeignKeyConstraint baseTableName="employee_source"
                                  baseColumnNames="employee_id"
                                  constraintName="fk_employee_source_employee_id"
                                  referencedTableName="employee"
                                  referencedColumnNames="id"
-                                 onDelete="CASCADE"/>
+                                 onDelete="NO ACTION"/>
     </changeSet>
 
 </databaseChangeLog>

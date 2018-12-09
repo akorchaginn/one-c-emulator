@@ -3,6 +3,8 @@ package org.pes.onecemulator.service.impl;
 import org.pes.onecemulator.converter.DocumentCrmConverter;
 import org.pes.onecemulator.converter.EmployeeCrmConverter;
 import org.pes.onecemulator.converter.PayerCrmConverter;
+import org.pes.onecemulator.entity.EmployeeSource;
+import org.pes.onecemulator.entity.PayerSource;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.model.DocumentCrm;
 import org.pes.onecemulator.model.EmployeeCrm;
@@ -14,7 +16,8 @@ import org.pes.onecemulator.service.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -25,8 +28,6 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     private static final DocumentCrmConverter DOCUMENT_CRM_CONVERTER = new DocumentCrmConverter();
 
     private static final PayerCrmConverter PAYER_CRM_CONVERTER = new PayerCrmConverter();
-
-    private static final EmployeeCrmConverter EMPLOYEE_CRM_CONVERTER = new EmployeeCrmConverter();
 
     private final InvoiceRepository invoiceRepository;
 
@@ -69,32 +70,36 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     @Override
     public List<PayerCrm> getAllPayersCrmBySource(final String sourceName) {
         return sourceRepository.findByName(sourceName)
-                .map(Source::getPayers)
-                .orElse(new HashSet<>())
+                .map(Source::getPayerSources)
+                .orElse(new ArrayList<>())
                 .stream()
+                .map(PayerSource::getPayer)
                 .map(PAYER_CRM_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<EmployeeCrm> getAllEmployeesCrmBySourceAndExternalIds(final String sourceName,
+    public List<EmployeeCrm> getAllEmployeesCrmBySourceAndExternalIds(final String source,
                                                                       final List<String> externalIds) {
         return externalIds.stream()
                 .map(employeeRepository::findByExternalId)
                 .map(oe -> oe.orElse(null))
                 .filter(Objects::nonNull)
-                .filter(e -> e.getSources().stream().anyMatch(s -> s.getName().equals(sourceName)))
-                .map(EMPLOYEE_CRM_CONVERTER::convert)
+                .flatMap(e -> e.getEmployeeSources().stream())
+                .filter(es -> es.getSource().getName().equals(source))
+                .map(EmployeeSource::getEmployee)
+                .map(e -> new EmployeeCrmConverter(source).convert(e))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<EmployeeCrm> getAllEmployeesCrmBySource(String source) {
         return sourceRepository.findByName(source)
-                .map(Source::getEmployees)
-                .orElse(new HashSet<>())
+                .map(Source::getEmployeeSources)
                 .stream()
-                .map(EMPLOYEE_CRM_CONVERTER::convert)
+                .flatMap(Collection::stream)
+                .map(EmployeeSource::getEmployee)
+                .map(e -> new EmployeeCrmConverter(source).convert(e))
                 .collect(Collectors.toList());
     }
 }

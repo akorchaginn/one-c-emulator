@@ -6,7 +6,7 @@
 	<groupId>org.pes.onecemulator</groupId>
 	<artifactId>one-c-emulator</artifactId>
 	<version>0.0.3-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>one-c-emulator</name>
 	<description>From PES to PES</description>
@@ -29,6 +29,7 @@
 		<h2.version>1.4.197</h2.version>
 		<lombok.version>1.18.4</lombok.version>
 		<liquibase.version>3.6.2</liquibase.version>
+		<mysql.version>8.0.13</mysql.version>
 	</properties>
 
 	<dependencies>

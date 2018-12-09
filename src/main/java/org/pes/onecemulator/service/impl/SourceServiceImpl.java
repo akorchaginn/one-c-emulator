@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -53,76 +51,49 @@ public class SourceServiceImpl implements SourceService {
 
     @Transactional
     @Override
-    public SourceModel create(final SourceModel model) throws Exception {
+    public SourceModel create(final SourceModel model) throws ValidationException {
+        validateModel(model);
 
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
-
-        if (model.getName() == null) {
-            throw new ValidationException("Name is null.");
-        }
-
-        if (model.getName().isEmpty()) {
-            throw new ValidationException("Name is empty.");
-        }
-
-        Source source = new Source();
-        source.setName(model.getName());
-        source = sourceRepository.save(source);
-
-        return SOURCE_MODEL_CONVERTER.convert(source);
+        return SOURCE_MODEL_CONVERTER.convert(updateOrCreate(model, new Source()));
     }
 
     @Transactional
     @Override
-    public SourceModel update(final SourceModel model) throws Exception {
-
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
+    public SourceModel update(final SourceModel model) throws ValidationException, NotFoundException {
+        validateModel(model);
 
         if (model.getId() == null) {
             throw new ValidationException("Id is null.");
         }
 
-        if (model.getName() == null) {
-            throw new ValidationException("Name is null.");
-        }
-
-        if (model.getName().isEmpty()) {
-            throw new ValidationException("Name is empty.");
-        }
-
-        Source source = sourceRepository.findById(model.getId())
+        final Source source = sourceRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(Source.class, model.getId()));
-        source.setName(model.getName());
-        source = sourceRepository.save(source);
 
-        return SOURCE_MODEL_CONVERTER.convert(source);
-    }
-
-    @Transactional
-    @Override
-    public Set<Source> updateOrCreate(final Set<String> sources) {
-        final Set<Source> newSources = new HashSet<>();
-        sources.forEach(s -> {
-            final Source source = sourceRepository.findByName(s)
-                    .orElseGet(() ->
-                    {
-                        final Source newSource = new Source();
-                        newSource.setName(s);
-                        return newSource;
-                    });
-            newSources.add(source);
-        });
-
-        return new HashSet<>(sourceRepository.saveAll(newSources));
+        return SOURCE_MODEL_CONVERTER.convert(updateOrCreate(model, source));
     }
 
     @Transactional
     @Override
     public void delete(final UUID id) {
         sourceRepository.deleteById(id);
+    }
+
+    private Source updateOrCreate(final SourceModel model, final Source source) {
+        source.setName(model.getName());
+        return sourceRepository.save(source);
+    }
+
+    private void validateModel(final SourceModel model) throws ValidationException {
+        if (model == null) {
+            throw new ValidationException("Model is null.");
+        }
+
+        if (model.getName() == null) {
+            throw new ValidationException("Name is null.");
+        }
+
+        if (model.getName().isEmpty()) {
+            throw new ValidationException("Name is empty.");
+        }
     }
 }

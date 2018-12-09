@@ -4,7 +4,7 @@ import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
 
-public final class InfoNotification {
+final class InfoNotification {
 
     public static void show(final String description) {
         Notification error = new Notification("Информация:", description, Notification.Type.HUMANIZED_MESSAGE);

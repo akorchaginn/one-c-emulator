@@ -16,6 +16,8 @@ public interface PayerService {
 
     PayerModel create(PayerModel model) throws Exception;
 
+    List<PayerModel> create(List<PayerModel> models) throws Exception;
+
     PayerModel update(PayerModel model) throws Exception;
 
     void delete(UUID id);

@@ -39,10 +39,7 @@ public class PayerController {
 
     @PostMapping(value = "/create")
     public @ResponseBody List<PayerModel> create(@RequestBody List<PayerModel> modelList) throws Exception {
-        for (PayerModel model: modelList) {
-            payerService.create(model);
-        }
-        return payerService.list();
+        return payerService.create(modelList);
     }
 
     @PostMapping(value = "/update")

@@ -2,18 +2,18 @@ package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.converter.EmployeeModelConverter;
 import org.pes.onecemulator.entity.Employee;
-import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.EmployeeModel;
 import org.pes.onecemulator.repository.EmployeeRepository;
 import org.pes.onecemulator.service.EmployeeService;
-import org.pes.onecemulator.service.SourceService;
+import org.pes.onecemulator.service.EmployeeSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -24,17 +24,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    private final SourceService sourceService;
+    private final EmployeeSourceService employeeSourceService;
 
     @Autowired
     public EmployeeServiceImpl(final EmployeeRepository employeeRepository,
-                               final SourceService sourceService) {
+                               final EmployeeSourceService employeeSourceService) {
         this.employeeRepository = employeeRepository;
-        this.sourceService = sourceService;
+        this.employeeSourceService = employeeSourceService;
     }
 
     @Override
-    public EmployeeModel getById(UUID id) throws NotFoundException {
+    public EmployeeModel getById(final UUID id) throws NotFoundException {
         return employeeRepository.findById(id)
                 .map(EMPLOYEE_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Employee.class, id));
@@ -48,84 +48,71 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
-    public EmployeeModel create(EmployeeModel model) throws Exception {
-        if (model == null) {
-            throw new ValidationException("Model is null.");
-        }
+    public EmployeeModel create(final EmployeeModel model) throws ValidationException {
+        validateModel(model);
 
-        if (model.getSources() == null) {
-            throw new ValidationException("Sources list is null.");
-        }
-
-        if (model.getSources().isEmpty()) {
-            throw new ValidationException("Source list is empty.");
-        }
-
-        final Set<Source> newSources = sourceService.updateOrCreate(model.getSources());
-
-        if (newSources.isEmpty()) {
-            throw new ValidationException("New source list is empty.");
-        }
-
-        Employee employee = new Employee();
-        employee.setExternalId(model.getExternalId());
-        employee.setFullName(model.getFullName());
-        employee.setGender(model.getGender());
-        employee.setBirthday(model.getBirthday());
-        employee.setStartDate(model.getStartDate());
-        employee.setEndDate(model.getEndDate());
-        employee.setFizId(model.getFizId());
-        employee.setPosition(model.getPosition());
-        employee.setUnit(model.getUnit());
-        employee.setPeriod(model.getPeriod());
-        employee.setSources(newSources);
-        employee = employeeRepository.save(employee);
-
-        return EMPLOYEE_MODEL_CONVERTER.convert(employee);
+        return EMPLOYEE_MODEL_CONVERTER.convert(updateOrCreate(model, new Employee()));
     }
 
+    @Transactional
     @Override
-    public EmployeeModel update(EmployeeModel model) throws Exception {
-        if (model == null) {
-            throw new ValidationException("Model is null.");
+    public List<EmployeeModel> create(final List<EmployeeModel> models) throws ValidationException {
+        final List<EmployeeModel> result = new ArrayList<>();
+        for (EmployeeModel model : models) {
+            result.add(create(model));
         }
 
-        if (model.getSources() == null) {
-            throw new ValidationException("Sources list is null.");
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public EmployeeModel update(final EmployeeModel model) throws ValidationException, NotFoundException {
+        validateModel(model);
+
+        if (model.getId() == null) {
+            throw new ValidationException("Id is null.");
         }
 
-        if (model.getSources().isEmpty()) {
-            throw new ValidationException("Source list is empty.");
-        }
-
-        final Set<Source> newSources = sourceService.updateOrCreate(model.getSources());
-
-        if (newSources.isEmpty()) {
-            throw new ValidationException("New source list is empty.");
-        }
-
-        Employee employee = employeeRepository.findById(model.getId())
+        final Employee employee = employeeRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(Employee.class, model.getId()));
 
+        return EMPLOYEE_MODEL_CONVERTER.convert(updateOrCreate(model, employee));
+    }
+
+    @Override
+    public void delete(final UUID id) {
+        employeeRepository.deleteById(id);
+    }
+
+    private Employee updateOrCreate(final EmployeeModel model, final Employee employee) throws ValidationException {
         employee.setExternalId(model.getExternalId());
         employee.setFullName(model.getFullName());
         employee.setGender(model.getGender());
         employee.setBirthday(model.getBirthday());
-        employee.setStartDate(model.getStartDate());
-        employee.setEndDate(model.getEndDate());
         employee.setFizId(model.getFizId());
         employee.setPosition(model.getPosition());
         employee.setUnit(model.getUnit());
         employee.setPeriod(model.getPeriod());
-        employee.setSources(newSources);
-        employee = employeeRepository.save(employee);
 
-        return EMPLOYEE_MODEL_CONVERTER.convert(employee);
+        employeeSourceService.add(employee, model.getEmployeeSources());
+
+        return employeeRepository.save(employee);
     }
 
-    @Override
-    public void delete(UUID id) {
-        employeeRepository.deleteById(id);
+    private void validateModel(final EmployeeModel model) throws ValidationException {
+        if (model == null) {
+            throw new ValidationException("Model is null.");
+        }
+
+        if (model.getEmployeeSources() == null) {
+            throw new ValidationException("Employee source list is null.");
+        }
+
+        if (model.getEmployeeSources().isEmpty()) {
+            throw new ValidationException("Employee source list is empty.");
+        }
     }
 }
