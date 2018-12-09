@@ -3,7 +3,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-    <changeSet id="1809121116_01" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_01" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="source"/>
@@ -30,7 +30,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121116_02" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_02" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="payer"/>
@@ -62,7 +62,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121116_03" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_03" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="source"/>
             <tableExists tableName="payer"/>
@@ -102,7 +102,7 @@
                                  onDelete="NO ACTION"/>
     </changeSet>
 
-    <changeSet id="1809121116_04" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_04" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="invoice"/>
@@ -164,7 +164,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121116_05" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_05" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="expense_request"/>
@@ -209,7 +209,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121116_06" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_06" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="accounting_entry"/>
@@ -251,7 +251,7 @@
                                  onDelete="CASCADE"/>
     </changeSet>
 
-    <changeSet id="1809121116_08" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_08" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="employee"/>
@@ -285,7 +285,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121116_09" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_09" author="marker91" runOnChange="true" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="source"/>
             <tableExists tableName="employee"/>
