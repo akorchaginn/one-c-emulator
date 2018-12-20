@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ public abstract class AbstractEntity {
                     )
             }
     )
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Column(name = "created_time")
