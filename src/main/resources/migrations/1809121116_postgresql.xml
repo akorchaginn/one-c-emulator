@@ -12,8 +12,8 @@
 
         <createTable tableName="source">
             <column name="id" type="uuid"/>
-            <column name="created_time" type="datetime"/>
-            <column name="updated_time" type="datetime"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
             <column name="version" type="bigint"/>
 
             <column name="name" type="varchar(255)">
@@ -39,8 +39,8 @@
 
         <createTable tableName="payer">
             <column name="id" type="uuid"/>
-            <column name="created_time" type="datetime"/>
-            <column name="updated_time" type="datetime"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
             <column name="version" type="bigint"/>
 
             <column name="address" type="varchar(255)"/>
@@ -73,8 +73,8 @@
 
         <createTable tableName="payer_source">
             <column name="id" type="uuid"/>
-            <column name="created_time" type="datetime"/>
-            <column name="updated_time" type="datetime"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
             <column name="version" type="bigint"/>
 
             <column name="source_id" type="uuid">
@@ -111,8 +111,8 @@
 
         <createTable tableName="invoice">
             <column name="id" type="uuid"/>
-            <column name="created_time" type="datetime"/>
-            <column name="updated_time" type="datetime"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
             <column name="version" type="bigint"/>
 
             <column name="date" type="date"/>
@@ -173,8 +173,8 @@
 
         <createTable tableName="expense_request">
             <column name="id" type="uuid"/>
-            <column name="created_time" type="datetime"/>
-            <column name="updated_time" type="datetime"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
             <column name="version" type="bigint"/>
 
             <column name="currency" type="varchar(255)">
@@ -218,8 +218,8 @@
 
         <createTable tableName="accounting_entry">
             <column name="id" type="uuid"/>
-            <column name="created_time" type="datetime"/>
-            <column name="updated_time" type="datetime"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
             <column name="version" type="bigint"/>
 
             <column name="code" type="varchar(255)">
@@ -260,8 +260,8 @@
 
         <createTable tableName="employee">
             <column name="id" type="uuid"/>
-            <column name="created_time" type="datetime"/>
-            <column name="updated_time" type="datetime"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
             <column name="version" type="bigint"/>
 
             <column name="external_id" type="varchar(255)">
@@ -296,8 +296,8 @@
 
         <createTable tableName="employee_source">
             <column name="id" type="uuid"/>
-            <column name="created_time" type="datetime"/>
-            <column name="updated_time" type="datetime"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
             <column name="version" type="bigint"/>
 
             <column name="source_id" type="uuid">
