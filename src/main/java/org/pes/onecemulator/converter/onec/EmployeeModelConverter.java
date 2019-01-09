@@ -1,22 +1,23 @@
-package org.pes.onecemulator.converter;
+package org.pes.onecemulator.converter.onec;
 
+import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.Employee;
 import org.pes.onecemulator.entity.EmployeeSource;
-import org.pes.onecemulator.model.EmployeeCrm;
+import org.pes.onecemulator.model.onec.EmployeeModel;
 
 import java.time.LocalDate;
 
-public class EmployeeCrmConverter implements Converter<Employee, EmployeeCrm> {
+public class EmployeeModelConverter implements Converter<Employee, EmployeeModel> {
 
     private final String source;
 
-    public EmployeeCrmConverter(final String source) {
+    public EmployeeModelConverter(final String source) {
         this.source = source;
     }
 
     @Override
-    public EmployeeCrm convert(final Employee entity) {
-        final EmployeeCrm model = new EmployeeCrm();
+    public EmployeeModel convert(final Employee entity) {
+        final EmployeeModel model = new EmployeeModel();
         model.setExternalId(entity.getExternalId());
         model.setFullName(entity.getFullName());
         model.setGender(entity.getGender());

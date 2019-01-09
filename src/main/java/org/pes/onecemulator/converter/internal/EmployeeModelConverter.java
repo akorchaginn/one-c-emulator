@@ -1,8 +1,9 @@
-package org.pes.onecemulator.converter;
+package org.pes.onecemulator.converter.internal;
 
+import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.Employee;
-import org.pes.onecemulator.model.EmployeeModel;
-import org.pes.onecemulator.model.EmployeeSourceModel;
+import org.pes.onecemulator.model.internal.EmployeeModel;
+import org.pes.onecemulator.model.internal.EmployeeSourceModel;
 
 import java.util.List;
 import java.util.stream.Collectors;

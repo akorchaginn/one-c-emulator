@@ -2,9 +2,9 @@ package org.pes.onecemulator.view.invoiceadmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import org.pes.onecemulator.model.InvoiceModel;
-import org.pes.onecemulator.model.PayerModel;
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
+import org.pes.onecemulator.model.internal.PayerModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 import org.pes.onecemulator.service.InvoiceService;
 import org.pes.onecemulator.service.PayerService;
 import org.pes.onecemulator.service.SourceService;

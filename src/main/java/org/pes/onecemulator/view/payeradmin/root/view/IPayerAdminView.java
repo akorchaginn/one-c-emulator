@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.payeradmin.root.view;
 
-import org.pes.onecemulator.model.PayerModel;
+import org.pes.onecemulator.model.internal.PayerModel;
 
 import java.util.List;
 

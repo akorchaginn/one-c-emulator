@@ -1,7 +1,7 @@
 package org.pes.onecemulator.controller;
 
 import org.pes.onecemulator.exception.NotFoundException;
-import org.pes.onecemulator.model.EmployeeModel;
+import org.pes.onecemulator.model.internal.EmployeeModel;
 import org.pes.onecemulator.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

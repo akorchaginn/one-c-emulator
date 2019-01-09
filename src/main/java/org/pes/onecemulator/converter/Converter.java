@@ -1,6 +1,6 @@
 package org.pes.onecemulator.converter;
 
-interface Converter<I, O> {
+public interface Converter<I, O> {
 
     O convert(I input);
 }

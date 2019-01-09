@@ -1,7 +1,7 @@
 package org.pes.onecemulator.controller;
 
 import org.pes.onecemulator.exception.NotFoundException;
-import org.pes.onecemulator.model.PayerModel;
+import org.pes.onecemulator.model.internal.PayerModel;
 import org.pes.onecemulator.service.PayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

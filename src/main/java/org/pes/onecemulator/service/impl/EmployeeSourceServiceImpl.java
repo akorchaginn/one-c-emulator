@@ -4,7 +4,7 @@ import org.pes.onecemulator.entity.Employee;
 import org.pes.onecemulator.entity.EmployeeSource;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.ValidationException;
-import org.pes.onecemulator.model.EmployeeSourceModel;
+import org.pes.onecemulator.model.internal.EmployeeSourceModel;
 import org.pes.onecemulator.repository.EmployeeSourceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.EmployeeSourceService;

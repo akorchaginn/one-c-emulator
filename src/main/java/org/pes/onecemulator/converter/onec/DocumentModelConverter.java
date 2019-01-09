@@ -1,16 +1,17 @@
-package org.pes.onecemulator.converter;
+package org.pes.onecemulator.converter.onec;
 
+import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
-import org.pes.onecemulator.model.DocumentCrm;
+import org.pes.onecemulator.model.onec.DocumentModel;
 
 import java.util.Optional;
 
-public class DocumentCrmConverter implements Converter<Invoice, DocumentCrm> {
+public class DocumentModelConverter implements Converter<Invoice, DocumentModel> {
 
     @Override
-    public DocumentCrm convert(final Invoice entity) {
-        final DocumentCrm model = new DocumentCrm();
+    public DocumentModel convert(final Invoice entity) {
+        final DocumentModel model = new DocumentModel();
         model.setId(entity.getId());
         model.setNumber(entity.getNumber());
         model.setNumberOq(entity.getNumberOq());

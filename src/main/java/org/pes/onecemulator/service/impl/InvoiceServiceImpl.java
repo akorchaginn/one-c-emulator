@@ -1,12 +1,12 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.InvoiceModelConverter;
+import org.pes.onecemulator.converter.internal.InvoiceModelConverter;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
-import org.pes.onecemulator.model.InvoiceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;

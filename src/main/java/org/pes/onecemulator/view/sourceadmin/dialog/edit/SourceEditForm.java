@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.sourceadmin.dialog.edit;
 
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.ui.FormLayout;
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 
 class SourceEditForm extends FormLayout {
 

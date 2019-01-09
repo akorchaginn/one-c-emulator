@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.expenserequestadmin.root.view;
 
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 
 import java.util.List;
 

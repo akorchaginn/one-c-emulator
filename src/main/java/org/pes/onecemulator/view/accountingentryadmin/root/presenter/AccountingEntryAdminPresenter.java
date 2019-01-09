@@ -2,8 +2,8 @@ package org.pes.onecemulator.view.accountingentryadmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import org.pes.onecemulator.model.AccountingEntryModel;
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 import org.pes.onecemulator.service.AccountingEntryService;
 import org.pes.onecemulator.service.ExpenseRequestService;
 import org.pes.onecemulator.view.accountingentryadmin.dialog.add.IAccountingEntryAddDialog;

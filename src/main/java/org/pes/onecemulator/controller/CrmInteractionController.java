@@ -2,9 +2,9 @@ package org.pes.onecemulator.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.pes.onecemulator.model.DocumentCrm;
-import org.pes.onecemulator.model.EmployeeCrm;
-import org.pes.onecemulator.model.PayerCrm;
+import org.pes.onecemulator.model.onec.DocumentModel;
+import org.pes.onecemulator.model.onec.EmployeeModel;
+import org.pes.onecemulator.model.onec.PayerModel;
 import org.pes.onecemulator.service.CrmInteractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,16 +33,16 @@ public class CrmInteractionController {
     }
 
     @PostMapping(value = "{source}/hs/DocID")
-    public @ResponseBody List<DocumentCrm> getDocById(
+    public @ResponseBody List<DocumentModel> getDocById(
             @PathVariable(value = "source") String source,
-            @RequestBody List<DocumentCrm> documents) {
+            @RequestBody List<DocumentModel> documents) {
         try {
             LOGGER.info("Request: " + source + "/hs/DocID " + mapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
             LOGGER.error("Request error: ", e);
         }
 
-        final List<DocumentCrm> documentList =
+        final List<DocumentModel> documentList =
                 crmInteractionService.getDocumentsCrmById(documents, source);
 
         try {
@@ -55,16 +55,16 @@ public class CrmInteractionController {
     }
 
     @PostMapping(value = "{source}/hs/NewDoc")
-    public @ResponseBody List<DocumentCrm> getDocByExternalId(
+    public @ResponseBody List<DocumentModel> getDocByExternalId(
             @PathVariable(value = "source") String source,
-            @RequestBody List<DocumentCrm> documents) {
+            @RequestBody List<DocumentModel> documents) {
         try {
             LOGGER.info("Request: " + source + "/hs/NewDoc " + mapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
             LOGGER.error("Request error: ", e);
         }
 
-        final List<DocumentCrm> documentList =
+        final List<DocumentModel> documentList =
                 crmInteractionService.getDocumentsCrmByExternalId(documents, source);
 
         try {
@@ -77,11 +77,11 @@ public class CrmInteractionController {
     }
 
     @PostMapping(value = "{source}/hs/Con")
-    public @ResponseBody List<PayerCrm> getAllPayers(
+    public @ResponseBody List<PayerModel> getPayers(
             @PathVariable(value = "source") String source) {
         LOGGER.info("Request: source=" + source);
 
-        final List<PayerCrm> payerList =
+        final List<PayerModel> payerList =
                 crmInteractionService.getAllPayersCrmBySource(source);
 
         LOGGER.info("Response: size=" + payerList.size());
@@ -90,8 +90,8 @@ public class CrmInteractionController {
     }
 
     @PostMapping(value = "{source}/hs/Sotrudnik")
-    public @ResponseBody List<EmployeeCrm> getAllEmployees(
-            @PathVariable(value = "source") String source, @RequestBody List<EmployeeCrm> employees) {
+    public @ResponseBody List<EmployeeModel> getEmployees(
+            @PathVariable(value = "source") String source, @RequestBody List<EmployeeModel> employees) {
         try {
             LOGGER.info("Request: source=" + source + " ids= " + mapper.writeValueAsString(employees));
         } catch (JsonProcessingException e) {
@@ -102,9 +102,9 @@ public class CrmInteractionController {
             return crmInteractionService.getAllEmployeesCrmBySource(source);
         }
 
-        final List<EmployeeCrm> result = crmInteractionService.getAllEmployeesCrmBySourceAndExternalIds(source,
+        final List<EmployeeModel> result = crmInteractionService.getAllEmployeesCrmBySourceAndExternalIds(source,
                 employees.stream()
-                        .map(EmployeeCrm::getExternalId)
+                        .map(EmployeeModel::getExternalId)
                         .collect(Collectors.toList()));
 
         try {

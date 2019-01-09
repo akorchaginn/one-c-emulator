@@ -4,7 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.UI;
-import org.pes.onecemulator.model.InvoiceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
 import org.pes.onecemulator.view.fundamentals.fragment.header.ViewHeader;
 import org.pes.onecemulator.view.fundamentals.layout.BaseViewLayout;
 import org.pes.onecemulator.view.invoiceadmin.dialog.add.InvoiceAddDialog;

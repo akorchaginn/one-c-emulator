@@ -1,8 +1,8 @@
 package org.pes.onecemulator.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.pes.onecemulator.model.EmployeeCrm;
-import org.pes.onecemulator.model.PayerCrm;
+import org.pes.onecemulator.model.onec.EmployeeModel;
+import org.pes.onecemulator.model.onec.PayerModel;
 import org.pes.onecemulator.service.OnecRestClientService;
 import org.pes.onecemulator.service.RestService;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,14 +29,13 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
     private String employeesUri;
 
     @Override
-    public List<PayerCrm> getPayers(final String source) throws IOException, InterruptedException {
+    public List<PayerModel> getPayers(final String source) throws IOException, InterruptedException {
         final HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(onecHost + payersUri))
+                .uri(getUri(source, payersUri))
                 .build();
 
-        final HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-
-        final List<PayerCrm> result = readJson(response.body(), PayerCrm.class);
+        final List<PayerModel> result = readJson(
+                HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString()), PayerModel.class);
 
         // для проверки
         logger.info(String.valueOf(result.size()));
@@ -46,14 +45,13 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
     }
 
     @Override
-    public List<EmployeeCrm> getEmployees(final String source) throws IOException, InterruptedException {
+    public List<EmployeeModel> getEmployees(final String source) throws IOException, InterruptedException {
         final HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(onecHost + employeesUri))
+                .uri(getUri(source, employeesUri))
                 .build();
 
-        final HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-
-        final List<EmployeeCrm> result = readJson(response.body(), EmployeeCrm.class);
+        final List<EmployeeModel> result = readJson(
+                HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString()), EmployeeModel.class);
 
         // для проверки
         logger.info(String.valueOf(result.size()));
@@ -62,7 +60,13 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
         return result;
     }
 
-    private static <T> List<T> readJson(String json, Class<T> clazz) throws IOException {
-        return OBJECT_MAPPER.readValue(json, OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
+    private URI getUri(final String source, final String uri) {
+        return URI.create(onecHost + "/" + source + uri);
+    }
+
+    private static <T> List<T> readJson(HttpResponse<String> response, Class<T> clazz) throws IOException {
+        return OBJECT_MAPPER.readValue(
+                response.body(),
+                OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
     }
 }

@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.invoiceadmin.dialog.add;
 
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.ui.FormLayout;
-import org.pes.onecemulator.model.InvoiceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
 
 import java.util.List;
 

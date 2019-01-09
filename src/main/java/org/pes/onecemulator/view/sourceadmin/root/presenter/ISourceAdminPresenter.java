@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.sourceadmin.root.presenter;
 
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 import org.pes.onecemulator.view.sourceadmin.dialog.add.ISourceAddDialog;
 import org.pes.onecemulator.view.sourceadmin.dialog.delete.IDeleteSourceConfirmDialog;
 import org.pes.onecemulator.view.sourceadmin.dialog.edit.ISourceEditDialog;

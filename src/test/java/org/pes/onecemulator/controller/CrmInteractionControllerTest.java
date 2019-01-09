@@ -3,7 +3,7 @@ package org.pes.onecemulator.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.pes.onecemulator.model.DocumentCrm;
+import org.pes.onecemulator.model.onec.DocumentModel;
 import org.pes.onecemulator.service.CrmInteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -60,10 +60,10 @@ public class CrmInteractionControllerTest {
     public void getDocByIdWithOneElementAtListTest() throws Exception {
         String SOURCE = "1db";
 
-        DocumentCrm documentCrmInput = new DocumentCrm();
+        DocumentModel documentCrmInput = new DocumentModel();
         documentCrmInput.setId(UUID.fromString("468e2104-109b-4f85-b0f8-d2d13a9e501a"));
 
-        DocumentCrm documentCrmOutput = new DocumentCrm();
+        DocumentModel documentCrmOutput = new DocumentModel();
         documentCrmOutput.setId(UUID.fromString("468e2104-109b-4f85-b0f8-d2d13a9e501a"));
         documentCrmOutput.setPayerName("РогаИКопыта");
         documentCrmOutput.setStatus("Продано");
@@ -75,8 +75,8 @@ public class CrmInteractionControllerTest {
         documentCrmOutput.setDate(LocalDate.parse("2018-03-08", DateTimeFormatter.ISO_DATE));
         documentCrmOutput.setPaymentDate(LocalDate.parse("2018-03-09", DateTimeFormatter.ISO_DATE));
 
-        List<DocumentCrm> docIn = Collections.singletonList(documentCrmInput);
-        List<DocumentCrm> docOut = Collections.singletonList(documentCrmOutput);
+        List<DocumentModel> docIn = Collections.singletonList(documentCrmInput);
+        List<DocumentModel> docOut = Collections.singletonList(documentCrmOutput);
 
         given(service.getDocumentsCrmById(anyList(), anyString())).willReturn(docOut);
 
@@ -102,10 +102,10 @@ public class CrmInteractionControllerTest {
     public void getDocByIdWithManyElementsAtListTest() throws Exception {
         String SOURCE = "1db";
 
-        DocumentCrm documentCrmInput1 = new DocumentCrm();
+        DocumentModel documentCrmInput1 = new DocumentModel();
         documentCrmInput1.setId(UUID.fromString("468e2104-109b-4f85-b0f8-d2d13a9e501a"));
 
-        DocumentCrm documentCrmOutput1 = new DocumentCrm();
+        DocumentModel documentCrmOutput1 = new DocumentModel();
         documentCrmOutput1.setId(UUID.fromString("468e2104-109b-4f85-b0f8-d2d13a9e501a"));
         documentCrmOutput1.setPayerName("РогаИКопыта");
         documentCrmOutput1.setStatus("Продано");
@@ -117,10 +117,10 @@ public class CrmInteractionControllerTest {
         documentCrmOutput1.setDate(LocalDate.parse("2018-03-08", DateTimeFormatter.ISO_DATE));
         documentCrmOutput1.setPaymentDate(LocalDate.parse("2018-03-09", DateTimeFormatter.ISO_DATE));
 
-        DocumentCrm documentCrmInput2 = new DocumentCrm();
+        DocumentModel documentCrmInput2 = new DocumentModel();
         documentCrmInput2.setId(UUID.fromString("90cf7646-c1bf-4fbe-a3df-cf74eca234b7"));
 
-        DocumentCrm documentCrmOutput2 = new DocumentCrm();
+        DocumentModel documentCrmOutput2 = new DocumentModel();
         documentCrmOutput2.setId(UUID.fromString("90cf7646-c1bf-4fbe-a3df-cf74eca234b7"));
         documentCrmOutput2.setPayerName("КопытаИрония");
         documentCrmOutput2.setStatus("Продается");
@@ -132,8 +132,8 @@ public class CrmInteractionControllerTest {
         documentCrmOutput2.setDate(LocalDate.parse("2018-03-09", DateTimeFormatter.ISO_DATE));
         documentCrmOutput2.setPaymentDate(LocalDate.parse("2018-03-10", DateTimeFormatter.ISO_DATE));
 
-        List<DocumentCrm> docIn = Arrays.asList(documentCrmInput1, documentCrmInput2);
-        List<DocumentCrm> docOut = Arrays.asList(documentCrmOutput1, documentCrmOutput2);
+        List<DocumentModel> docIn = Arrays.asList(documentCrmInput1, documentCrmInput2);
+        List<DocumentModel> docOut = Arrays.asList(documentCrmOutput1, documentCrmOutput2);
 
         given(service.getDocumentsCrmById(anyList(), anyString())).willReturn(docOut);
 

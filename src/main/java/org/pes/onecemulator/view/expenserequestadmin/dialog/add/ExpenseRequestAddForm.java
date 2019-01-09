@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.expenserequestadmin.dialog.add;
 
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.ui.FormLayout;
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 
 import java.util.List;
 

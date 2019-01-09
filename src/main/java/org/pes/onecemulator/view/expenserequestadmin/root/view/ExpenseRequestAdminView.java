@@ -4,7 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.UI;
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 import org.pes.onecemulator.view.expenserequestadmin.dialog.add.ExpenseRequestAddDialog;
 import org.pes.onecemulator.view.expenserequestadmin.dialog.delete.DeleteExpenseRequestConfirmDialog;
 import org.pes.onecemulator.view.expenserequestadmin.dialog.edit.ExpenseRequestEditDialog;

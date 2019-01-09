@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.invoiceadmin.root.presenter;
 
-import org.pes.onecemulator.model.InvoiceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
 import org.pes.onecemulator.view.invoiceadmin.dialog.add.IInvoiceAddDialog;
 import org.pes.onecemulator.view.invoiceadmin.dialog.delete.IDeleteInvoiceConfirmDialog;
 import org.pes.onecemulator.view.invoiceadmin.dialog.edit.IInvoiceEditDialog;

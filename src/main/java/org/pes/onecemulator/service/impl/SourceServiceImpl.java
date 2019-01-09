@@ -1,10 +1,10 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.SourceModelConverter;
+import org.pes.onecemulator.converter.internal.SourceModelConverter;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.SourceService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.accountingentryadmin.root.presenter;
 
-import org.pes.onecemulator.model.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
 import org.pes.onecemulator.view.accountingentryadmin.dialog.add.IAccountingEntryAddDialog;
 import org.pes.onecemulator.view.accountingentryadmin.dialog.delete.IDeleteAccountingEntryConfirmDialog;
 import org.pes.onecemulator.view.accountingentryadmin.dialog.edit.IAccountingEntryEditDialog;

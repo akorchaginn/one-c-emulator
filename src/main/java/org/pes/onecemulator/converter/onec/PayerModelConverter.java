@@ -1,13 +1,14 @@
-package org.pes.onecemulator.converter;
+package org.pes.onecemulator.converter.onec;
 
+import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.Payer;
-import org.pes.onecemulator.model.PayerCrm;
+import org.pes.onecemulator.model.onec.PayerModel;
 
-public class PayerCrmConverter implements Converter<Payer, PayerCrm> {
+public class PayerModelConverter implements Converter<Payer, PayerModel> {
 
     @Override
-    public PayerCrm convert(final Payer entity) {
-        final PayerCrm model = new PayerCrm();
+    public PayerModel convert(final Payer entity) {
+        final PayerModel model = new PayerModel();
         model.setId(entity.getAddress());
         model.setCode(entity.getCode());
         model.setName(entity.getName());

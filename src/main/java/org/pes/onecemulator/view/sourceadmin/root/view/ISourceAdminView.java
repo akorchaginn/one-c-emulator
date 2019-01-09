@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.sourceadmin.root.view;
 
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 
 import java.util.List;
 

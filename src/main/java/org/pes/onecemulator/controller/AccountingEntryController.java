@@ -1,7 +1,7 @@
 package org.pes.onecemulator.controller;
 
 import org.pes.onecemulator.exception.NotFoundException;
-import org.pes.onecemulator.model.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
 import org.pes.onecemulator.service.AccountingEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
