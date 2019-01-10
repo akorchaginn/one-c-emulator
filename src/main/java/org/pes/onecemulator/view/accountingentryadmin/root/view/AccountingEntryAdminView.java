@@ -4,7 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.UI;
-import org.pes.onecemulator.model.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
 import org.pes.onecemulator.view.accountingentryadmin.dialog.add.AccountingEntryAddDialog;
 import org.pes.onecemulator.view.accountingentryadmin.dialog.delete.DeleteAccountingEntryConfirmDialog;
 import org.pes.onecemulator.view.accountingentryadmin.dialog.edit.AccountingEntryEditDialog;

@@ -2,8 +2,8 @@ package org.pes.onecemulator.view.payeradmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import org.pes.onecemulator.model.PayerModel;
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.PayerModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 import org.pes.onecemulator.service.PayerService;
 import org.pes.onecemulator.service.SourceService;
 import org.pes.onecemulator.view.fundamentals.notification.ErrorNotification;

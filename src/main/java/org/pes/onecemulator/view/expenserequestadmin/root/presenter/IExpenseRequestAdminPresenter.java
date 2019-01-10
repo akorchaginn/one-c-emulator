@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.expenserequestadmin.root.presenter;
 
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 import org.pes.onecemulator.view.expenserequestadmin.dialog.add.IExpenseRequestAddDialog;
 import org.pes.onecemulator.view.expenserequestadmin.dialog.delete.IDeleteExpenseRequestConfirmDialog;
 import org.pes.onecemulator.view.expenserequestadmin.dialog.edit.IExpenseRequestEditDialog;

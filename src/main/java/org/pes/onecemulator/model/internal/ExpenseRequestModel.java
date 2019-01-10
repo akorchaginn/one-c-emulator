@@ -1,4 +1,4 @@
-package org.pes.onecemulator.model;
+package org.pes.onecemulator.model.internal;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

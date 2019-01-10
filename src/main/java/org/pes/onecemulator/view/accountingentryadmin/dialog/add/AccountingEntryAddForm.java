@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.accountingentryadmin.dialog.add;
 
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.ui.FormLayout;
-import org.pes.onecemulator.model.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
 
 import java.util.List;
 

@@ -1,7 +1,8 @@
-package org.pes.onecemulator.converter;
+package org.pes.onecemulator.converter.internal;
 
+import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.ExpenseRequest;
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 
 public class ExpenseRequestModelConverter implements Converter<ExpenseRequest, ExpenseRequestModel> {
 

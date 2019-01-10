@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.invoiceadmin.dialog.edit;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.ComboBox;
-import org.pes.onecemulator.model.InvoiceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
 
 class InvoicePayerEditField extends ComboBox<String> {
 

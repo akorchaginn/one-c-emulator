@@ -1,4 +1,4 @@
-package org.pes.onecemulator.model;
+package org.pes.onecemulator.model.onec;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class EmployeeCrm {
+public class EmployeeModel {
 
     @JsonProperty(value = "id")
     private String externalId;

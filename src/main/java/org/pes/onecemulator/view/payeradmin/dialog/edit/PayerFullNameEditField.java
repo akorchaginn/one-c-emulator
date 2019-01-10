@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.payeradmin.dialog.edit;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
-import org.pes.onecemulator.model.PayerModel;
+import org.pes.onecemulator.model.internal.PayerModel;
 
 class PayerFullNameEditField extends TextField {
 

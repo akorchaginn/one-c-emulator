@@ -1,11 +1,11 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.AccountingEntryModelConverter;
+import org.pes.onecemulator.converter.internal.AccountingEntryModelConverter;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
-import org.pes.onecemulator.model.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
 import org.pes.onecemulator.repository.AccountingEntryRepository;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.service.AccountingEntryService;

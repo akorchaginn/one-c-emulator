@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.expenserequestadmin.dialog.edit;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.CheckBox;
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 
 class ExpenseRequestConfirmEditField extends CheckBox {
 

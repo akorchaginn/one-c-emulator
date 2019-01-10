@@ -2,8 +2,8 @@ package org.pes.onecemulator.view.expenserequestadmin.root.presenter;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import org.pes.onecemulator.model.ExpenseRequestModel;
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 import org.pes.onecemulator.service.ExpenseRequestService;
 import org.pes.onecemulator.service.SourceService;
 import org.pes.onecemulator.view.expenserequestadmin.dialog.add.IExpenseRequestAddDialog;

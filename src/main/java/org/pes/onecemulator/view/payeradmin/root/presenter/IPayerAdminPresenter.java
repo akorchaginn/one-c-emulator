@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.payeradmin.root.presenter;
 
-import org.pes.onecemulator.model.PayerModel;
+import org.pes.onecemulator.model.internal.PayerModel;
 import org.pes.onecemulator.view.payeradmin.dialog.add.IPayerAddDialog;
 import org.pes.onecemulator.view.payeradmin.dialog.delete.IDeletePayerConfirmDialog;
 import org.pes.onecemulator.view.payeradmin.dialog.edit.IPayerEditDialog;

@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.payeradmin.dialog.edit;
 
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.ui.FormLayout;
-import org.pes.onecemulator.model.PayerModel;
+import org.pes.onecemulator.model.internal.PayerModel;
 
 import java.util.ArrayList;
 import java.util.List;

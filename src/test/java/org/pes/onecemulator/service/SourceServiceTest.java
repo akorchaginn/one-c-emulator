@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,14 +1,14 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.DocumentCrmConverter;
-import org.pes.onecemulator.converter.EmployeeCrmConverter;
-import org.pes.onecemulator.converter.PayerCrmConverter;
+import org.pes.onecemulator.converter.onec.DocumentModelConverter;
+import org.pes.onecemulator.converter.onec.EmployeeModelConverter;
+import org.pes.onecemulator.converter.onec.PayerModelConverter;
 import org.pes.onecemulator.entity.EmployeeSource;
 import org.pes.onecemulator.entity.PayerSource;
 import org.pes.onecemulator.entity.Source;
-import org.pes.onecemulator.model.DocumentCrm;
-import org.pes.onecemulator.model.EmployeeCrm;
-import org.pes.onecemulator.model.PayerCrm;
+import org.pes.onecemulator.model.onec.DocumentModel;
+import org.pes.onecemulator.model.onec.EmployeeModel;
+import org.pes.onecemulator.model.onec.PayerModel;
 import org.pes.onecemulator.repository.EmployeeRepository;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.SourceRepository;
@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 @Service
 public class CrmInteractionServiceImpl implements CrmInteractionService {
 
-    private static final DocumentCrmConverter DOCUMENT_CRM_CONVERTER = new DocumentCrmConverter();
+    private static final DocumentModelConverter DOCUMENT_CRM_CONVERTER = new DocumentModelConverter();
 
-    private static final PayerCrmConverter PAYER_CRM_CONVERTER = new PayerCrmConverter();
+    private static final PayerModelConverter PAYER_CRM_CONVERTER = new PayerModelConverter();
 
     private final InvoiceRepository invoiceRepository;
 
@@ -45,7 +45,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     @Override
-    public List<DocumentCrm> getDocumentsCrmById(final List<DocumentCrm> documentCrmList, final String sourceName) {
+    public List<DocumentModel> getDocumentsCrmById(final List<DocumentModel> documentCrmList, final String sourceName) {
         return documentCrmList.stream()
                 .filter(Objects::nonNull)
                 .map(documentCrm -> invoiceRepository.findByIdAndSource(documentCrm.getId(), sourceName).orElse(null))
@@ -55,8 +55,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     @Override
-    public List<DocumentCrm> getDocumentsCrmByExternalId(final List<DocumentCrm> documentCrmList,
-                                                         final String sourceName) {
+    public List<DocumentModel> getDocumentsCrmByExternalId(final List<DocumentModel> documentCrmList,
+                                                           final String sourceName) {
         return documentCrmList.stream()
                 .filter(Objects::nonNull)
                 .map(documentCrm ->
@@ -68,7 +68,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     @Override
-    public List<PayerCrm> getAllPayersCrmBySource(final String sourceName) {
+    public List<PayerModel> getAllPayersCrmBySource(final String sourceName) {
         return sourceRepository.findByName(sourceName)
                 .map(Source::getPayerSources)
                 .orElse(new ArrayList<>())
@@ -79,8 +79,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     @Override
-    public List<EmployeeCrm> getAllEmployeesCrmBySourceAndExternalIds(final String source,
-                                                                      final List<String> externalIds) {
+    public List<EmployeeModel> getAllEmployeesCrmBySourceAndExternalIds(final String source,
+                                                                        final List<String> externalIds) {
         return externalIds.stream()
                 .map(employeeRepository::findByExternalId)
                 .map(oe -> oe.orElse(null))
@@ -88,18 +88,18 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .flatMap(e -> e.getEmployeeSources().stream())
                 .filter(es -> es.getSource().getName().equals(source))
                 .map(EmployeeSource::getEmployee)
-                .map(e -> new EmployeeCrmConverter(source).convert(e))
+                .map(e -> new EmployeeModelConverter(source).convert(e))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<EmployeeCrm> getAllEmployeesCrmBySource(String source) {
+    public List<EmployeeModel> getAllEmployeesCrmBySource(String source) {
         return sourceRepository.findByName(source)
                 .map(Source::getEmployeeSources)
                 .stream()
                 .flatMap(Collection::stream)
                 .map(EmployeeSource::getEmployee)
-                .map(e -> new EmployeeCrmConverter(source).convert(e))
+                .map(e -> new EmployeeModelConverter(source).convert(e))
                 .collect(Collectors.toList());
     }
 }

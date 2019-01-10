@@ -1,8 +1,9 @@
-package org.pes.onecemulator.converter;
+package org.pes.onecemulator.converter.internal;
 
+import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.entity.ExpenseRequest;
-import org.pes.onecemulator.model.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
 
 import java.util.Optional;
 

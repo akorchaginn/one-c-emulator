@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.accountingentryadmin.dialog.edit;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.ComboBox;
-import org.pes.onecemulator.model.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
 
 import java.util.List;
 

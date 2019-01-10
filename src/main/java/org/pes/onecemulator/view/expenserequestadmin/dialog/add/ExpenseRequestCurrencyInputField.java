@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.expenserequestadmin.dialog.add;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 
 class ExpenseRequestCurrencyInputField extends TextField {
 

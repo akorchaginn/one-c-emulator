@@ -1,6 +1,6 @@
 package org.pes.onecemulator.view.invoiceadmin.root.view;
 
-import org.pes.onecemulator.model.InvoiceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
 
 import java.util.List;
 

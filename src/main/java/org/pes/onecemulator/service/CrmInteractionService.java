@@ -1,20 +1,20 @@
 package org.pes.onecemulator.service;
 
-import org.pes.onecemulator.model.DocumentCrm;
-import org.pes.onecemulator.model.EmployeeCrm;
-import org.pes.onecemulator.model.PayerCrm;
+import org.pes.onecemulator.model.onec.DocumentModel;
+import org.pes.onecemulator.model.onec.EmployeeModel;
+import org.pes.onecemulator.model.onec.PayerModel;
 
 import java.util.List;
 
 public interface CrmInteractionService {
 
-    List<DocumentCrm> getDocumentsCrmById(List<DocumentCrm> documentCrmList, String source);
+    List<DocumentModel> getDocumentsCrmById(List<DocumentModel> documentCrmList, String source);
 
-    List<DocumentCrm> getDocumentsCrmByExternalId(List<DocumentCrm> documentCrmList, String source);
+    List<DocumentModel> getDocumentsCrmByExternalId(List<DocumentModel> documentCrmList, String source);
 
-    List<PayerCrm> getAllPayersCrmBySource(String source);
+    List<PayerModel> getAllPayersCrmBySource(String source);
 
-    List<EmployeeCrm> getAllEmployeesCrmBySourceAndExternalIds(String source, List<String> externalIds);
+    List<EmployeeModel> getAllEmployeesCrmBySourceAndExternalIds(String source, List<String> externalIds);
 
-    List<EmployeeCrm> getAllEmployeesCrmBySource(String source);
+    List<EmployeeModel> getAllEmployeesCrmBySource(String source);
 }

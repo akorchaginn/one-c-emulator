@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.invoiceadmin.dialog.add;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.DateField;
-import org.pes.onecemulator.model.InvoiceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
 
 import java.time.LocalDate;
 

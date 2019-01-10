@@ -1,10 +1,10 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.EmployeeModelConverter;
+import org.pes.onecemulator.converter.internal.EmployeeModelConverter;
 import org.pes.onecemulator.entity.Employee;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
-import org.pes.onecemulator.model.EmployeeModel;
+import org.pes.onecemulator.model.internal.EmployeeModel;
 import org.pes.onecemulator.repository.EmployeeRepository;
 import org.pes.onecemulator.service.EmployeeService;
 import org.pes.onecemulator.service.EmployeeSourceService;

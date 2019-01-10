@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.payeradmin.dialog.add;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.CheckBoxGroup;
-import org.pes.onecemulator.model.PayerModel;
+import org.pes.onecemulator.model.internal.PayerModel;
 
 import java.util.List;
 

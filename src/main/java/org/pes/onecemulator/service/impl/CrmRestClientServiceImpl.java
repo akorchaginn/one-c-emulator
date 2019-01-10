@@ -2,37 +2,31 @@ package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.service.CrmRestClientService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.pes.onecemulator.service.RestService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.format.DateTimeFormatter;
 
 @Service
-public class CrmRestClientServiceImpl implements CrmRestClientService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CrmRestClientServiceImpl.class);
-
-    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
+public class CrmRestClientServiceImpl extends RestService implements CrmRestClientService {
 
     private static final String CRM_API_TOKEN = "crm-api-token";
 
     private static final String CRM_1C_DATABASE_SOURCE = "crm-1c-database-source";
 
+    @Value("${crm.interaction.token:#{null}}")
+    private String crmToken;
+
     @Value("${crm.interaction.host:#{null}}")
     private String crmHost;
 
-    @Value("${crm.interaction.uri:#{null}}")
-    private String crmUri;
-
-    @Value("${crm.interaction.token:#{null}}")
-    private String crmToken;
+    @Value("${crm.interaction.expense-request.uri:#{null}}")
+    private String expenseRequestUri;
 
     @Async
     @Override
@@ -43,11 +37,11 @@ public class CrmRestClientServiceImpl implements CrmRestClientService {
                 .setHeader(CRM_1C_DATABASE_SOURCE, accountingEntry.getExpenseRequest().getSource().getName())
                 .build();
 
-        LOGGER.info("Request: " + request + " headers = " + request.headers());
+        logger.info("Request: " + request + " headers = " + request.headers());
 
         final HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
-        LOGGER.info("Response:" +
+        logger.info("Response:" +
                 " status code = " + response.statusCode() +
                 " body = " + response.body() +
                 " headers = " + response.headers());
@@ -58,7 +52,7 @@ public class CrmRestClientServiceImpl implements CrmRestClientService {
     }
 
     private URI prepareExpenseRequestURI(final AccountingEntry accountingEntry) {
-        final String uriString =  getBaseCrmUri() + String.join(",",
+        final String uriString =  getExpenseRequestCrmUrl() + String.join(",",
                 accountingEntry.getExpenseRequest().getNumber(),
                 accountingEntry.getSum(),
                 toCrmString(Boolean.TRUE.equals(accountingEntry.getExpenseRequest().getPaid())),
@@ -71,8 +65,8 @@ public class CrmRestClientServiceImpl implements CrmRestClientService {
         return URI.create(uriString);
     }
 
-    private String getBaseCrmUri() {
-        return crmHost + crmUri + "/";
+    private String getExpenseRequestCrmUrl() {
+        return crmHost + expenseRequestUri + "/";
     }
 
     private String toCrmString(boolean value) {

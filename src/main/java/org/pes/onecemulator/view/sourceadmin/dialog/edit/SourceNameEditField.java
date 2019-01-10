@@ -2,7 +2,7 @@ package org.pes.onecemulator.view.sourceadmin.dialog.edit;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.ui.TextField;
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 
 class SourceNameEditField extends TextField {
 

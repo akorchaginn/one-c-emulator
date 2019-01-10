@@ -2,7 +2,7 @@ package org.pes.onecemulator.service;
 
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
-import org.pes.onecemulator.model.SourceModel;
+import org.pes.onecemulator.model.internal.SourceModel;
 
 import java.util.List;
 import java.util.UUID;

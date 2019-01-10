@@ -1,9 +1,10 @@
-package org.pes.onecemulator.converter;
+package org.pes.onecemulator.converter.internal;
 
+import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.PayerSource;
 import org.pes.onecemulator.entity.Source;
-import org.pes.onecemulator.model.PayerModel;
+import org.pes.onecemulator.model.internal.PayerModel;
 
 import java.util.stream.Collectors;
 

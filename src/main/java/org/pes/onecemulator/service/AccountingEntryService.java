@@ -1,7 +1,7 @@
 package org.pes.onecemulator.service;
 
 import org.pes.onecemulator.exception.NotFoundException;
-import org.pes.onecemulator.model.AccountingEntryModel;
+import org.pes.onecemulator.model.internal.AccountingEntryModel;
 
 import java.util.List;
 import java.util.UUID;

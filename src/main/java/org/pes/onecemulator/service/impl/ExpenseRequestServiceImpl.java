@@ -1,11 +1,11 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.ExpenseRequestModelConverter;
+import org.pes.onecemulator.converter.internal.ExpenseRequestModelConverter;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
-import org.pes.onecemulator.model.ExpenseRequestModel;
+import org.pes.onecemulator.model.internal.ExpenseRequestModel;
 import org.pes.onecemulator.repository.ExpenseRequestRepository;
 import org.pes.onecemulator.repository.SourceRepository;
 import org.pes.onecemulator.service.ExpenseRequestService;

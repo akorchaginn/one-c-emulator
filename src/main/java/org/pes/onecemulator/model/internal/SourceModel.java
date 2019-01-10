@@ -1,4 +1,4 @@
-package org.pes.onecemulator.model;
+package org.pes.onecemulator.model.internal;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
