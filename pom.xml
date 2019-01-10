@@ -5,7 +5,7 @@
 
 	<groupId>org.pes.onecemulator</groupId>
 	<artifactId>one-c-emulator</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.1.0-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>one-c-emulator</name>
