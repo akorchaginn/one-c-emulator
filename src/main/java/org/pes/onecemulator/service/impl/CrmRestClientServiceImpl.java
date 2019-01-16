@@ -4,7 +4,6 @@ import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.service.CrmRestClientService;
 import org.pes.onecemulator.service.RestService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -28,7 +27,6 @@ public class CrmRestClientServiceImpl extends RestService implements CrmRestClie
     @Value("${crm.interaction.expense-request.uri:#{null}}")
     private String expenseRequestUri;
 
-    @Async
     @Override
     public void sendExpenseRequest(final AccountingEntry accountingEntry) throws Exception {
         final HttpRequest request = HttpRequest.newBuilder()
