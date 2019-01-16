@@ -41,6 +41,8 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
     public List<PayerModel> getPayers(final String source) throws IOException, InterruptedException {
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(source, payersUri))
+                .setHeader(CONTENT_TYPE, APPLICATION_JSON)
+                .POST(HttpRequest.BodyPublishers.ofString(""))
                 .build();
 
         final List<PayerModel> result = readJson(
@@ -57,6 +59,8 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
     public List<EmployeeModel> getEmployees(final String source) throws IOException, InterruptedException {
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(source, employeesUri))
+                .setHeader(CONTENT_TYPE, APPLICATION_JSON)
+                .POST(HttpRequest.BodyPublishers.ofString("[{\"id\":\"\"}]"))
                 .build();
 
         final List<EmployeeModel> result = readJson(
