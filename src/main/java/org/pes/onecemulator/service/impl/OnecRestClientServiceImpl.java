@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.net.URI;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
@@ -18,6 +21,12 @@ import java.util.List;
 public class OnecRestClientServiceImpl extends RestService implements OnecRestClientService {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    @Value("${onec.interaction.auth.user:#{null}}")
+    private String user;
+
+    @Value("${onec.interaction.auth.password:#{null}}")
+    private String password;
 
     @Value("${onec.interaction.host:#{null}}")
     private String onecHost;
@@ -35,7 +44,7 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
                 .build();
 
         final List<PayerModel> result = readJson(
-                HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString()), PayerModel.class);
+                getHttpClient().send(request, HttpResponse.BodyHandlers.ofString()), PayerModel.class);
 
         // для проверки
         logger.info(String.valueOf(result.size()));
@@ -51,7 +60,7 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
                 .build();
 
         final List<EmployeeModel> result = readJson(
-                HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString()), EmployeeModel.class);
+                getHttpClient().send(request, HttpResponse.BodyHandlers.ofString()), EmployeeModel.class);
 
         // для проверки
         logger.info(String.valueOf(result.size()));
@@ -62,6 +71,15 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
 
     private URI getUri(final String source, final String uri) {
         return URI.create(onecHost + "/" + source + uri);
+    }
+
+    private HttpClient getHttpClient() {
+        return getHttpClientBuilder().authenticator(new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password.toCharArray());
+            }
+        }).build();
     }
 
     private static <T> List<T> readJson(HttpResponse<String> response, Class<T> clazz) throws IOException {
