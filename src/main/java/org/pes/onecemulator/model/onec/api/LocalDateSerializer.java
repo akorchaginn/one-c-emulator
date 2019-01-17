@@ -1,4 +1,4 @@
-package org.pes.onecemulator.model.api;
+package org.pes.onecemulator.model.onec.api;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -11,6 +11,6 @@ public class LocalDateSerializer extends JsonSerializer<LocalDate> {
 
     @Override
     public void serialize(LocalDate localDate, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString(localDate.toString());
+        jsonGenerator.writeString(localDate.atStartOfDay().toString());
     }
 }

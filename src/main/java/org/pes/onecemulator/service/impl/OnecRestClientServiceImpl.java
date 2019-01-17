@@ -1,6 +1,8 @@
 package org.pes.onecemulator.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.pes.onecemulator.model.onec.EmployeeModel;
 import org.pes.onecemulator.model.onec.PayerModel;
 import org.pes.onecemulator.service.OnecRestClientService;
@@ -21,6 +23,11 @@ import java.util.List;
 public class OnecRestClientServiceImpl extends RestService implements OnecRestClientService {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    static {
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        OBJECT_MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     @Value("${onec.interaction.auth.user:#{null}}")
     private String user;

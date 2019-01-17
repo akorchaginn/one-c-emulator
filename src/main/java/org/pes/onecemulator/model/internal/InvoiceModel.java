@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.pes.onecemulator.model.api.LocalDateDeserializer;
-import org.pes.onecemulator.model.api.LocalDateSerializer;
+import org.pes.onecemulator.model.internal.api.LocalDateDeserializer;
+import org.pes.onecemulator.model.internal.api.LocalDateSerializer;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;

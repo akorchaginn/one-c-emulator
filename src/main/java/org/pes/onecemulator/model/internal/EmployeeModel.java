@@ -8,8 +8,8 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.pes.onecemulator.model.api.LocalDateDeserializer;
-import org.pes.onecemulator.model.api.LocalDateSerializer;
+import org.pes.onecemulator.model.internal.api.LocalDateDeserializer;
+import org.pes.onecemulator.model.internal.api.LocalDateSerializer;
 
 import java.time.LocalDate;
 import java.util.HashSet;
