@@ -18,17 +18,14 @@ public class Invoice extends AbstractEntity {
     @Column(name = "number", nullable = false)
     private String number;
 
-    @Column(name = "number_oq")
-    private String numberOq;
-
     @Column(name = "payment_date")
     private LocalDate paymentDate;
 
     @Column(name = "payment_sum")
     private String paymentSum;
 
-    @Column(name = "payment_sum_rub")
-    private String paymentSumRUB;
+    @Column(name = "payment_sum_invoice_currency")
+    private String paymentSumInvoiceCurrency;
 
     @Column(name = "payment_currency")
     private String paymentCurrency;
@@ -38,9 +35,6 @@ public class Invoice extends AbstractEntity {
 
     @Column(name = "sum")
     private String sum;
-
-    @Column(name = "sum_rub")
-    private String sumRUB;
 
     @Column(name = "currency")
     private String currency;
@@ -72,14 +66,6 @@ public class Invoice extends AbstractEntity {
         this.number = number;
     }
 
-    public String getNumberOq() {
-        return numberOq;
-    }
-
-    public void setNumberOq(String numberOq) {
-        this.numberOq = numberOq;
-    }
-
     public LocalDate getPaymentDate() {
         return paymentDate;
     }
@@ -96,12 +82,12 @@ public class Invoice extends AbstractEntity {
         this.paymentSum = paymentSum;
     }
 
-    public String getPaymentSumRUB() {
-        return paymentSumRUB;
+    public String getPaymentSumInvoiceCurrency() {
+        return paymentSumInvoiceCurrency;
     }
 
-    public void setPaymentSumRUB(String paymentSumRUB) {
-        this.paymentSumRUB = paymentSumRUB;
+    public void setPaymentSumInvoiceCurrency(String paymentSumInvoiceCurrency) {
+        this.paymentSumInvoiceCurrency = paymentSumInvoiceCurrency;
     }
 
     public String getPaymentCurrency() {
@@ -126,14 +112,6 @@ public class Invoice extends AbstractEntity {
 
     public void setSum(String sum) {
         this.sum = sum;
-    }
-
-    public String getSumRUB() {
-        return sumRUB;
-    }
-
-    public void setSumRUB(String sumRUB) {
-        this.sumRUB = sumRUB;
     }
 
     public String getCurrency() {

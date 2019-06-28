@@ -35,9 +35,6 @@ public class InvoiceModel {
     @NotNull
     private String number;
 
-    @JsonProperty("NomOQ")
-    private String numberOq;
-
     @JsonProperty("payerCode")
     @NotNull
     private String payerCode;
@@ -49,7 +46,7 @@ public class InvoiceModel {
     private LocalDate paymentDate;
 
     @JsonProperty("sumOplat")
-    private String paymentSumRUB;
+    private String paymentSumInvoiceCurrency;
 
     @JsonProperty("sumOplat_currency_P")
     private String paymentSum;
@@ -62,9 +59,6 @@ public class InvoiceModel {
 
     @JsonProperty("sum")
     private String sum;
-
-    @JsonProperty("Sum_rub")
-    private String sumRUB;
 
     @JsonProperty("currency_S")
     private String currency;

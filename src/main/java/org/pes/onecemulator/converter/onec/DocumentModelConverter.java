@@ -14,7 +14,6 @@ public class DocumentModelConverter implements Converter<Invoice, DocumentModel>
         final DocumentModel model = new DocumentModel();
         model.setId(entity.getId());
         model.setNumber(entity.getNumber());
-        model.setNumberOq(entity.getNumberOq());
         model.setPayerName(Optional.ofNullable(entity.getPayer())
                 .map(Payer::getName)
                 .orElse(null));
@@ -22,9 +21,8 @@ public class DocumentModelConverter implements Converter<Invoice, DocumentModel>
         model.setDate(entity.getDate());
         model.setStatus(entity.getStatus());
         model.setPaymentDate(entity.getPaymentDate());
-        model.setPaymentSumRUB(entity.getPaymentSumRUB());
+        model.setPaymentSumInvoiceCurrency(entity.getPaymentSumInvoiceCurrency());
         model.setExternalId(entity.getExternalId());
-        model.setInvoiceSumRUB(entity.getSumRUB());
         model.setInvoiceCurrency(entity.getCurrency());
         model.setPaymentCurrency(entity.getPaymentCurrency());
         model.setPaymentSum(entity.getPaymentSum());

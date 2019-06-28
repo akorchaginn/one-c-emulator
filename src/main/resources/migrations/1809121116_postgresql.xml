@@ -119,14 +119,12 @@
             <column name="number" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="number_oq" type="varchar(255)"/>
             <column name="payment_date" type="date"/>
             <column name="payment_sum" type="varchar(255)"/>
-            <column name="payment_sum_rub" type="varchar(255)"/>
+            <column name="payment_sum_invoice_currency" type="varchar(255)"/>
             <column name="payment_currency" type="varchar(255)"/>
             <column name="status" type="varchar(255)"/>
             <column name="sum" type="varchar(255)"/>
-            <column name="sum_rub" type="varchar(255)"/>
             <column name="currency" type="varchar(255)"/>
             <column name="external_id" type="varchar(255)">
                 <constraints nullable="false"/>
