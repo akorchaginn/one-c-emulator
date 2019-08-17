@@ -23,12 +23,14 @@ public class CrmInteractionController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CrmInteractionController.class);
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     private final CrmInteractionService crmInteractionService;
 
     @Autowired
-    public CrmInteractionController(CrmInteractionService crmInteractionService) {
+    public CrmInteractionController(final ObjectMapper objectMapper,
+                                    final CrmInteractionService crmInteractionService) {
+        this.objectMapper = objectMapper;
         this.crmInteractionService = crmInteractionService;
     }
 
@@ -37,7 +39,7 @@ public class CrmInteractionController {
             @PathVariable(value = "source") String source,
             @RequestBody List<DocumentModel> documents) {
         try {
-            LOGGER.info("Request: " + source + "/hs/DocID " + mapper.writeValueAsString(documents));
+            LOGGER.info("Request: " + source + "/hs/DocID " + objectMapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
             LOGGER.error("Request error: ", e);
         }
@@ -46,7 +48,7 @@ public class CrmInteractionController {
                 crmInteractionService.getDocumentsCrmById(documents, source);
 
         try {
-            LOGGER.info("Response: " + mapper.writeValueAsString(documentList));
+            LOGGER.info("Response: " + objectMapper.writeValueAsString(documentList));
         } catch (JsonProcessingException e) {
             LOGGER.error("Response error: ", e);
         }
@@ -59,7 +61,7 @@ public class CrmInteractionController {
             @PathVariable(value = "source") String source,
             @RequestBody List<DocumentModel> documents) {
         try {
-            LOGGER.info("Request: " + source + "/hs/NewDoc " + mapper.writeValueAsString(documents));
+            LOGGER.info("Request: " + source + "/hs/NewDoc " + objectMapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
             LOGGER.error("Request error: ", e);
         }
@@ -68,7 +70,7 @@ public class CrmInteractionController {
                 crmInteractionService.getDocumentsCrmByExternalId(documents, source);
 
         try {
-            LOGGER.info("Response: " + mapper.writeValueAsString(documentList));
+            LOGGER.info("Response: " + objectMapper.writeValueAsString(documentList));
         } catch (JsonProcessingException e) {
             LOGGER.error("Response error: ", e);
         }
@@ -93,7 +95,7 @@ public class CrmInteractionController {
     public @ResponseBody List<EmployeeModel> getEmployees(
             @PathVariable(value = "source") String source, @RequestBody List<EmployeeModel> employees) {
         try {
-            LOGGER.info("Request: source=" + source + " ids= " + mapper.writeValueAsString(employees));
+            LOGGER.info("Request: source=" + source + " ids= " + objectMapper.writeValueAsString(employees));
         } catch (JsonProcessingException e) {
             LOGGER.error("Request error: ", e);
         }
@@ -108,7 +110,7 @@ public class CrmInteractionController {
                         .collect(Collectors.toList()));
 
         try {
-            LOGGER.info("Response: " + mapper.writeValueAsString(result));
+            LOGGER.info("Response: " + objectMapper.writeValueAsString(result));
         } catch (JsonProcessingException e) {
             LOGGER.error("Response error: ", e);
         }
