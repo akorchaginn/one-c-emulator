@@ -37,14 +37,15 @@ public class CrmInteractionControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private CrmInteractionService service;
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
     @Test
     public void getDocByIdWithEmptyListTest() throws Exception {
-        String SOURCE = "1db";
+        final String SOURCE = "1db";
 
         given(service.getDocumentsCrmById(new ArrayList<>(), SOURCE)).willReturn(new ArrayList<>());
 
@@ -58,12 +59,12 @@ public class CrmInteractionControllerTest {
 
     @Test
     public void getDocByIdWithOneElementAtListTest() throws Exception {
-        String SOURCE = "1db";
+        final String SOURCE = "1db";
 
-        DocumentModel documentCrmInput = new DocumentModel();
+        final DocumentModel documentCrmInput = new DocumentModel();
         documentCrmInput.setId(UUID.fromString("468e2104-109b-4f85-b0f8-d2d13a9e501a"));
 
-        DocumentModel documentCrmOutput = new DocumentModel();
+        final DocumentModel documentCrmOutput = new DocumentModel();
         documentCrmOutput.setId(UUID.fromString("468e2104-109b-4f85-b0f8-d2d13a9e501a"));
         documentCrmOutput.setPayerName("РогаИКопыта");
         documentCrmOutput.setStatus("Продано");
@@ -74,14 +75,16 @@ public class CrmInteractionControllerTest {
         documentCrmOutput.setDate(LocalDate.parse("2018-03-08", DateTimeFormatter.ISO_DATE));
         documentCrmOutput.setPaymentDate(LocalDate.parse("2018-03-09", DateTimeFormatter.ISO_DATE));
 
-        List<DocumentModel> docIn = Collections.singletonList(documentCrmInput);
-        List<DocumentModel> docOut = Collections.singletonList(documentCrmOutput);
+        final List<DocumentModel> docIn = Collections.singletonList(documentCrmInput);
+        final List<DocumentModel> docOut = Collections.singletonList(documentCrmOutput);
 
         given(service.getDocumentsCrmById(anyList(), anyString())).willReturn(docOut);
 
+        final String json = objectMapper.writeValueAsString(docIn);
+
         mvc.perform(post("/{0}/hs/DocID", SOURCE)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(mapper.writeValueAsString(docIn)))
+                .content(json))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -89,21 +92,21 @@ public class CrmInteractionControllerTest {
                 .andExpect(jsonPath("$[0].nom", is(documentCrmOutput.getNumber())))
                 .andExpect(jsonPath("$[0].name", is(documentCrmOutput.getPayerName())))
                 .andExpect(jsonPath("$[0].sum", is(documentCrmOutput.getInvoiceSum())))
-                .andExpect(jsonPath("$[0].date", is(documentCrmOutput.getDate().toString())))
+                .andExpect(jsonPath("$[0].date", is(documentCrmOutput.getDate().atStartOfDay().toString())))
                 .andExpect(jsonPath("$[0].status", is(documentCrmOutput.getStatus())))
-                .andExpect(jsonPath("$[0].dataOplat", is(documentCrmOutput.getPaymentDate().toString())))
+                .andExpect(jsonPath("$[0].dataOplat", is(documentCrmOutput.getPaymentDate().atStartOfDay().toString())))
                 .andExpect(jsonPath("$[0].sumOplat", is(documentCrmOutput.getPaymentSumInvoiceCurrency())))
                 .andExpect(jsonPath("$[0].uuid", is(documentCrmOutput.getExternalId())));
     }
 
     @Test
     public void getDocByIdWithManyElementsAtListTest() throws Exception {
-        String SOURCE = "1db";
+        final String SOURCE = "1db";
 
-        DocumentModel documentCrmInput1 = new DocumentModel();
+        final DocumentModel documentCrmInput1 = new DocumentModel();
         documentCrmInput1.setId(UUID.fromString("468e2104-109b-4f85-b0f8-d2d13a9e501a"));
 
-        DocumentModel documentCrmOutput1 = new DocumentModel();
+        final DocumentModel documentCrmOutput1 = new DocumentModel();
         documentCrmOutput1.setId(UUID.fromString("468e2104-109b-4f85-b0f8-d2d13a9e501a"));
         documentCrmOutput1.setPayerName("РогаИКопыта");
         documentCrmOutput1.setStatus("Продано");
@@ -114,10 +117,10 @@ public class CrmInteractionControllerTest {
         documentCrmOutput1.setDate(LocalDate.parse("2018-03-08", DateTimeFormatter.ISO_DATE));
         documentCrmOutput1.setPaymentDate(LocalDate.parse("2018-03-09", DateTimeFormatter.ISO_DATE));
 
-        DocumentModel documentCrmInput2 = new DocumentModel();
+        final DocumentModel documentCrmInput2 = new DocumentModel();
         documentCrmInput2.setId(UUID.fromString("90cf7646-c1bf-4fbe-a3df-cf74eca234b7"));
 
-        DocumentModel documentCrmOutput2 = new DocumentModel();
+        final DocumentModel documentCrmOutput2 = new DocumentModel();
         documentCrmOutput2.setId(UUID.fromString("90cf7646-c1bf-4fbe-a3df-cf74eca234b7"));
         documentCrmOutput2.setPayerName("КопытаИрония");
         documentCrmOutput2.setStatus("Продается");
@@ -128,14 +131,16 @@ public class CrmInteractionControllerTest {
         documentCrmOutput2.setDate(LocalDate.parse("2018-03-09", DateTimeFormatter.ISO_DATE));
         documentCrmOutput2.setPaymentDate(LocalDate.parse("2018-03-10", DateTimeFormatter.ISO_DATE));
 
-        List<DocumentModel> docIn = Arrays.asList(documentCrmInput1, documentCrmInput2);
-        List<DocumentModel> docOut = Arrays.asList(documentCrmOutput1, documentCrmOutput2);
+        final List<DocumentModel> docIn = Arrays.asList(documentCrmInput1, documentCrmInput2);
+        final List<DocumentModel> docOut = Arrays.asList(documentCrmOutput1, documentCrmOutput2);
 
         given(service.getDocumentsCrmById(anyList(), anyString())).willReturn(docOut);
 
+        final String json = objectMapper.writeValueAsString(docIn);
+
         mvc.perform(post("/{0}/hs/DocID", SOURCE)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(mapper.writeValueAsString(docIn)))
+                .content(json))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -143,18 +148,18 @@ public class CrmInteractionControllerTest {
                 .andExpect(jsonPath("$[0].nom", is(documentCrmOutput1.getNumber())))
                 .andExpect(jsonPath("$[0].name", is(documentCrmOutput1.getPayerName())))
                 .andExpect(jsonPath("$[0].sum", is(documentCrmOutput1.getInvoiceSum())))
-                .andExpect(jsonPath("$[0].date", is(documentCrmOutput1.getDate().toString())))
+                .andExpect(jsonPath("$[0].date", is(documentCrmOutput1.getDate().atStartOfDay().toString())))
                 .andExpect(jsonPath("$[0].status", is(documentCrmOutput1.getStatus())))
-                .andExpect(jsonPath("$[0].dataOplat", is(documentCrmOutput1.getPaymentDate().toString())))
+                .andExpect(jsonPath("$[0].dataOplat", is(documentCrmOutput1.getPaymentDate().atStartOfDay().toString())))
                 .andExpect(jsonPath("$[0].sumOplat", is(documentCrmOutput1.getPaymentSumInvoiceCurrency())))
                 .andExpect(jsonPath("$[0].uuid", is(documentCrmOutput1.getExternalId())))
                 .andExpect(jsonPath("$[1].id", is(documentCrmOutput2.getId().toString())))
                 .andExpect(jsonPath("$[1].nom", is(documentCrmOutput2.getNumber())))
                 .andExpect(jsonPath("$[1].name", is(documentCrmOutput2.getPayerName())))
                 .andExpect(jsonPath("$[1].sum", is(documentCrmOutput2.getInvoiceSum())))
-                .andExpect(jsonPath("$[1].date", is(documentCrmOutput2.getDate().toString())))
+                .andExpect(jsonPath("$[1].date", is(documentCrmOutput2.getDate().atStartOfDay().toString())))
                 .andExpect(jsonPath("$[1].status", is(documentCrmOutput2.getStatus())))
-                .andExpect(jsonPath("$[1].dataOplat", is(documentCrmOutput2.getPaymentDate().toString())))
+                .andExpect(jsonPath("$[1].dataOplat", is(documentCrmOutput2.getPaymentDate().atStartOfDay().toString())))
                 .andExpect(jsonPath("$[1].sumOplat", is(documentCrmOutput2.getPaymentSumInvoiceCurrency())))
                 .andExpect(jsonPath("$[1].uuid", is(documentCrmOutput2.getExternalId())));
     }
