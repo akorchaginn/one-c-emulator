@@ -13,18 +13,15 @@ public class InvoiceModelConverter implements Converter<Invoice, InvoiceModel> {
         model.setSource(entity.getSource().getName());
         model.setDate(entity.getDate());
         model.setNumber(entity.getNumber());
-        model.setNumberOq(entity.getNumberOq());
         model.setPayerCode(entity.getPayer().getCode());
         model.setPaymentDate(entity.getPaymentDate());
-        model.setPaymentSumRUB(entity.getPaymentSumRUB());
+        model.setPaymentSumInvoiceCurrency(entity.getPaymentSumInvoiceCurrency());
         model.setStatus(entity.getStatus());
         model.setSum(entity.getSum());
         model.setExternalId(entity.getExternalId());
         model.setPaymentCurrency(entity.getPaymentCurrency());
         model.setCurrency(entity.getCurrency());
         model.setPaymentSum(entity.getPaymentSum());
-        model.setSumRUB(entity.getSumRUB());
-
         return model;
     }
 }

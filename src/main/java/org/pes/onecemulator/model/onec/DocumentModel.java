@@ -23,17 +23,11 @@ public class DocumentModel {
     @JsonProperty("nom")
     private String number;
 
-    @JsonProperty("NomOQ")
-    private String numberOq;
-
     @JsonProperty("name")
     private String payerName;
 
     @JsonProperty("sum")
     private String invoiceSum;
-
-    @JsonProperty("Sum_rub")
-    private String invoiceSumRUB;
 
     @JsonProperty("currency_S")
     private String invoiceCurrency;
@@ -47,7 +41,7 @@ public class DocumentModel {
     private String paymentSum;
 
     @JsonProperty("sumOplat")
-    private String paymentSumRUB;
+    private String paymentSumInvoiceCurrency;
 
     @JsonProperty("currency_P")
     private String paymentCurrency;

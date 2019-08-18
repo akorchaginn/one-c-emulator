@@ -97,7 +97,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setSource(source);
         invoice.setDate(model.getDate());
         invoice.setNumber(model.getNumber());
-        invoice.setNumberOq(model.getNumberOq());
         invoice.setPayer(payer);
         invoice.setPaymentDate(model.getPaymentDate());
         invoice.setPaymentSum(model.getPaymentSum());
@@ -106,8 +105,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setExternalId(model.getExternalId());
         invoice.setPaymentCurrency(model.getPaymentCurrency());
         invoice.setCurrency(model.getCurrency());
-        invoice.setPaymentSumRUB(model.getPaymentSumRUB());
-        invoice.setSumRUB(model.getSumRUB());
+        invoice.setPaymentSumInvoiceCurrency(model.getPaymentSumInvoiceCurrency());
 
         return invoiceRepository.save(invoice);
     }
