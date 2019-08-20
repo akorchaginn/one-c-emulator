@@ -36,8 +36,8 @@ public class CrmInteractionController {
 
     @PostMapping(value = "{source}/hs/DocID")
     public @ResponseBody List<DocumentModel> getDocById(
-            @PathVariable(value = "source") String source,
-            @RequestBody List<DocumentModel> documents) {
+            @PathVariable(value = "source") final String source,
+            @RequestBody final List<DocumentModel> documents) {
         try {
             LOGGER.info("Request: " + source + "/hs/DocID " + objectMapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
@@ -58,8 +58,8 @@ public class CrmInteractionController {
 
     @PostMapping(value = "{source}/hs/NewDoc")
     public @ResponseBody List<DocumentModel> getDocByExternalId(
-            @PathVariable(value = "source") String source,
-            @RequestBody List<DocumentModel> documents) {
+            @PathVariable(value = "source") final String source,
+            @RequestBody final List<DocumentModel> documents) {
         try {
             LOGGER.info("Request: " + source + "/hs/NewDoc " + objectMapper.writeValueAsString(documents));
         } catch (JsonProcessingException e) {
@@ -80,7 +80,7 @@ public class CrmInteractionController {
 
     @PostMapping(value = "{source}/hs/Con")
     public @ResponseBody List<PayerModel> getPayers(
-            @PathVariable(value = "source") String source) {
+            @PathVariable(value = "source") final String source) {
         LOGGER.info("Request: source=" + source);
 
         final List<PayerModel> payerList =
@@ -93,7 +93,8 @@ public class CrmInteractionController {
 
     @PostMapping(value = "{source}/hs/Sotrudnik")
     public @ResponseBody List<EmployeeModel> getEmployees(
-            @PathVariable(value = "source") String source, @RequestBody List<EmployeeModel> employees) {
+            @PathVariable(value = "source") final String source,
+            @RequestBody final List<EmployeeModel> employees) {
         try {
             LOGGER.info("Request: source=" + source + " ids= " + objectMapper.writeValueAsString(employees));
         } catch (JsonProcessingException e) {

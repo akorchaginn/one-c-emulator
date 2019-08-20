@@ -97,6 +97,7 @@ public class AccountingEntryServiceImpl implements AccountingEntryService {
         accountingEntry.setDocumentName(model.getDocumentName());
         accountingEntry.setExpenseRequest(expenseRequest);
         accountingEntry.setSum(model.getSum());
+
         return accountingEntryRepository.save(accountingEntry);
     }
 

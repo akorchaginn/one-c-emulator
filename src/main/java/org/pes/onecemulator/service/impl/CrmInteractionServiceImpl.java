@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,8 +48,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     public List<DocumentModel> getDocumentsCrmById(final List<DocumentModel> documentCrmList, final String sourceName) {
         return documentCrmList.stream()
                 .filter(Objects::nonNull)
-                .map(documentCrm -> invoiceRepository.findByIdAndSource(documentCrm.getId(), sourceName).orElse(null))
-                .filter(Objects::nonNull)
+                .map(documentCrm -> invoiceRepository.findByIdAndSource(documentCrm.getId(), sourceName))
+                .flatMap(Optional::stream)
                 .map(DOCUMENT_CRM_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
@@ -59,10 +59,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                                                            final String sourceName) {
         return documentCrmList.stream()
                 .filter(Objects::nonNull)
-                .map(documentCrm ->
-                        invoiceRepository.findByExternalIdAndSource(
-                                documentCrm.getExternalId(), sourceName).orElse(null))
-                .filter(Objects::nonNull)
+                .map(documentCrm -> invoiceRepository.findByExternalIdAndSource(documentCrm.getExternalId(), sourceName))
+                .flatMap(Optional::stream)
                 .map(DOCUMENT_CRM_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
@@ -83,8 +81,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                                                                         final List<String> externalIds) {
         return externalIds.stream()
                 .map(employeeRepository::findByExternalId)
-                .map(oe -> oe.orElse(null))
-                .filter(Objects::nonNull)
+                .flatMap(Optional::stream)
                 .flatMap(e -> e.getEmployeeSources().stream())
                 .filter(es -> es.getSource().getName().equals(source))
                 .map(EmployeeSource::getEmployee)
@@ -93,11 +90,11 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     }
 
     @Override
-    public List<EmployeeModel> getAllEmployeesCrmBySource(String source) {
+    public List<EmployeeModel> getAllEmployeesCrmBySource(final String source) {
         return sourceRepository.findByName(source)
                 .map(Source::getEmployeeSources)
+                .orElse(new ArrayList<>())
                 .stream()
-                .flatMap(Collection::stream)
                 .map(EmployeeSource::getEmployee)
                 .map(e -> new EmployeeModelConverter(source).convert(e))
                 .collect(Collectors.toList());

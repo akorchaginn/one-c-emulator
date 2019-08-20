@@ -16,17 +16,17 @@ public class OnecInteractionController {
     private final OnecInteractionService onecInteractionService;
 
     @Autowired
-    public OnecInteractionController(OnecInteractionService onecInteractionService) {
+    public OnecInteractionController(final OnecInteractionService onecInteractionService) {
         this.onecInteractionService = onecInteractionService;
     }
 
     @GetMapping(value = "/load/payers/{source}")
-    public void loadPayers(@PathVariable(value = "source") String source) throws IOException, InterruptedException {
+    public void loadPayers(@PathVariable(value = "source") final String source) throws IOException, InterruptedException {
         onecInteractionService.loadPayers(source);
     }
 
     @GetMapping(value = "/load/employees/{source}")
-    public void loadEmployees(@PathVariable(value = "source") String source) throws IOException, InterruptedException {
+    public void loadEmployees(@PathVariable(value = "source") final String source) throws IOException, InterruptedException {
         onecInteractionService.loadEmployees(source);
     }
 }

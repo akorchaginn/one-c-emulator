@@ -15,7 +15,7 @@ public interface EmployeeService {
 
     EmployeeModel create(EmployeeModel model) throws ValidationException;
 
-    List<EmployeeModel> create(final List<EmployeeModel> models) throws ValidationException;
+    List<EmployeeModel> create(List<EmployeeModel> models) throws ValidationException;
 
     EmployeeModel update(EmployeeModel model) throws ValidationException, NotFoundException;
 

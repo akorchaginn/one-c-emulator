@@ -31,7 +31,7 @@ public class JpaConfig implements TransactionManagementConfigurer {
     private final Environment env;
 
     @Autowired
-    public JpaConfig(Environment env) {
+    public JpaConfig(final Environment env) {
         this.env = env;
     }
 
@@ -45,7 +45,7 @@ public class JpaConfig implements TransactionManagementConfigurer {
 
     @Bean
     public DataSource configureDataSource() {
-        HikariConfig config = new HikariConfig();
+        final HikariConfig config = new HikariConfig();
         config.setDriverClassName(env.getRequiredProperty("dataSource.driverClassName"));
         config.setJdbcUrl(env.getRequiredProperty("dataSource.url"));
         config.setUsername(env.getRequiredProperty("dataSource.username"));
@@ -56,12 +56,12 @@ public class JpaConfig implements TransactionManagementConfigurer {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(configureDataSource());
         entityManagerFactoryBean.setPackagesToScan("org.pes.onecemulator.entity");
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
-        Properties jpaProperties = new Properties();
+        final Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
         jpaProperties.put("hibernate.hbm2ddl.auto", env.getRequiredProperty("hibernate.hbm2ddl.auto"));
         jpaProperties.put("hibernate.enable_lazy_load_no_trans", "true");
@@ -72,7 +72,7 @@ public class JpaConfig implements TransactionManagementConfigurer {
 
     @Bean
     public JpaTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        final JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
         return transactionManager;

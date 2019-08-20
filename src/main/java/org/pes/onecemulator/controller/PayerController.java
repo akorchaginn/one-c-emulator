@@ -23,12 +23,12 @@ public class PayerController {
     private final PayerService payerService;
 
     @Autowired
-    public PayerController(PayerService payerService) {
+    public PayerController(final PayerService payerService) {
         this.payerService = payerService;
     }
 
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody PayerModel getById(@PathVariable UUID id) throws NotFoundException {
+    public @ResponseBody PayerModel getById(@PathVariable final UUID id) throws NotFoundException {
         return payerService.getById(id);
     }
 
@@ -38,17 +38,17 @@ public class PayerController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody List<PayerModel> create(@RequestBody List<PayerModel> modelList) throws Exception {
+    public @ResponseBody List<PayerModel> create(@RequestBody final List<PayerModel> modelList) throws Exception {
         return payerService.create(modelList);
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody PayerModel update(@RequestBody PayerModel model) throws Exception {
+    public @ResponseBody PayerModel update(@RequestBody final PayerModel model) throws Exception {
         return payerService.update(model);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public void delete(@PathVariable(value = "id") UUID id) {
+    public void delete(@PathVariable(value = "id") final UUID id) {
         payerService.delete(id);
     }
 }

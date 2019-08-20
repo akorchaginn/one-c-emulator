@@ -8,5 +8,5 @@ import java.util.Set;
 
 public interface EmployeeSourceService {
 
-    void add(final Employee employee, final Set<EmployeeSourceModel> sourceModels) throws ValidationException;
+    void add(Employee employee, Set<EmployeeSourceModel> sourceModels) throws ValidationException;
 }

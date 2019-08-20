@@ -8,11 +8,11 @@ import java.util.UUID;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundException extends Exception {
 
-    public NotFoundException(Class clazz, UUID id) {
+    public NotFoundException(final Class clazz, final UUID id) {
         super(clazz.getSimpleName() + " with id: " + id + " not found at database.");
     }
 
-    public NotFoundException(Class clazz, String str) {
+    public NotFoundException(final Class clazz, final String str) {
         super(clazz.getSimpleName() + " with " + str + " not found at database.");
     }
 }

@@ -23,12 +23,12 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(final EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody EmployeeModel getById(@PathVariable UUID id) throws NotFoundException {
+    public @ResponseBody EmployeeModel getById(@PathVariable final UUID id) throws NotFoundException {
         return employeeService.getById(id);
     }
 
@@ -38,18 +38,17 @@ public class EmployeeController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody
-    List<EmployeeModel> create(@RequestBody List<EmployeeModel> modelList) throws Exception {
+    public @ResponseBody List<EmployeeModel> create(@RequestBody final List<EmployeeModel> modelList) throws Exception {
         return employeeService.create(modelList);
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody EmployeeModel update(@RequestBody EmployeeModel model) throws Exception {
+    public @ResponseBody EmployeeModel update(@RequestBody final EmployeeModel model) throws Exception {
         return employeeService.update(model);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public void delete(@PathVariable(value = "id") UUID id) {
+    public void delete(@PathVariable(value = "id") final UUID id) {
         employeeService.delete(id);
     }
 }

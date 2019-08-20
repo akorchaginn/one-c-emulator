@@ -23,13 +23,12 @@ public class AccountingEntryController {
     private final AccountingEntryService accountingEntryService;
 
     @Autowired
-    public AccountingEntryController(AccountingEntryService accountingEntryService) {
+    public AccountingEntryController(final AccountingEntryService accountingEntryService) {
         this.accountingEntryService = accountingEntryService;
     }
 
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody
-    AccountingEntryModel getById(@PathVariable UUID id) throws NotFoundException {
+    public @ResponseBody AccountingEntryModel getById(@PathVariable final UUID id) throws NotFoundException {
         return accountingEntryService.getById(id);
     }
 
@@ -39,19 +38,17 @@ public class AccountingEntryController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody
-    AccountingEntryModel create(@RequestBody AccountingEntryModel model) throws Exception {
+    public @ResponseBody AccountingEntryModel create(@RequestBody final AccountingEntryModel model) throws Exception {
         return accountingEntryService.create(model);
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody
-    AccountingEntryModel update(@RequestBody AccountingEntryModel model) throws Exception {
+    public @ResponseBody AccountingEntryModel update(@RequestBody final AccountingEntryModel model) throws Exception {
         return accountingEntryService.update(model);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public void delete(@PathVariable UUID id) {
+    public void delete(@PathVariable final UUID id) {
         accountingEntryService.delete(id);
     }
 }

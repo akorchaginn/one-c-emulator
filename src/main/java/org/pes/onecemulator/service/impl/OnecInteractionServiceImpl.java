@@ -13,19 +13,17 @@ public class OnecInteractionServiceImpl implements OnecInteractionService {
     private final OnecRestClientService onecRestClientService;
 
     @Autowired
-    public OnecInteractionServiceImpl(OnecRestClientService onecRestClientService) {
+    public OnecInteractionServiceImpl(final OnecRestClientService onecRestClientService) {
         this.onecRestClientService = onecRestClientService;
     }
 
     @Override
     public void loadPayers(final String source) throws IOException, InterruptedException {
-        // TODO сделать сохранение в БД
         onecRestClientService.getPayers(source);
     }
 
     @Override
     public void loadEmployees(final String source) throws IOException, InterruptedException {
-        // TODO сделать сохранение в БД
         onecRestClientService.getEmployees(source);
     }
 }

@@ -23,13 +23,12 @@ public class ExpenseRequestController {
     private final ExpenseRequestService expenseRequestService;
 
     @Autowired
-    public ExpenseRequestController(ExpenseRequestService expenseRequestService) {
+    public ExpenseRequestController(final ExpenseRequestService expenseRequestService) {
         this.expenseRequestService = expenseRequestService;
     }
 
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody
-    ExpenseRequestModel getById(@PathVariable UUID id) throws NotFoundException {
+    public @ResponseBody ExpenseRequestModel getById(@PathVariable final UUID id) throws NotFoundException {
         return expenseRequestService.getById(id);
     }
 
@@ -39,19 +38,17 @@ public class ExpenseRequestController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody
-    ExpenseRequestModel create(@RequestBody ExpenseRequestModel model) throws Exception {
+    public @ResponseBody ExpenseRequestModel create(@RequestBody final ExpenseRequestModel model) throws Exception {
         return expenseRequestService.create(model);
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody
-    ExpenseRequestModel update(@RequestBody ExpenseRequestModel model) throws Exception {
+    public @ResponseBody ExpenseRequestModel update(@RequestBody final ExpenseRequestModel model) throws Exception {
         return expenseRequestService.update(model);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public void delete(@PathVariable(value = "id") UUID id) {
+    public void delete(@PathVariable(value = "id") final UUID id) {
         expenseRequestService.delete(id);
     }
 }

@@ -23,13 +23,12 @@ public class InvoiceController {
     private final InvoiceService invoiceService;
 
     @Autowired
-    public InvoiceController(InvoiceService invoiceService) {
+    public InvoiceController(final InvoiceService invoiceService) {
         this.invoiceService = invoiceService;
     }
 
     @GetMapping(value = "/get-by-id/{id}")
-    public @ResponseBody
-    InvoiceModel getById(@PathVariable UUID id) throws NotFoundException {
+    public @ResponseBody InvoiceModel getById(@PathVariable final UUID id) throws NotFoundException {
         return invoiceService.getById(id);
     }
 
@@ -39,17 +38,17 @@ public class InvoiceController {
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody InvoiceModel create(@RequestBody InvoiceModel model) throws Exception {
+    public @ResponseBody InvoiceModel create(@RequestBody final InvoiceModel model) throws Exception {
         return invoiceService.create(model);
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody InvoiceModel update(@RequestBody InvoiceModel model) throws Exception {
+    public @ResponseBody InvoiceModel update(@RequestBody final InvoiceModel model) throws Exception {
         return invoiceService.update(model);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public void delete(@PathVariable UUID id) {
+    public void delete(@PathVariable final UUID id) {
         invoiceService.delete(id);
     }
 }

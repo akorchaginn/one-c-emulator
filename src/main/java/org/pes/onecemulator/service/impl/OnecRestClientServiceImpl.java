@@ -45,7 +45,7 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
     }
 
     @Override
-    public List<PayerModel> getPayers(final String source) throws IOException, InterruptedException {
+    public void getPayers(final String source) throws IOException, InterruptedException {
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(source, payersUri))
                 .setHeader(CONTENT_TYPE, APPLICATION_JSON)
@@ -57,12 +57,10 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
         // для проверки
         logger.info(String.valueOf(result.size()));
         logger.info(objectMapper.writeValueAsString(result));
-
-        return result;
     }
 
     @Override
-    public List<EmployeeModel> getEmployees(final String source) throws IOException, InterruptedException {
+    public void getEmployees(final String source) throws IOException, InterruptedException {
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(source, employeesUri))
                 .setHeader(CONTENT_TYPE, APPLICATION_JSON)
@@ -74,8 +72,6 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
         // для проверки
         logger.info(String.valueOf(result.size()));
         logger.info(objectMapper.writeValueAsString(result));
-
-        return result;
     }
 
     private URI getUri(final String source, final String uri) {

@@ -12,17 +12,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ApiError> handleAllExceptions(Exception e) {
+    public final ResponseEntity<ApiError> handleAllExceptions(final Exception e) {
         return new ResponseEntity<>(new ApiError(e), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public final ResponseEntity<ApiError> handleNotFoundExceptions(Exception e) {
+    public final ResponseEntity<ApiError> handleNotFoundExceptions(final Exception e) {
         return new ResponseEntity<>(new ApiError(e), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ValidationException.class)
-    public final ResponseEntity<ApiError> handleValidationExceptions(Exception e) {
+    public final ResponseEntity<ApiError> handleValidationExceptions(final Exception e) {
         return new ResponseEntity<>(new ApiError(e), HttpStatus.BAD_REQUEST);
     }
 }

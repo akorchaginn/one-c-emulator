@@ -7,5 +7,5 @@ import java.util.Set;
 
 public interface PayerSourceService {
 
-    void add(final Payer payer, final Set<String> sources) throws ValidationException;
+    void add(Payer payer, Set<String> sources) throws ValidationException;
 }

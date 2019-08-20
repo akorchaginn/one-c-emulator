@@ -12,7 +12,7 @@ class ApiError {
     @JsonProperty("error")
     private String error;
 
-    ApiError(Throwable exception) {
+    ApiError(final Throwable exception) {
         this.error = ExceptionUtils.getCause(exception).getMessage();
     }
 }
