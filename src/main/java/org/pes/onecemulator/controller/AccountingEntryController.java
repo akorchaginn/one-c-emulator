@@ -7,6 +7,7 @@ import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.internal.AccountingEntryModel;
 import org.pes.onecemulator.service.AccountingEntryService;
 import org.pes.onecemulator.service.CrmRestClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class AccountingEntryController {
 
     private final CrmRestClientService crmRestClientService;
 
+    @Autowired
     public AccountingEntryController(final AccountingEntryService accountingEntryService,
                                      final CrmRestClientService crmRestClientService) {
         this.accountingEntryService = accountingEntryService;

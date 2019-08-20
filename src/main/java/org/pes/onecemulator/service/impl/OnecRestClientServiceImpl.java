@@ -7,6 +7,7 @@ import org.pes.onecemulator.model.onec.EmployeeModel;
 import org.pes.onecemulator.model.onec.PayerModel;
 import org.pes.onecemulator.service.OnecRestClientService;
 import org.pes.onecemulator.service.RestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,7 @@ public class OnecRestClientServiceImpl extends RestService implements OnecRestCl
 
     private final ObjectMapper objectMapper;
 
+    @Autowired
     public OnecRestClientServiceImpl(final ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.httpClient = createHttpClient(user, password);

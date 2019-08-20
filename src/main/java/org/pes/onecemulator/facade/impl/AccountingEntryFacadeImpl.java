@@ -6,6 +6,7 @@ import org.pes.onecemulator.facade.AccountingEntryFacade;
 import org.pes.onecemulator.model.internal.AccountingEntryModel;
 import org.pes.onecemulator.service.AccountingEntryService;
 import org.pes.onecemulator.service.CrmRestClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class AccountingEntryFacadeImpl implements AccountingEntryFacade {
 
     private final CrmRestClientService crmRestClientService;
 
+    @Autowired
     public AccountingEntryFacadeImpl(final AccountingEntryService accountingEntryService,
                                      final CrmRestClientService crmRestClientService) {
         this.accountingEntryService = accountingEntryService;
