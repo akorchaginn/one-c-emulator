@@ -2,7 +2,7 @@ package org.pes.onecemulator.ui.menu;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
-import org.pes.onecemulator.view.sourceadmin.root.view.SourceAdminView;
+import org.pes.onecemulator.ui.view.sourceadmin.root.view.SourceAdminView;
 
 class ToSourceAdminViewButton extends Button {
 

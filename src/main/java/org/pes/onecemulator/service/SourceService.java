@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service;
 
+import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.internal.SourceModel;
@@ -9,15 +10,15 @@ import java.util.UUID;
 
 public interface SourceService {
 
-    SourceModel getById(UUID id) throws NotFoundException;
+    Source getById(UUID id) throws NotFoundException;
 
-    SourceModel getByName(String name) throws NotFoundException;
+    Source getByName(String name) throws NotFoundException;
 
-    List<SourceModel> list();
+    List<Source> list();
 
-    SourceModel create(SourceModel model) throws ValidationException;
+    Source create(SourceModel model) throws ValidationException;
 
-    SourceModel update(SourceModel model) throws ValidationException, NotFoundException;
+    Source update(SourceModel model) throws ValidationException, NotFoundException;
 
     void delete(UUID id);
 }

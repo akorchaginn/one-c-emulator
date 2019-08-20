@@ -1,6 +1,5 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.internal.InvoiceModelConverter;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
@@ -17,12 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
-
-    private static final InvoiceModelConverter INVOICE_MODEL_CONVERTER = new InvoiceModelConverter();
 
     private final InvoiceRepository invoiceRepository;
 
@@ -40,31 +36,27 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public InvoiceModel getById(final UUID id) throws NotFoundException {
+    public Invoice getById(final UUID id) throws NotFoundException {
         return invoiceRepository.findById(id)
-                .map(INVOICE_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Invoice.class, id));
     }
 
     @Override
-    public List<InvoiceModel> list() {
-        return invoiceRepository.findAll()
-                .stream()
-                .map(INVOICE_MODEL_CONVERTER::convert)
-                .collect(Collectors.toList());
+    public List<Invoice> list() {
+        return invoiceRepository.findAll();
     }
 
     @Transactional
     @Override
-    public InvoiceModel create(final InvoiceModel model) throws Exception {
+    public Invoice create(final InvoiceModel model) throws NotFoundException, ValidationException {
         validateModel(model);
 
-        return INVOICE_MODEL_CONVERTER.convert(updateOrCreate(model, new Invoice()));
+        return updateOrCreate(model, new Invoice());
     }
 
     @Transactional
     @Override
-    public InvoiceModel update(final InvoiceModel model) throws Exception {
+    public Invoice update(final InvoiceModel model) throws NotFoundException, ValidationException {
         validateModel(model);
 
         if (model.getId() == null) {
@@ -74,7 +66,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         final Invoice invoice = invoiceRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(Invoice.class, model.getId()));
 
-        return INVOICE_MODEL_CONVERTER.convert(updateOrCreate(model, invoice));
+        return updateOrCreate(model, invoice);
     }
 
     @Transactional

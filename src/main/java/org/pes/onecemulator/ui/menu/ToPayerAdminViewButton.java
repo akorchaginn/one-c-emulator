@@ -2,7 +2,7 @@ package org.pes.onecemulator.ui.menu;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
-import org.pes.onecemulator.view.payeradmin.root.view.PayerAdminView;
+import org.pes.onecemulator.ui.view.payeradmin.root.view.PayerAdminView;
 
 class ToPayerAdminViewButton extends Button {
 

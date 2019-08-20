@@ -2,7 +2,7 @@ package org.pes.onecemulator.ui.menu;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
-import org.pes.onecemulator.view.expenserequestadmin.root.view.ExpenseRequestAdminView;
+import org.pes.onecemulator.ui.view.expenserequestadmin.root.view.ExpenseRequestAdminView;
 
 class ToExpenseRequestAdminViewButton extends Button {
 

@@ -1,6 +1,5 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.internal.PayerModelConverter;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.PayerSource;
 import org.pes.onecemulator.entity.Source;
@@ -23,8 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class PayerServiceImpl implements PayerService {
 
-    private static final PayerModelConverter PAYER_MODEL_CONVERTER = new PayerModelConverter();
-
     private final PayerRepository payerRepository;
 
     private final SourceRepository sourceRepository;
@@ -41,53 +38,37 @@ public class PayerServiceImpl implements PayerService {
     }
 
     @Override
-    public PayerModel getById(final UUID id) throws NotFoundException {
+    public Payer getById(final UUID id) throws NotFoundException {
         return payerRepository.findById(id)
-                .map(PAYER_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Payer.class, id));
     }
 
     @Override
-    public List<PayerModel> list() {
-        return payerRepository.findAll()
-                .stream()
-                .map(PAYER_MODEL_CONVERTER::convert)
-                .collect(Collectors.toList());
+    public List<Payer> list() {
+        return payerRepository.findAll();
     }
 
     @Override
-    public List<PayerModel> listBySource(final String source) {
+    public List<Payer> listBySource(final String source) {
         return sourceRepository.findByName(source)
                 .map(Source::getPayerSources)
                 .orElse(new ArrayList<>())
                 .stream()
                 .map(PayerSource::getPayer)
-                .map(PAYER_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public PayerModel create(final PayerModel model) throws ValidationException {
+    public Payer create(final PayerModel model) throws ValidationException {
         validateModel(model);
 
-        return PAYER_MODEL_CONVERTER.convert(updateOrCreate(model, new Payer()));
+        return updateOrCreate(model, new Payer());
     }
 
     @Transactional
     @Override
-    public List<PayerModel> create(final List<PayerModel> models) throws ValidationException {
-        final List<PayerModel> result = new ArrayList<>();
-        for (PayerModel model : models) {
-            result.add(create(model));
-        }
-
-        return result;
-    }
-
-    @Transactional
-    @Override
-    public PayerModel update(final PayerModel model) throws ValidationException, NotFoundException {
+    public Payer update(final PayerModel model) throws NotFoundException, ValidationException {
         validateModel(model);
 
         if (model.getId() == null) {
@@ -97,7 +78,7 @@ public class PayerServiceImpl implements PayerService {
         final Payer payer = payerRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(Payer.class, model.getId()));
 
-        return PAYER_MODEL_CONVERTER.convert(updateOrCreate(model, payer));
+        return updateOrCreate(model, payer);
     }
 
     @Transactional

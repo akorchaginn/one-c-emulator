@@ -2,7 +2,7 @@ package org.pes.onecemulator.ui.menu;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
-import org.pes.onecemulator.view.invoiceadmin.root.view.InvoiceAdminView;
+import org.pes.onecemulator.ui.view.invoiceadmin.root.view.InvoiceAdminView;
 
 class ToInvoiceAdminViewButton extends Button {
 

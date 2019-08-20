@@ -1,6 +1,8 @@
 package org.pes.onecemulator.controller;
 
+import org.pes.onecemulator.converter.internal.InvoiceModelConverter;
 import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.internal.InvoiceModel;
 import org.pes.onecemulator.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/invoice")
 public class InvoiceController {
+
+    private static final InvoiceModelConverter INVOICE_MODEL_CONVERTER = new InvoiceModelConverter();
 
     private final InvoiceService invoiceService;
 
@@ -29,22 +34,24 @@ public class InvoiceController {
 
     @GetMapping(value = "/get-by-id/{id}")
     public @ResponseBody InvoiceModel getById(@PathVariable final UUID id) throws NotFoundException {
-        return invoiceService.getById(id);
+        return INVOICE_MODEL_CONVERTER.convert(invoiceService.getById(id));
     }
 
     @GetMapping(value = "/list")
     public @ResponseBody List<InvoiceModel> list() {
-        return invoiceService.list();
+        return invoiceService.list().stream()
+                .map(INVOICE_MODEL_CONVERTER::convert)
+                .collect(Collectors.toList());
     }
 
     @PostMapping(value = "/create")
-    public @ResponseBody InvoiceModel create(@RequestBody final InvoiceModel model) throws Exception {
-        return invoiceService.create(model);
+    public @ResponseBody InvoiceModel create(@RequestBody final InvoiceModel model) throws NotFoundException, ValidationException {
+        return INVOICE_MODEL_CONVERTER.convert(invoiceService.create(model));
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody InvoiceModel update(@RequestBody final InvoiceModel model) throws Exception {
-        return invoiceService.update(model);
+    public @ResponseBody InvoiceModel update(@RequestBody final InvoiceModel model) throws NotFoundException, ValidationException {
+        return INVOICE_MODEL_CONVERTER.convert(invoiceService.update(model));
     }
 
     @DeleteMapping(value = "/delete/{id}")

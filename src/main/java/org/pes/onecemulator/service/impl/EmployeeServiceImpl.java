@@ -1,6 +1,5 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.internal.EmployeeModelConverter;
 import org.pes.onecemulator.entity.Employee;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
@@ -15,12 +14,9 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-
-    private static final EmployeeModelConverter EMPLOYEE_MODEL_CONVERTER = new EmployeeModelConverter();
 
     private final EmployeeRepository employeeRepository;
 
@@ -34,34 +30,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeModel getById(final UUID id) throws NotFoundException {
+    public Employee getById(final UUID id) throws NotFoundException {
         return employeeRepository.findById(id)
-                .map(EMPLOYEE_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Employee.class, id));
     }
 
     @Override
-    public List<EmployeeModel> list() {
-        return employeeRepository.findAll()
-                .stream()
-                .map(EMPLOYEE_MODEL_CONVERTER::convert)
-                .collect(Collectors.toList());
+    public List<Employee> list() {
+        return employeeRepository.findAll();
     }
 
     @Transactional
     @Override
-    public EmployeeModel create(final EmployeeModel model) throws ValidationException {
-        validateModel(model);
-
-        return EMPLOYEE_MODEL_CONVERTER.convert(updateOrCreate(model, new Employee()));
-    }
-
-    @Transactional
-    @Override
-    public List<EmployeeModel> create(final List<EmployeeModel> models) throws ValidationException {
-        final List<EmployeeModel> result = new ArrayList<>();
+    public List<Employee> create(final List<EmployeeModel> models) throws ValidationException {
+        final List<Employee> result = new ArrayList<>();
         for (EmployeeModel model : models) {
-            result.add(create(model));
+            validateModel(model);
+            result.add(updateOrCreate(model, new Employee()));
         }
 
         return result;
@@ -69,7 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Transactional
     @Override
-    public EmployeeModel update(final EmployeeModel model) throws ValidationException, NotFoundException {
+    public Employee update(final EmployeeModel model) throws ValidationException, NotFoundException {
         validateModel(model);
 
         if (model.getId() == null) {
@@ -79,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         final Employee employee = employeeRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(Employee.class, model.getId()));
 
-        return EMPLOYEE_MODEL_CONVERTER.convert(updateOrCreate(model, employee));
+        return updateOrCreate(model, employee);
     }
 
     @Override

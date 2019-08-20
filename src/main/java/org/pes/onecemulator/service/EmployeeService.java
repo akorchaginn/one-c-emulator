@@ -1,5 +1,6 @@
 package org.pes.onecemulator.service;
 
+import org.pes.onecemulator.entity.Employee;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.internal.EmployeeModel;
@@ -9,15 +10,13 @@ import java.util.UUID;
 
 public interface EmployeeService {
 
-    EmployeeModel getById(UUID id) throws NotFoundException;
+    Employee getById(UUID id) throws NotFoundException;
 
-    List<EmployeeModel> list();
+    List<Employee> list();
 
-    EmployeeModel create(EmployeeModel model) throws ValidationException;
+    List<Employee> create(List<EmployeeModel> models) throws ValidationException;
 
-    List<EmployeeModel> create(List<EmployeeModel> models) throws ValidationException;
-
-    EmployeeModel update(EmployeeModel model) throws ValidationException, NotFoundException;
+    Employee update(EmployeeModel model) throws ValidationException, NotFoundException;
 
     void delete(UUID id);
 }

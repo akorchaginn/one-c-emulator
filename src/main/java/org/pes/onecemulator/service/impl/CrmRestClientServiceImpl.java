@@ -25,6 +25,8 @@ public class CrmRestClientServiceImpl extends RestService implements CrmRestClie
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    private static final HttpResponse.BodyHandler<String> STRING_BODY_HANDLER = HttpResponse.BodyHandlers.ofString();
+
     @Value("${crm.interaction.token:#{null}}")
     private String crmToken;
 
@@ -35,25 +37,21 @@ public class CrmRestClientServiceImpl extends RestService implements CrmRestClie
     private String expenseRequestUri;
 
     @Override
-    public void sendExpenseRequest(final AccountingEntry accountingEntry) throws Exception {
+    public void sendExpenseRequest(final AccountingEntry accountingEntry) {
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(prepareExpenseRequestURI(accountingEntry))
                 .setHeader(CRM_API_TOKEN, crmToken)
                 .setHeader(CRM_1C_DATABASE_SOURCE, accountingEntry.getExpenseRequest().getSource().getName())
                 .build();
 
-        logger.info("Request: " + request + " headers = " + request.headers());
-
-        final HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-
-        logger.info("Response:" +
-                " status code = " + response.statusCode() +
-                " body = " + response.body() +
-                " headers = " + response.headers());
-
-        if (response.statusCode() != 200) {
-            throw new Exception("Status code not equal 200.");
-        }
+        HTTP_CLIENT.sendAsync(request, STRING_BODY_HANDLER)
+                .thenAccept(response -> {
+                    loggingRequestResponse(request, response, null);
+                })
+                .exceptionally(throwable -> {
+                    loggingRequestResponse(request, null, throwable);
+                    return null;
+                });
     }
 
     private URI prepareExpenseRequestURI(final AccountingEntry accountingEntry) {
@@ -80,6 +78,20 @@ public class CrmRestClientServiceImpl extends RestService implements CrmRestClie
                      .append(dateString);
 
         return URI.create(stringBuilder.toString());
+    }
+
+    private void loggingRequestResponse(final HttpRequest request,
+                                        final HttpResponse<String> response,
+                                        final Throwable throwable) {
+        logger.info("Request: " + request + " headers = " + request.headers());
+        if (response != null) {
+            logger.info("Response:" +
+                    " status code = " + response.statusCode() +
+                    " body = " + response.body() +
+                    " headers = " + response.headers());
+        } else {
+            logger.error("Response error: ", throwable);
+        }
     }
 
     private static String toCrmString(final Boolean value) {

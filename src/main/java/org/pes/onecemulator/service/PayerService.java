@@ -1,6 +1,8 @@
 package org.pes.onecemulator.service;
 
+import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.internal.PayerModel;
 
 import java.util.List;
@@ -8,17 +10,15 @@ import java.util.UUID;
 
 public interface PayerService {
 
-    PayerModel getById(UUID id) throws NotFoundException;
+    Payer getById(UUID id) throws NotFoundException;
 
-    List<PayerModel> list();
+    List<Payer> list();
 
-    List<PayerModel> listBySource(String source);
+    List<Payer> listBySource(String source);
 
-    PayerModel create(PayerModel model) throws Exception;
+    Payer create(PayerModel model) throws ValidationException;
 
-    List<PayerModel> create(List<PayerModel> models) throws Exception;
-
-    PayerModel update(PayerModel model) throws Exception;
+    Payer update(PayerModel model) throws NotFoundException, ValidationException;
 
     void delete(UUID id);
 }

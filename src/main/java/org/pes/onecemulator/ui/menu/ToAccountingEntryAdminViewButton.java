@@ -2,7 +2,7 @@ package org.pes.onecemulator.ui.menu;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
-import org.pes.onecemulator.view.accountingentryadmin.root.view.AccountingEntryAdminView;
+import org.pes.onecemulator.ui.view.accountingentryadmin.root.view.AccountingEntryAdminView;
 
 class ToAccountingEntryAdminViewButton extends Button {
 

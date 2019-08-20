@@ -1,6 +1,5 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.internal.ExpenseRequestModelConverter;
 import org.pes.onecemulator.entity.ExpenseRequest;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
@@ -15,12 +14,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class ExpenseRequestServiceImpl implements ExpenseRequestService {
-
-    private static final ExpenseRequestModelConverter EXPENSE_REQUEST_MODEL_CONVERTER = new ExpenseRequestModelConverter();
 
     private final ExpenseRequestRepository expenseRequestRepository;
 
@@ -34,31 +30,27 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
     }
 
     @Override
-    public ExpenseRequestModel getById(final UUID id) throws NotFoundException {
+    public ExpenseRequest getById(final UUID id) throws NotFoundException {
         return expenseRequestRepository.findById(id)
-                .map(EXPENSE_REQUEST_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, id));
     }
 
     @Override
-    public List<ExpenseRequestModel> list() {
-        return expenseRequestRepository.findAll()
-                .stream()
-                .map(EXPENSE_REQUEST_MODEL_CONVERTER::convert)
-                .collect(Collectors.toList());
+    public List<ExpenseRequest> list() {
+        return expenseRequestRepository.findAll();
     }
 
     @Transactional
     @Override
-    public ExpenseRequestModel create(final ExpenseRequestModel model) throws Exception {
+    public ExpenseRequest create(final ExpenseRequestModel model) throws ValidationException, NotFoundException {
         validateModel(model);
 
-        return EXPENSE_REQUEST_MODEL_CONVERTER.convert(updateOrCreate(model, new ExpenseRequest()));
+        return updateOrCreate(model, new ExpenseRequest());
     }
 
     @Transactional
     @Override
-    public ExpenseRequestModel update(final ExpenseRequestModel model) throws Exception {
+    public ExpenseRequest update(final ExpenseRequestModel model) throws ValidationException, NotFoundException {
         validateModel(model);
 
         if (model.getId() == null) {
@@ -68,7 +60,7 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         final ExpenseRequest expenseRequest = expenseRequestRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(ExpenseRequest.class, model.getId()));
 
-        return EXPENSE_REQUEST_MODEL_CONVERTER.convert(updateOrCreate(model, expenseRequest));
+        return updateOrCreate(model, expenseRequest);
     }
 
     @Transactional
@@ -87,6 +79,7 @@ public class ExpenseRequestServiceImpl implements ExpenseRequestService {
         expenseRequest.setPaid(model.isPaid());
         expenseRequest.setNumber(model.getNumber());
         expenseRequest.setSum(model.getSum());
+
         return expenseRequestRepository.save(expenseRequest);
     }
 

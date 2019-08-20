@@ -1,6 +1,8 @@
 package org.pes.onecemulator.service;
 
+import org.pes.onecemulator.entity.AccountingEntry;
 import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.internal.AccountingEntryModel;
 
 import java.util.List;
@@ -8,13 +10,13 @@ import java.util.UUID;
 
 public interface AccountingEntryService {
 
-    AccountingEntryModel getById(UUID id) throws NotFoundException;
+    AccountingEntry getById(UUID id) throws NotFoundException;
 
-    List<AccountingEntryModel> list();
+    List<AccountingEntry> list();
 
-    AccountingEntryModel create(AccountingEntryModel model) throws Exception;
+    AccountingEntry create(AccountingEntryModel model) throws NotFoundException, ValidationException;
 
-    AccountingEntryModel update(AccountingEntryModel model) throws Exception;
+    AccountingEntry update(AccountingEntryModel model) throws NotFoundException, ValidationException;
 
     void delete(UUID id);
 }

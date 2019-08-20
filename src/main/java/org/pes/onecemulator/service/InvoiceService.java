@@ -1,6 +1,8 @@
 package org.pes.onecemulator.service;
 
+import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.exception.NotFoundException;
+import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.internal.InvoiceModel;
 
 import java.util.List;
@@ -8,13 +10,13 @@ import java.util.UUID;
 
 public interface InvoiceService {
 
-    InvoiceModel getById(UUID id) throws NotFoundException;
+    Invoice getById(UUID id) throws NotFoundException;
 
-    List<InvoiceModel> list();
+    List<Invoice> list();
 
-    InvoiceModel create(InvoiceModel model) throws Exception;
+    Invoice create(InvoiceModel model) throws NotFoundException, ValidationException;
 
-    InvoiceModel update(InvoiceModel model) throws Exception;
+    Invoice update(InvoiceModel model) throws NotFoundException, ValidationException;
 
     void delete(UUID id);
 }

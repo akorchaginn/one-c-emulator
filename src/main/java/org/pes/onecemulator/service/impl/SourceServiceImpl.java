@@ -1,6 +1,5 @@
 package org.pes.onecemulator.service.impl;
 
-import org.pes.onecemulator.converter.internal.SourceModelConverter;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
@@ -13,12 +12,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class SourceServiceImpl implements SourceService {
-
-    private static final SourceModelConverter SOURCE_MODEL_CONVERTER = new SourceModelConverter();
 
     private final SourceRepository sourceRepository;
 
@@ -28,38 +24,33 @@ public class SourceServiceImpl implements SourceService {
     }
 
     @Override
-    public SourceModel getById(final UUID id) throws NotFoundException {
+    public Source getById(final UUID id) throws NotFoundException {
         return sourceRepository.findById(id)
-                .map(SOURCE_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Source.class, id));
     }
 
     @Override
-    public SourceModel getByName(final String name) throws NotFoundException {
+    public Source getByName(final String name) throws NotFoundException {
         return sourceRepository.findByName(name)
-                .map(SOURCE_MODEL_CONVERTER::convert)
                 .orElseThrow(() -> new NotFoundException(Source.class, "name:" + name));
     }
 
     @Override
-    public List<SourceModel> list() {
-        return sourceRepository.findAll()
-                .stream()
-                .map(SOURCE_MODEL_CONVERTER::convert)
-                .collect(Collectors.toList());
+    public List<Source> list() {
+        return sourceRepository.findAll();
     }
 
     @Transactional
     @Override
-    public SourceModel create(final SourceModel model) throws ValidationException {
+    public Source create(final SourceModel model) throws ValidationException {
         validateModel(model);
 
-        return SOURCE_MODEL_CONVERTER.convert(updateOrCreate(model, new Source()));
+        return updateOrCreate(model, new Source());
     }
 
     @Transactional
     @Override
-    public SourceModel update(final SourceModel model) throws ValidationException, NotFoundException {
+    public Source update(final SourceModel model) throws ValidationException, NotFoundException {
         validateModel(model);
 
         if (model.getId() == null) {
@@ -69,7 +60,7 @@ public class SourceServiceImpl implements SourceService {
         final Source source = sourceRepository.findById(model.getId())
                 .orElseThrow(() -> new NotFoundException(Source.class, model.getId()));
 
-        return SOURCE_MODEL_CONVERTER.convert(updateOrCreate(model, source));
+        return updateOrCreate(model, source);
     }
 
     @Transactional
