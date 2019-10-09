@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -47,7 +48,8 @@ public class EmployeeSourceServiceImpl implements EmployeeSourceService {
                         return newSource;
                     });
 
-            final EmployeeSource employeeSource = employeeSourceRepository.findById(model.getId())
+            final EmployeeSource employeeSource = Optional.ofNullable(model.getId())
+                    .flatMap(employeeSourceRepository::findById)
                     .orElseGet(EmployeeSource::new);
 
             updateOrCreate(model, employeeSource, employee, source);
