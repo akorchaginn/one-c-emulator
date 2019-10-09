@@ -31,6 +31,12 @@ public class Payer extends AbstractEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "subcontractor", nullable = false)
+    private boolean subcontractor;
+
+    @Column(name = "customer", nullable = false)
+    private boolean customer;
+
     @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PayerSource> payerSources;
 
@@ -81,6 +87,14 @@ public class Payer extends AbstractEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    public boolean isSubcontractor() { return subcontractor; }
+
+    public void setSubcontractor(boolean subcontractor) { this.subcontractor = subcontractor; }
+
+    public boolean isCustomer() { return customer; }
+
+    public void setCustomer(boolean customer) { this.customer = customer; }
 
     public List<PayerSource> getPayerSources() {
         if (payerSources == null) {

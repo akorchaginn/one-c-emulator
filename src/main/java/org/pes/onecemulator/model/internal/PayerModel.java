@@ -37,6 +37,12 @@ public class PayerModel {
     @JsonProperty("address")
     private String address;
 
+    @JsonProperty("customer")
+    private boolean customer;
+
+    @JsonProperty("subcontractor")
+    private boolean subcontractor;
+
     @JsonProperty("source")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @Setter(value = AccessLevel.NONE)

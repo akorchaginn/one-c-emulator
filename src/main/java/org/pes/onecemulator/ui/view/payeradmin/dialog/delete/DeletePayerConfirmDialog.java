@@ -21,7 +21,7 @@ public class DeletePayerConfirmDialog extends ConfirmDialog implements View, IDe
 
     @Autowired
     public DeletePayerConfirmDialog(IPayerAdminPresenter presenter) {
-        super("Вы действительно хотите удалить плательщика?");
+        super("Вы действительно хотите удалить контрагента?");
         this.presenter = presenter;
     }
 

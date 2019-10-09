@@ -20,6 +20,10 @@ class PayerAddForm extends FormLayout {
 
     private final PayerAddressInputField payerAddress;
 
+    private final PayerCustomerInputField payerCustomer;
+
+    private final PayerSubcontractorInputField payerSubcontractor;
+
     private final PayerSourceInputField payerSource;
 
     PayerAddForm(List<String> sources) {
@@ -29,8 +33,10 @@ class PayerAddForm extends FormLayout {
         this.payerInn = new PayerInnInputField();
         this.payerKpp = new PayerKppInputField();
         this.payerAddress = new PayerAddressInputField();
+        this.payerSubcontractor = new PayerSubcontractorInputField();
+        this.payerCustomer = new PayerCustomerInputField();
         this.payerSource = new PayerSourceInputField(sources);
-        addComponents(payerCode, payerName, payerFullName, payerInn, payerKpp, payerAddress, payerSource);
+        addComponents(payerCode, payerName, payerFullName, payerInn, payerKpp, payerAddress, payerSubcontractor, payerCustomer, payerSource);
         setMargin(false);
     }
 
@@ -40,6 +46,8 @@ class PayerAddForm extends FormLayout {
         payerFullName.binder.validate();
         payerInn.binder.validate();
         payerKpp.binder.validate();
+        payerSubcontractor.binder.validate();
+        payerCustomer.binder.validate();
         payerAddress.binder.validate();
         payerSource.binder.validate();
     }
@@ -55,6 +63,8 @@ class PayerAddForm extends FormLayout {
                 && payerInn.binder.isValid()
                 && payerKpp.binder.isValid()
                 && payerAddress.binder.isValid()
+                && payerSubcontractor.binder.isValid()
+                && payerCustomer.binder.isValid()
                 && payerSource.binder.isValid();
     }
 
@@ -66,6 +76,8 @@ class PayerAddForm extends FormLayout {
                 payerInn.getErrorMessage(),
                 payerKpp.getErrorMessage(),
                 payerAddress.getErrorMessage(),
+                payerSubcontractor.getErrorMessage(),
+                payerCustomer.getErrorMessage(),
                 payerSource.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
@@ -80,6 +92,8 @@ class PayerAddForm extends FormLayout {
         object.setInn(payerInn.getValue());
         object.setKpp(payerKpp.getValue());
         object.setAddress(payerAddress.getValue());
+        object.setSubcontractor(payerSubcontractor.getValue());
+        object.setCustomer(payerCustomer.getValue());
         object.getSources().addAll(payerSource.getValue());
 
         return object;

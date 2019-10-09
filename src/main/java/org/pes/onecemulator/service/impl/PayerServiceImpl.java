@@ -94,6 +94,8 @@ public class PayerServiceImpl implements PayerService {
         payer.setInn(model.getInn());
         payer.setKpp(model.getKpp());
         payer.setAddress(model.getAddress());
+        payer.setSubcontractor(model.isSubcontractor());
+        payer.setCustomer(model.isCustomer());
 
         payerSourceService.add(payer, model.getSources());
 

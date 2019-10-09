@@ -66,8 +66,15 @@ public class PayerController {
     }
 
     @PostMapping(value = "/update")
-    public @ResponseBody PayerModel update(@RequestBody final PayerModel model) throws ValidationException, NotFoundException {
-        return PAYER_MODEL_CONVERTER.convert(payerService.update(model));
+    public @ResponseBody List<PayerModel> update(@RequestBody final List<PayerModel> modelList) throws ValidationException, NotFoundException {
+        final List<Payer> payers = new ArrayList<>();
+        for (PayerModel payerModel : modelList) {
+            payers.add(payerService.update(payerModel));
+        }
+
+        return payers.stream()
+                .map(PAYER_MODEL_CONVERTER::convert)
+                .collect(Collectors.toList());
     }
 
     @DeleteMapping(value = "/delete/{id}")

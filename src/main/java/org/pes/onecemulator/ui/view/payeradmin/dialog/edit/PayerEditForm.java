@@ -23,6 +23,10 @@ class PayerEditForm extends FormLayout {
 
     private final PayerAddressEditField payerAddress;
 
+    private final PayerSubcontractorEditField payerSubcontractor;
+
+    private final PayerCustomerEditField payerCustomer;
+
     private final PayerSourceEditField payerSource;
 
     PayerEditForm(PayerModel target, List<String> sourceList) {
@@ -33,9 +37,11 @@ class PayerEditForm extends FormLayout {
         this.payerInn = new PayerInnEditField(target.getInn());
         this.payerKpp = new PayerKppEditField(target.getKpp());
         this.payerAddress = new PayerAddressEditField(target.getAddress());
+        this.payerSubcontractor = new PayerSubcontractorEditField(target.isSubcontractor());
+        this.payerCustomer = new PayerCustomerEditField(target.isCustomer());
         this.payerSource = new PayerSourceEditField(new ArrayList<>(target.getSources()), sourceList);
 
-        addComponents(payerId, payerCode, payerName, payerFullName, payerInn, payerKpp, payerAddress, payerSource);
+        addComponents(payerId, payerCode, payerName, payerFullName, payerInn, payerKpp, payerAddress, payerSubcontractor, payerCustomer, payerSource);
         setMargin(false);
     }
 
@@ -46,6 +52,8 @@ class PayerEditForm extends FormLayout {
         payerInn.binder.validate();
         payerKpp.binder.validate();
         payerAddress.binder.validate();
+        payerSubcontractor.binder.validate();
+        payerCustomer.binder.validate();
         payerSource.binder.validate();
     }
 
@@ -60,6 +68,8 @@ class PayerEditForm extends FormLayout {
                 && payerInn.binder.isValid()
                 && payerKpp.binder.isValid()
                 && payerAddress.binder.isValid()
+                && payerSubcontractor.binder.isValid()
+                && payerCustomer.binder.isValid()
                 && payerSource.binder.isValid();
     }
 
@@ -71,6 +81,8 @@ class PayerEditForm extends FormLayout {
                 || payerInn.hasChanges()
                 || payerKpp.hasChanges()
                 || payerAddress.hasChanges()
+                || payerSubcontractor.hasChanges()
+                || payerCustomer.hasChanges()
                 || payerSource.hasChanges();
     }
 
@@ -82,6 +94,8 @@ class PayerEditForm extends FormLayout {
                 payerInn.getErrorMessage(),
                 payerKpp.getErrorMessage(),
                 payerAddress.getErrorMessage(),
+                payerSubcontractor.getErrorMessage(),
+                payerCustomer.getErrorMessage(),
                 payerSource.getErrorMessage());
         return String.format("%s<br/>%s",
                 compositeErrorMessage.getErrorLevel().intValue(),
@@ -97,6 +111,8 @@ class PayerEditForm extends FormLayout {
         object.setInn(payerInn.getValue());
         object.setKpp(payerKpp.getValue());
         object.setAddress(payerAddress.getValue());
+        object.setSubcontractor(payerSubcontractor.getValue());
+        object.setCustomer(payerCustomer.getValue());
         object.getSources().addAll(payerSource.getValue());
 
         return object;

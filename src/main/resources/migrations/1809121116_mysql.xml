@@ -51,6 +51,12 @@
             <column name="inn" type="varchar(255)"/>
             <column name="kpp" type="varchar(255)"/>
             <column name="name" type="varchar(255)"/>
+            <column name="subcontractor" type="boolean" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="customer" type="boolean" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
         </createTable>
 
         <addPrimaryKey tableName="payer" columnNames="id"/>

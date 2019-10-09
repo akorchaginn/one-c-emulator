@@ -17,7 +17,9 @@ public class PayerGrid extends Grid<PayerModel> {
 
     private static final ValueProvider<PayerModel, String> payerNameValueProvider = PayerModel::getName;
 
-    private static final ValueProvider<PayerModel, String> payerFullNameValueProvider = PayerModel::getFullName;
+    private static final ValueProvider<PayerModel, Boolean> partnerSuncontractorValueProvider = PayerModel::isSubcontractor;
+
+    private static final ValueProvider<PayerModel, Boolean> partnerCustomerNameValueProvider = PayerModel::isCustomer;
 
     private static final ValueProvider<PayerModel, String> payerInnValueProvider = PayerModel::getInn;
 
@@ -36,7 +38,8 @@ public class PayerGrid extends Grid<PayerModel> {
 
         addColumn(payerCodeValueProvider).setCaption("Код");
         addColumn(payerNameValueProvider).setCaption("Название");
-        addColumn(payerFullNameValueProvider).setCaption("Полное название");
+        addColumn(partnerSuncontractorValueProvider).setCaption("Субподрядчик");
+        addColumn(partnerCustomerNameValueProvider).setCaption("Плательщик");
         addColumn(payerInnValueProvider).setCaption("ИНН");
         addColumn(payerKppValueProvider).setCaption("КПП");
         addColumn(payerAddressValueProvider).setCaption("Адрес");

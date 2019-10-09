@@ -22,7 +22,7 @@ public class PayerAddDialog extends FormDialog implements View, IPayerAddDialog 
 
     @Autowired
     public PayerAddDialog(IPayerAdminPresenter presenter) {
-        super("Добавление плательщика");
+        super("Добавление контрагента");
         this.presenter = presenter;
     }
 

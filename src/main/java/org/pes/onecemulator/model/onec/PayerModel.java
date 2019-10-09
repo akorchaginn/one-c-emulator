@@ -30,4 +30,10 @@ public class PayerModel {
 
     @JsonProperty(value = "ad")
     private String address;
+
+    @JsonProperty("subcontractor")
+    private boolean subcontractor;
+
+    @JsonProperty("customer")
+    private boolean customer;
 }

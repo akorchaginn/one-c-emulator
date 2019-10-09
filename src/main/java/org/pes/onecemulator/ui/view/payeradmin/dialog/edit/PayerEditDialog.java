@@ -24,7 +24,7 @@ public class PayerEditDialog extends FormDialog implements View, IPayerEditDialo
 
     @Autowired
     public PayerEditDialog(IPayerAdminPresenter presenter) {
-        super("Редактирование плательщика");
+        super("Редактирование контрагента");
         this.presenter = presenter;
     }
 

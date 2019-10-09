@@ -20,6 +20,8 @@ public class PayerModelConverter implements Converter<Payer, PayerModel> {
         model.setInn(entity.getInn());
         model.setKpp(entity.getKpp());
         model.setAddress(entity.getAddress());
+        model.setSubcontractor(entity.isSubcontractor());
+        model.setCustomer(entity.isCustomer());
         model.getSources().addAll(entity.getPayerSources()
                 .stream()
                 .map(PayerSource::getSource)
