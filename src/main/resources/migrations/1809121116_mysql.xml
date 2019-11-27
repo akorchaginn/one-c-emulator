@@ -176,7 +176,7 @@
             </not>
         </preConditions>
 
-        <createTable tableName="invoice">
+        <createTable tableName="invoice_item">
             <column name="id" type="uuid"/>
             <column name="created_time" type="timestamp"/>
             <column name="updated_time" type="timestamp"/>

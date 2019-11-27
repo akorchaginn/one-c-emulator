@@ -1,11 +1,14 @@
 package org.pes.onecemulator.service.impl;
 
 import org.pes.onecemulator.entity.Invoice;
+import org.pes.onecemulator.entity.InvoiceItem;
 import org.pes.onecemulator.entity.Payer;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.exception.NotFoundException;
 import org.pes.onecemulator.exception.ValidationException;
 import org.pes.onecemulator.model.internal.InvoiceModel;
+import org.pes.onecemulator.model.internal.InvoiceItemModel;
+import org.pes.onecemulator.repository.InvoiceItemRepository;
 import org.pes.onecemulator.repository.InvoiceRepository;
 import org.pes.onecemulator.repository.PayerRepository;
 import org.pes.onecemulator.repository.SourceRepository;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
@@ -26,13 +31,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private final SourceRepository sourceRepository;
 
+    private final InvoiceItemRepository invoiceItemRepository;
+
     @Autowired
     public InvoiceServiceImpl(final InvoiceRepository invoiceRepository,
                               final PayerRepository payerRepository,
-                              final SourceRepository sourceRepository) {
+                              final SourceRepository sourceRepository,
+                              final InvoiceItemRepository invoiceItemRepository) {
         this.invoiceRepository = invoiceRepository;
         this.payerRepository = payerRepository;
         this.sourceRepository = sourceRepository;
+        this.invoiceItemRepository = invoiceItemRepository;
     }
 
     @Override
@@ -98,6 +107,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setPaymentCurrency(model.getPaymentCurrency());
         invoice.setCurrency(model.getCurrency());
         invoice.setPaymentSumInvoiceCurrency(model.getPaymentSumInvoiceCurrency());
+
+        final List<InvoiceItem> invoiceItems = model.getInvoiceItems().stream()
+                .map(i -> {
+                    final InvoiceItem invoiceItem = Optional.ofNullable(i.getId())
+                            .flatMap(invoiceItemRepository::findById)
+                            .orElseGet(InvoiceItem::new);
+                    invoiceItem.setContent(i.getContent());
+                    invoiceItem.setInvoice(invoice);
+                    return invoiceItem;
+                })
+                .collect(Collectors.toList());
+        invoice.getItems().addAll(invoiceItems);
 
         return invoiceRepository.save(invoice);
     }

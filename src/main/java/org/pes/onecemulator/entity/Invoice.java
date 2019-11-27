@@ -164,4 +164,8 @@ public class Invoice extends AbstractEntity {
         this.items = items;
     }
 
+    public void addItem(InvoiceItem item) {
+        this.items.add(item);
+    }
+
 }

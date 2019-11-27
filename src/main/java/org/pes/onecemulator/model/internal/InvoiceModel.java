@@ -1,8 +1,10 @@
 package org.pes.onecemulator.model.internal;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +13,8 @@ import org.pes.onecemulator.model.internal.api.LocalDateSerializer;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -66,6 +70,10 @@ public class InvoiceModel {
     @JsonProperty("externalId")
     @NotNull
     private String externalId;
+
+    @JsonProperty("items")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private Set<InvoiceItemModel> InvoiceItems = new HashSet<>();
 
     public boolean containsWithIgnoreCase(String text) {
         return number.toLowerCase().contains(text)
