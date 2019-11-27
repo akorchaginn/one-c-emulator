@@ -1,12 +1,16 @@
 package org.pes.onecemulator.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "invoice")
@@ -49,6 +53,9 @@ public class Invoice extends AbstractEntity {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "source_id")
     private Source source;
+
+    @OneToMany(mappedBy = "invoice", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<InvoiceItem> items;
 
     public LocalDate getDate() {
         return date;
@@ -145,4 +152,20 @@ public class Invoice extends AbstractEntity {
     public void setSource(Source source) {
         this.source = source;
     }
+
+    public List<InvoiceItem> getItems() {
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+        return items;
+    }
+
+    public void setItems(List<InvoiceItem> items) {
+        this.items = items;
+    }
+
+    public void addItem(InvoiceItem item) {
+        this.items.add(item);
+    }
+
 }

@@ -170,6 +170,37 @@
 
     <changeSet id="1809121116_05" author="marker91" runOnChange="true" dbms="mysql">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="invoice"/>
+            <not>
+                <tableExists tableName="invoice_item"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="invoice_item">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
+            <column name="version" type="bigint"/>
+
+            <column name="content" type="varchar(255)"/>
+            <column name="invoice_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="invoice_item" columnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="invoice_item"
+                                 baseColumnNames="invoice_id"
+                                 constraintName="fk_invoice_item_invoice_id"
+                                 referencedTableName="invoice"
+                                 referencedColumnNames="id"
+                                 onDelete="NO ACTION"/>
+
+    </changeSet>
+
+    <changeSet id="1809121116_06" author="marker91" runOnChange="true" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="expense_request"/>
             </not>
@@ -213,7 +244,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1809121116_06" author="marker91" runOnChange="true" dbms="mysql">
+    <changeSet id="1809121116_07" author="marker91" runOnChange="true" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="accounting_entry"/>

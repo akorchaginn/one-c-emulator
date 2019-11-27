@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.pes.onecemulator.model.internal.EmployeeSourceModel;
 import org.pes.onecemulator.model.onec.api.LocalDateDeserializer;
 import org.pes.onecemulator.model.onec.api.LocalDateSerializer;
 
 import java.time.LocalDate;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -56,4 +58,8 @@ public class DocumentModel {
 
     @JsonProperty(value = "uuid")
     private String externalId;
+
+    @JsonProperty("goods")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private Set<InvoiceItemModel> invoiceItems = new HashSet<>();
 }

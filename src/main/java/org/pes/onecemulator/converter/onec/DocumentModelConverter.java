@@ -2,10 +2,15 @@ package org.pes.onecemulator.converter.onec;
 
 import org.pes.onecemulator.converter.Converter;
 import org.pes.onecemulator.entity.Invoice;
+import org.pes.onecemulator.entity.InvoiceItem;
 import org.pes.onecemulator.entity.Payer;
+import org.pes.onecemulator.model.internal.EmployeeSourceModel;
 import org.pes.onecemulator.model.onec.DocumentModel;
+import org.pes.onecemulator.model.onec.InvoiceItemModel;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DocumentModelConverter implements Converter<Invoice, DocumentModel> {
 
@@ -26,7 +31,18 @@ public class DocumentModelConverter implements Converter<Invoice, DocumentModel>
         model.setInvoiceCurrency(entity.getCurrency());
         model.setPaymentCurrency(entity.getPaymentCurrency());
         model.setPaymentSum(entity.getPaymentSum());
-
+        model.getInvoiceItems().addAll(getInvoiceItems(entity));
         return model;
+    }
+
+    private List<InvoiceItemModel> getInvoiceItems(final Invoice entity){
+        return entity.getItems().stream()
+                .map(es -> {
+                    final InvoiceItemModel model = new InvoiceItemModel();
+                    model.setId(es.getId());
+                    model.setContent(es.getContent());
+                    return model;
+                })
+                .collect(Collectors.toList());
     }
 }
