@@ -8,9 +8,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.pes.onecemulator.model.internal.EmployeeSourceModel;
+import org.pes.onecemulator.model.internal.InvoiceModel;
 import org.pes.onecemulator.model.onec.api.LocalDateDeserializer;
 import org.pes.onecemulator.model.onec.api.LocalDateSerializer;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -62,4 +64,24 @@ public class DocumentModel {
     @JsonProperty("goods")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private Set<InvoiceItemModel> invoiceItems = new HashSet<>();
+
+    @JsonProperty("Act_id")
+    private UUID actId;
+
+    @JsonProperty("Act_status")
+    private String actStatus;
+
+    @JsonProperty("Act_date_accept")
+    @JsonSerialize(using = org.pes.onecemulator.model.internal.api.LocalDateSerializer.class)
+    @JsonDeserialize(using = org.pes.onecemulator.model.internal.api.LocalDateDeserializer.class)
+    @NotNull
+    private LocalDate actAcceptDate;
+
+    @JsonProperty("Act_nom")
+    @NotNull
+    private String actNumber;
+
+    @JsonProperty("invoices")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private Set<InvoiceModel> Invoices = new HashSet<>();
 }

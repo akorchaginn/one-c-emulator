@@ -75,6 +75,8 @@ public class InvoiceModel {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private Set<InvoiceItemModel> InvoiceItems = new HashSet<>();
 
+
+
     public boolean containsWithIgnoreCase(String text) {
         return number.toLowerCase().contains(text)
                 || externalId.toLowerCase().contains(text);

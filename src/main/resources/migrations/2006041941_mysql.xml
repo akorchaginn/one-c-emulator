@@ -1,0 +1,51 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="2006041941_01" author="akorchagin" runOnChange="true" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="act"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="act">
+            <column name="id" type="uuid"/>
+            <column name="created_time" type="timestamp"/>
+            <column name="updated_time" type="timestamp"/>
+            <column name="version" type="bigint"/>
+
+            <column name="accept_date" type="date"/>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="act" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="2006041941_02" author="akorchagin" runOnChange="true" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="act"/>
+        </preConditions>
+
+        <addColumn tableName="invoice">
+            <column name="act_id" type="uuid"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="invoice"
+                                 baseColumnNames="act_id"
+                                 constraintName="fk_invoice_act_id"
+                                 referencedTableName="act"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+
+        <createIndex tableName="invoice" indexName="i_invoice_act_id">
+            <column name="act_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

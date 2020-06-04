@@ -1,6 +1,7 @@
 package org.pes.onecemulator.converter.onec;
 
 import org.pes.onecemulator.converter.Converter;
+import org.pes.onecemulator.entity.Act;
 import org.pes.onecemulator.entity.Invoice;
 import org.pes.onecemulator.entity.InvoiceItem;
 import org.pes.onecemulator.entity.Payer;
@@ -32,6 +33,14 @@ public class DocumentModelConverter implements Converter<Invoice, DocumentModel>
         model.setPaymentCurrency(entity.getPaymentCurrency());
         model.setPaymentSum(entity.getPaymentSum());
         model.getInvoiceItems().addAll(getInvoiceItems(entity));
+
+        Act act = entity.getAct();
+        if (act != null) {
+            model.setActId(act.getId());
+            model.setActStatus(act.getStatus());
+            model.setActNumber(act.getNumber());
+            model.setActAcceptDate(act.getAcceptDate());
+        }
         return model;
     }
 

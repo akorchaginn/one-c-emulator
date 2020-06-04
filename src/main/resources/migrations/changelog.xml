@@ -4,5 +4,6 @@
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <include file="1809121116_mysql.xml" relativeToChangelogFile="true"/>
+    <include file="2006041941_mysql.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

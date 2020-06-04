@@ -57,6 +57,10 @@ public class Invoice extends AbstractEntity {
     @OneToMany(mappedBy = "invoice", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<InvoiceItem> items;
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "act_id")
+    private Act act;
+
     public LocalDate getDate() {
         return date;
     }
@@ -168,4 +172,11 @@ public class Invoice extends AbstractEntity {
         this.items.add(item);
     }
 
+    public Act getAct() {
+        return act;
+    }
+
+    public void setAct(Act act) {
+        this.act = act;
+    }
 }
