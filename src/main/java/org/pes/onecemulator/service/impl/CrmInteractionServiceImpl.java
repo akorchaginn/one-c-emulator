@@ -3,7 +3,6 @@ package org.pes.onecemulator.service.impl;
 import org.pes.onecemulator.converter.onec.DocumentModelConverter;
 import org.pes.onecemulator.converter.onec.EmployeeModelConverter;
 import org.pes.onecemulator.converter.onec.PayerModelConverter;
-import org.pes.onecemulator.entity.EmployeeSource;
 import org.pes.onecemulator.entity.PayerSource;
 import org.pes.onecemulator.entity.Source;
 import org.pes.onecemulator.model.onec.DocumentModel;
@@ -28,6 +27,8 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     private static final DocumentModelConverter DOCUMENT_CRM_CONVERTER = new DocumentModelConverter();
 
     private static final PayerModelConverter PAYER_CRM_CONVERTER = new PayerModelConverter();
+
+    private static final EmployeeModelConverter EMPLOYEE_MODEL_CONVERTER = new EmployeeModelConverter();
 
     private final InvoiceRepository invoiceRepository;
 
@@ -69,7 +70,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     public List<PayerModel> getAllPayersCrmBySource(final String sourceName) {
         return sourceRepository.findByName(sourceName)
                 .map(Source::getPayerSources)
-                .orElse(new ArrayList<>())
+                .orElseGet(ArrayList::new)
                 .stream()
                 .map(PayerSource::getPayer)
                 .map(PAYER_CRM_CONVERTER::convert)
@@ -84,8 +85,7 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
                 .flatMap(Optional::stream)
                 .flatMap(e -> e.getEmployeeSources().stream())
                 .filter(es -> es.getSource().getName().equals(source))
-                .map(EmployeeSource::getEmployee)
-                .map(e -> new EmployeeModelConverter(source).convert(e))
+                .map(EMPLOYEE_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 
@@ -93,10 +93,9 @@ public class CrmInteractionServiceImpl implements CrmInteractionService {
     public List<EmployeeModel> getAllEmployeesCrmBySource(final String source) {
         return sourceRepository.findByName(source)
                 .map(Source::getEmployeeSources)
-                .orElse(new ArrayList<>())
+                .orElseGet(ArrayList::new)
                 .stream()
-                .map(EmployeeSource::getEmployee)
-                .map(e -> new EmployeeModelConverter(source).convert(e))
+                .map(EMPLOYEE_MODEL_CONVERTER::convert)
                 .collect(Collectors.toList());
     }
 }

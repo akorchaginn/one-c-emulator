@@ -5,46 +5,27 @@ import org.pes.onecemulator.entity.Employee;
 import org.pes.onecemulator.entity.EmployeeSource;
 import org.pes.onecemulator.model.onec.EmployeeModel;
 
-import java.time.LocalDate;
-
-public class EmployeeModelConverter implements Converter<Employee, EmployeeModel> {
-
-    private final String source;
-
-    public EmployeeModelConverter(final String source) {
-        this.source = source;
-    }
+public class EmployeeModelConverter implements Converter<EmployeeSource, EmployeeModel> {
 
     @Override
-    public EmployeeModel convert(final Employee entity) {
+    public EmployeeModel convert(final EmployeeSource employeeSource) {
+        if (employeeSource == null) {
+            return null;
+        }
+        final Employee employee = employeeSource.getEmployee();
         final EmployeeModel model = new EmployeeModel();
-        model.setExternalId(entity.getExternalId());
-        model.setFullName(entity.getFullName());
-        model.setGender(entity.getGender());
-        model.setBirthday(entity.getBirthday());
-        model.setStartDate(getStartDate(entity));
-        model.setEndDate(getEndDate(entity));
-        model.setFizId(entity.getFizId());
-        model.setPosition(entity.getPosition());
-        model.setUnit(entity.getUnit());
-        model.setPeriod(entity.getPeriod());
+        model.setExternalId(employee.getExternalId());
+        model.setFullName(employee.getFullName());
+        model.setGender(employee.getGender());
+        model.setBirthday(employee.getBirthday());
+        model.setStartDate(employeeSource.getStartDate());
+        model.setEndDate(employeeSource.getEndDate());
+        model.setFizId(employee.getFizId());
+        model.setPosition(employee.getPosition());
+        model.setUnit(employee.getUnit());
+        model.setPeriod(employee.getPeriod());
 
         return model;
     }
 
-    private LocalDate getStartDate(final Employee entity) {
-        return entity.getEmployeeSources().stream()
-                .filter(es -> es.getSource().getName().equals(source))
-                .map(EmployeeSource::getStartDate)
-                .findFirst()
-                .orElse(null);
-    }
-
-    private LocalDate getEndDate(final Employee entity) {
-        return entity.getEmployeeSources().stream()
-                .filter(es -> es.getSource().getName().equals(source))
-                .map(EmployeeSource::getEndDate)
-                .findFirst()
-                .orElse(null);
-    }
 }
