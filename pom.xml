@@ -28,7 +28,7 @@
 		<vaadin-push.version>8.4.5</vaadin-push.version>
 		<h2.version>1.4.199</h2.version>
 		<lombok.version>1.18.8</lombok.version>
-		<liquibase.version>3.7.0</liquibase.version>
+		<liquibase.version>4.8.0</liquibase.version>
 		<mysql.version>8.0.17</mysql.version>
 	</properties>
 
